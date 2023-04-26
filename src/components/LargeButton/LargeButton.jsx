@@ -1,23 +1,32 @@
-import { Text, Box, Button, Image, HStack, Pressable } from "native-base";
-import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import colors from "../../../colors";
 
 export const LargeButton = ({ children, image, handlePress = () => {} }) => {
   return (
-    <Pressable onPress={handlePress} width="100%" bg="green.400" shadow={"none"} rounded="md">
-      <Button
-        backgroundColor="green.400"
-        w="full"
-        py="2"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <HStack alignItems={"center"} space={2}>
-          <Image alt="add" source={image} w={"16px"} h={"16px"} />
-          <Text bold fontSize="md" color="gray.600">
-            {children}
-          </Text>
-        </HStack>
-      </Button>
-    </Pressable>
+    <TouchableOpacity style={s.container} onPress={handlePress}>
+      <Image style={s.sizeImg} source={image} />
+      <Text style={s.textBtn}>{children}</Text>
+    </TouchableOpacity>
   );
 };
+
+const s = StyleSheet.create({
+  container: {
+    width: "100%",
+    backgroundColor: colors.green[400],
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    gap: 8,
+    borderRadius: 6,
+  },
+  textBtn: {
+    color: colors.gray[600],
+    fontWeight: "bold",
+  },
+  sizeImg: {
+    height: 12,
+    width: 12,
+  },
+});
