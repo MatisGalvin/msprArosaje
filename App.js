@@ -4,6 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { CTACard } from "./src/components/CTACard/CTACard";
 import colors from "./colors";
 import { Header } from "./src/components/Header/Header";
+import { SectionTitle } from "./src/components/SectionTitle/SectionTitle";
 
 export default function App() {
     return (
@@ -19,6 +20,8 @@ export default function App() {
                 <Header screenName="Accueil" />
                 <View style={{flex: 6}} >
                     <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 50}}>
+
+                        <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
 
                     </ScrollView>
                 </View>
