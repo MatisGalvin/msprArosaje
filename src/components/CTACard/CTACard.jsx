@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderRadius: 12,
         backgroundColor: colors.white,
-        marginTop: 24,
+        marginTop: 45,
         marginBottom: 15,
 
         shadowColor: colors.black,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
             height: 4
         },
         shadowOpacity: .15,
-        shadowRadius: 15
+        shadowRadius: 15,
     },
     image: {
         marginTop: -50,

@@ -19,7 +19,7 @@ export default function App() {
                 </View> */}
                 <Header screenName="Accueil" />
                 <View style={{flex: 6}} >
-                    <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 50}}>
+                    <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 10}}>
 
                         <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
 
@@ -39,6 +39,9 @@ export default function App() {
                             handlePressButton={() => {}}
                             imageButton={require('./assets/images/static/plant-scan.png')}
                         />
+
+
+                        <SectionTitle image={require('./assets/images/static/plant.png')}>Conseils de la semaine</SectionTitle>
 
                     </ScrollView>
                 </View>
