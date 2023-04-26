@@ -5,6 +5,7 @@ import { CTACard } from "./src/components/CTACard/CTACard";
 import colors from "./colors";
 import { Header } from "./src/components/Header/Header";
 import { SectionTitle } from "./src/components/SectionTitle/SectionTitle";
+import { PlantCard } from "./src/components/SimplePlantCard/SimplePlantCard";
 
 export default function App() {
     return (
@@ -22,6 +23,13 @@ export default function App() {
                     <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 10}}>
 
                         <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
+
+                        <PlantCard
+                            image={require('./assets/images/examples/feey--9c16pMI9uU-unsplash.jpg')}
+                            owner="Quentin Hovine"
+                            name="Ficus"
+                            description="Vieux et résistant mais toujours de bon poil"
+                        />
 
                         <CTACard
                             image={require('./assets/images/static/minipot.png')}
