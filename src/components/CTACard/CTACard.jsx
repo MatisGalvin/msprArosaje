@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     },
     container: {
         gap: 10,
-        padding: 16
+        padding: 16,
+        alignSelf: 'stretch'
     },
     title: {
         textAlign: 'center',

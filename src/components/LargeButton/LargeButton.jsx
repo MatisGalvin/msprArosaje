@@ -26,7 +26,7 @@ const s = StyleSheet.create({
     fontWeight: "bold",
   },
   sizeImg: {
-    height: 12,
-    width: 12,
+    height: 16,
+    width: 16,
   },
 });

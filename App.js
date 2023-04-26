@@ -19,9 +19,26 @@ export default function App() {
                 </View> */}
                 <Header screenName="Accueil" />
                 <View style={{flex: 6}} >
-                    <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 50}}>
+                    <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 50}}>
 
                         <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
+
+                        <CTACard
+                            image={require('./assets/images/static/minipot.png')}
+                            title="Vous n’avez pas encore de plante !"
+                            content="Ajoutez une plante pour pouvoir la faire garder ou obtenir des conseils de botanistes professionnels"
+                            textButton="Ajouter votre première plante"
+                            handlePressButton={() => {}}
+                            imageButton={require('./assets/images/static/plus.png')}
+                        />
+                        <CTACard
+                            image={require('./assets/images/static/health.png')}
+                            title="Vous n’avez pas encore de plante !"
+                            content="Ajoutez une plante pour pouvoir la faire garder ou obtenir des conseils de botanistes professionnels"
+                            textButton="Diagnostiquer ma plante"
+                            handlePressButton={() => {}}
+                            imageButton={require('./assets/images/static/plant-scan.png')}
+                        />
 
                     </ScrollView>
                 </View>
