@@ -2,11 +2,12 @@ import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { CTACard } from "./src/components/CTACard/CTACard";
+import colors from "./colors";
 
 export default function App() {
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FEFF" }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
                 <View
                     alignItems="center"
                     justifyContent="center"

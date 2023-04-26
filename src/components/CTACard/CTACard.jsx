@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { LargeButton } from "../LargeButton/LargeButton";
 import { Image, StyleSheet, Text, View } from "react-native";
+import colors from "../../../colors";
 
 export const CTACard = ({image, title, content, imageButton, textButton, handlePressButton = () => {}}) => {
   
@@ -21,11 +22,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'stretch',
         borderRadius: 12,
-        backgroundColor: '#ffffff',
+        backgroundColor: colors.white,
         marginTop: 24,
         marginBottom: 15,
 
-        shadowColor: '#000000',
+        shadowColor: colors.black,
         shadowOffset: {
             width: 4,
             height: 4
@@ -44,12 +45,12 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: '#4B5563',
+        color: colors.gray[600],
         fontSize: 18,
         fontWeight: 'bold'
     },
     content: {
-        color: '#4B5563',
+        color: colors.gray[600],
         textAlign: 'center',
         fontSize: 14
     }
