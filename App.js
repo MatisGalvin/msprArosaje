@@ -6,6 +6,7 @@ import colors from "./colors";
 import { Header } from "./src/components/Header/Header";
 import { SectionTitle } from "./src/components/SectionTitle/SectionTitle";
 import { PlantCard } from "./src/components/SimplePlantCard/SimplePlantCard";
+import { DetailsPlantCard } from "./src/components/DetailsPlantCard/DetailsPlantCard";
 
 export default function App() {
     return (
@@ -20,9 +21,21 @@ export default function App() {
                 </View> */}
                 <Header screenName="Accueil" />
                 <View style={{flex: 6}} >
-                    <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 10}}>
+                    <ScrollView style={{overflow: 'visible', flex: 1}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', gap: 10}}>
 
                         <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
+
+                        <DetailsPlantCard
+                            image={require('./assets/images/examples/feey--9c16pMI9uU-unsplash.jpg')}
+                            owner="Quentin Hovine"
+                            name="Ficus"
+                            description="Vieux et résistant mais toujours de bon poil"
+                            address="1 Place Georges Frêches , 34000 Montpellier"
+                            imageButton={require('./assets/images/static/phone.png')}
+                            textButton="Contacter le/la propriétaire"
+                            handleButton={() => {}}
+                            handleEditBtn={() => {}}
+                        />
 
                         <PlantCard
                             image={require('./assets/images/examples/feey--9c16pMI9uU-unsplash.jpg')}
