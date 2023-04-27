@@ -37,7 +37,7 @@ export default function App() {
                             handleEditBtn={() => {}}
                         />
 
-                        <PlantCard
+                        <SimplePlantCard
                             image={require('./assets/images/examples/feey--9c16pMI9uU-unsplash.jpg')}
                             owner="Quentin Hovine"
                             name="Ficus"

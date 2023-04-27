@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import colors from "../../../colors";
 
-export const PlantCard = ({image, owner, name, description, handlePress = () => {}}) => {
+export const SimplePlantCard = ({image, owner, name, description, handlePress = () => {}}) => {
 
     return <TouchableOpacity onPress={handlePress} style={styles.body}>
         <Image source={image} style={styles.image} />
