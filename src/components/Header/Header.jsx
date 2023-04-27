@@ -5,7 +5,37 @@ import { Separator } from "../Separator/Separator";
 import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
 
+import { createStackNavigator } from '@react-navigation/stack';
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+
+const Stack = createStackNavigator();
+
 export const Header = ({screenName}) => {
+
+    const navTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: colors.background,
+        },
+    };
+
+    return (
+        <NavigationContainer theme={navTheme}>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}
+            >
+                <Stack.Screen name="Header">{() => <HeaderComponent screenName={screenName} />}</Stack.Screen>
+                {/* <Stack.Screen name="Notifications" component={Notifications} /> */}
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+
+}
+
+const HeaderComponent = ({screenName}) => {
 
     return <View style={styles.body}>
         <View style={[styles.container, {gap: 8}]}>

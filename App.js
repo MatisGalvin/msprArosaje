@@ -5,7 +5,7 @@ import { CTACard } from "./src/components/CTACard/CTACard";
 import colors from "./colors";
 import { Header } from "./src/components/Header/Header";
 import { SectionTitle } from "./src/components/SectionTitle/SectionTitle";
-import { PlantCard } from "./src/components/SimplePlantCard/SimplePlantCard";
+import { SimplePlantCard } from "./src/components/SimplePlantCard/SimplePlantCard";
 import { DetailsPlantCard } from "./src/components/DetailsPlantCard/DetailsPlantCard";
 
 export default function App() {
