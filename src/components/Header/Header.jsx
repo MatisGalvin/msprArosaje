@@ -4,8 +4,11 @@ import { NotificationButton } from "../NotificationButton/NotificationButton";
 import { Separator } from "../Separator/Separator";
 import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
+import { useNavigation } from "@react-navigation/native";
+
 
 export const Header = ({screenName}) => {
+    const navigation = useNavigation();
 
     return <View style={styles.body}>
         <View style={[styles.container, {gap: 8}]}>
@@ -13,7 +16,7 @@ export const Header = ({screenName}) => {
             <Text style={styles.titleText}>{screenName}</Text>
         </View>
         <View style={[styles.container, {gap: 16}]}>
-            <NotificationButton unread={3} />
+            <NotificationButton unread={3} handlePress={() => navigation.navigate('Notifications')} />
             <Separator />
             <ProfileButton />
         </View>
