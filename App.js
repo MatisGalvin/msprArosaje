@@ -1,66 +1,101 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { CTACard } from "./src/components/CTACard/CTACard";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import colors from "./colors";
-import { Header } from "./src/components/Header/Header";
-import { SectionTitle } from "./src/components/SectionTitle/SectionTitle";
-import { PlantCard } from "./src/components/SimplePlantCard/SimplePlantCard";
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Home } from "./src/screens/Home/Home";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { WrapperScreen } from "./src/components/WrapperScreen/WrapperScreen";
+import { Image, Text } from "react-native";
+
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { Notifications } from './src/screens/Notifications/Notifications';
+
+const Tab = createBottomTabNavigator();
+
+const BottomTabNavigator = () => {
+
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let icon;
+
+                    if (route.name === 'Home') {
+                        icon = focused ? require('./assets/images/static/bottomBar/house_active.png') : require('./assets/images/static/bottomBar/house_outline.png');
+                    } else if (route.name === 'Plantes') {
+                        icon = focused ? require('./assets/images/static/bottomBar/plant_active.png') : require('./assets/images/static/bottomBar/plant_outline.png');
+                    } else if (route.name === 'Analyse') {
+                        icon = focused ? require('./assets/images/static/bottomBar/photo_active.png') : require('./assets/images/static/bottomBar/photo_outline.png');
+                    } else if (route.name === 'Garde') {
+                        icon = focused ? require('./assets/images/static/bottomBar/tool_active.png') : require('./assets/images/static/bottomBar/tool_outline.png');
+                    } else if (route.name === 'Carte') {
+                        icon = focused ? require('./assets/images/static/bottomBar/location_active.png') : require('./assets/images/static/bottomBar/location_outline.png');
+                    }
+
+                    return <Image source={icon} style={{ width: 24, height: 24 }} />;
+                },
+                tabBarLabel: ({ focused, color, size }) => {
+                    return <Text style={{
+                        fontSize: 12,
+                        fontWeight: focused ? 'bold' : 'normal',
+                        color: colors.gray[600]
+                    }}>
+                        {route.name}
+                    </Text>
+                },
+                tabBarStyle: {
+                    borderTopWidth: 0,
+
+                    shadowColor: colors.black,
+                    shadowOffset: {
+                        width: 0,
+                        height: -5
+                    },
+                    shadowOpacity: .15,
+                    shadowRadius: 10,
+                },
+                headerShown: false
+            })}
+        >
+            <Tab.Screen name="Home">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Plantes">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Analyse">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Garde">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Carte">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+        </Tab.Navigator>
+    );
+}
+
+const Stack = createStackNavigator();
 
 export default function App() {
-    return (
+
+    const navTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: colors.background,
+        },
+    };
+
+    return <NavigationContainer theme={navTheme}>
         <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, padding: 16, paddingTop: 0 }}>
-                {/* <View
-                    alignItems="center"
-                    justifyContent="center"
-                    flex={1}
-                >
-                    <Text>HEADER</Text>
-                </View> */}
-                <Header screenName="Accueil" />
-                <View style={{flex: 6}} >
-                    <ScrollView style={{overflow: 'visible'}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', flex: 1, gap: 10}}>
-
-                        <SectionTitle image={require('./assets/images/static/plant.png')}>Mes plantes</SectionTitle>
-
-                        <PlantCard
-                            image={require('./assets/images/examples/feey--9c16pMI9uU-unsplash.jpg')}
-                            owner="Quentin Hovine"
-                            name="Ficus"
-                            description="Vieux et résistant mais toujours de bon poil"
-                        />
-
-                        <CTACard
-                            image={require('./assets/images/static/minipot.png')}
-                            title="Vous n’avez pas encore de plante !"
-                            content="Ajoutez une plante pour pouvoir la faire garder ou obtenir des conseils de botanistes professionnels"
-                            textButton="Ajouter votre première plante"
-                            handlePressButton={() => {}}
-                            imageButton={require('./assets/images/static/plus.png')}
-                        />
-                        <CTACard
-                            image={require('./assets/images/static/health.png')}
-                            title="Vous n’avez pas encore de plante !"
-                            content="Ajoutez une plante pour pouvoir la faire garder ou obtenir des conseils de botanistes professionnels"
-                            textButton="Diagnostiquer ma plante"
-                            handlePressButton={() => {}}
-                            imageButton={require('./assets/images/static/plant-scan.png')}
-                        />
-
-
-                        <SectionTitle image={require('./assets/images/static/plant.png')}>Conseils de la semaine</SectionTitle>
-
-                    </ScrollView>
-                </View>
-                <View
-                    alignItems="center"
-                    justifyContent="center"
-                    flex={1}
-                >
-                    <Text>FOOTER</Text>
-                </View>
-            </SafeAreaView>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false
+                }}
+            >
+                <Stack.Screen name="Default" component={BottomTabNavigator} />
+                <Stack.Screen
+                    name="Notifications"
+                    component={Notifications}
+                    options={{
+                        presentation: "modal",
+                        cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
+                    }}
+                />
+            </Stack.Navigator>
         </SafeAreaProvider>
-    );
+    </NavigationContainer>
 }
