@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Button, Pressable } from "react-native";
 
-export default function PlantTypeSelector(props) {
-
-    const {style, ...rest} = props;
-
-    [typeSelected, setTypeSelected] = useState("plantes") 
+export default function PlantTypeSelector({style, typeSelected, setTypeSelected}) {
 
   return (
     <View style={[styles.container, style]}>
