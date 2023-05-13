@@ -5,16 +5,19 @@ export default function TipCard({img, date, name, content}){
 
     return(
         <View style={styles.cardContainer}>
-            <View style={styles.imageContainer}>
-                <Image
-                style={styles.avatarImage}
-                source={img}
-                />
+            <View >
+                <View style={styles.imageContainer}>
+                    <Image
+                    style={styles.avatarImage}
+                    source={img}
+                    />
+                </View>
+                <Text style={[styles.dateText, styles.colorText]}>{date}</Text>
+                <Text numberOfLines={5} ellipsizeMode='tail' style={styles.colorText}>{content}</Text>
             </View>
-            <Text style={[styles.dateText, styles.colorText]}>{date}</Text>
-            <Text numberOfLines={5} ellipsizeMode='tail' style={styles.colorText}>{content}</Text>
             <Text style={[styles.textName, styles.colorText]}>{name}</Text>
         </View>
+        
     )
 }
 
@@ -32,7 +35,10 @@ const styles = StyleSheet.create({
             height: 4
         },
         shadowOpacity: .15,
-        shadowRadius: 15
+        shadowRadius: 15,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     imageContainer: {
         width: "100%"
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
         textAlign: "right",
         fontSize: 16,
         fontWeight: "600",
-        marginTop: 10
+        marginBottom: 10
     },
     colorText: {
         color: colors.gray[600]
