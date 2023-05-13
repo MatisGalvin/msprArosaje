@@ -1,39 +1,30 @@
-import React from "react";
-import {View, StyleSheet, Image, Text} from "react-native";
+import {Text, View, Image, StyleSheet} from "react-native";
+import colors from "../../../colors";
+export default function TipCard({img, date, name, content}){
 
-export default function TipCard(props) {
+
     return(
-        <View style={{ overflow: 'visible', elevation: 4, padding: 4}}>
-            <View
-                style={styles.cardContainer}
-            >
-                <View style={{ width: "20%"}}>
-                    <Image
-                        source={require('../../../assets/images/static/woman-showing-thumbs-up.png')}
-                        alt={"tip-img"}
-                        style={{width: 76, height: 80}}
-                    />
-                </View>
-                <View style={{ width: "65%", display: "flex", justifyContent: "center"}}>
-                    <Text style={{fontSize: 14}}>{props.children}</Text>
-                </View>
+        <View style={styles.cardContainer}>
+            <View style={styles.imageContainer}>
+                <Image
+                style={styles.avatarImage}
+                source={img}
+                />
             </View>
+            <Text style={[styles.dateText, styles.colorText]}>{date}</Text>
+            <Text numberOfLines={5} ellipsizeMode='tail' style={styles.colorText}>{content}</Text>
+            <Text style={[styles.textName, styles.colorText]}>{name}</Text>
         </View>
-
     )
 }
 
 const styles = StyleSheet.create({
     cardContainer: {
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        width: "100%",
-        borderRadius: 12,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignSelf: "center",
         backgroundColor: "#F4FFF7FF",
+        width: 187,
+        borderRadius: 12,
+        padding: 16,
+        marginVertical: 10,
 
         shadowColor: '#000000',
         shadowOffset: {
@@ -42,6 +33,28 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: .15,
         shadowRadius: 15
-
+    },
+    imageContainer: {
+        width: "100%"
+    },
+    avatarImage: {
+        width: 76,
+        height: 80,
+        alignSelf: "center",
+        resizeMode: "contain"
+    },
+    dateText: {
+        fontWeight: "bold",
+        marginVertical: 15
+    },
+    textName: {
+        width: "100%",
+        textAlign: "right",
+        fontSize: 16,
+        fontWeight: "600",
+        marginTop: 10
+    },
+    colorText: {
+        color: colors.gray[600]
     }
 })
