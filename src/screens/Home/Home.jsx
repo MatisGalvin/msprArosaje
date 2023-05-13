@@ -4,6 +4,7 @@ import { SimplePlantCard } from "../../components/SimplePlantCard/SimplePlantCar
 import { DetailsPlantCard } from "../../components/DetailsPlantCard/DetailsPlantCard";
 import { CTACard } from "../../components/CTACard/CTACard";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import TipCardsSlider from "../../components/TipCard/TipCardsSlider";
 
 export const Home = () => {
 
@@ -52,6 +53,8 @@ export const Home = () => {
 
 
                 <SectionTitle image={require('../../../assets/images/static/plant.png')}>Conseils de la semaine</SectionTitle>
+
+                <TipCardsSlider />
 
             </ScrollView>
         </View>
