@@ -10,6 +10,7 @@ import { Image, Text } from "react-native";
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Notifications } from './src/screens/Notifications/Notifications';
+import Plantes from "./src/screens/Plantes/Plantes";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +60,7 @@ const BottomTabNavigator = () => {
             })}
         >
             <Tab.Screen name="Home">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
-            <Tab.Screen name="Plantes">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Plantes">{() => <WrapperScreen><Plantes /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Analyse">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Garde">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Carte">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
