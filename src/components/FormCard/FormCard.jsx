@@ -1,19 +1,14 @@
 import {
-  Image,
-  Keyboard,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Tag } from "../Tag/Tag";
-import { LargeButton } from "../LargeButton/LargeButton";
 import colors from "../../../colors";
-import { EditBtn } from "../EditBtn/EditBtn";
 
-export default function FormCard() {
+export default function FormCard({style}) {
   return (
-    <View style={styles.body}>
+    <View style={[styles.body, style]}>
       <View style={styles.container}>
         <Text style={styles.smallTitle}>Adresse</Text>
         <Text style={styles.subTitle}>Voie et numéro de voie</Text>
@@ -62,38 +57,6 @@ const styles = StyleSheet.create({
   container: {
     alignSelf: "stretch",
     gap: 16,
-  },
-  image: {
-    alignSelf: "stretch",
-    width: "100%",
-    height: undefined,
-    aspectRatio: 1 / 0.85,
-    borderRadius: 6,
-  },
-  addressContainer: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  addressImage: {
-    width: 19,
-    height: 19,
-  },
-  addressTextWrapper: {
-    borderBottomWidth: 1,
-  },
-  addressText: {
-    fontSize: 14,
-    fontWeight: 600,
-    color: colors.gray[600],
-  },
-  nameText: {
-    color: colors.gray[600],
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  descriptionText: {
-    color: colors.gray[600],
-    fontSize: 14,
   },
   smallTitle: {
     width: "100%",
