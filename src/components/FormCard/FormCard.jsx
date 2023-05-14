@@ -1,21 +1,62 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "../../../colors";
+import { useState } from "react";
 
-export default function FormCard({style}) {
+export default function FormCard({ style, setCanSubmit }) {
+  const [street, setStreet] = useState();
+  const [city, setCity] = useState();
+  const [zipcode, setZipcode] = useState();
+  const [plantName, setPlantName] = useState();
+  const [description, setDescription] = useState();
+
+  const canSubmitOrNot = () => {
+    if (street && city && zipcode && zipcode.length === 5 && plantName) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  };
+
+  const onChangeStreet = (value) => {
+    setStreet(value);
+  };
+
+  const onChangeCity = (value) => {
+    setCity(value);
+  };
+
+  const onChangeZipcode = (value) => {
+    setZipcode(value);
+  };
+
+  const onChangePlantName = (value) => {
+    setPlantName(value);
+  };
+
+  const onChangeDescription = (value) => {
+    setDescription(value);
+  };
+
   return (
     <View style={[styles.body, style]}>
       <View style={styles.container}>
         <Text style={styles.smallTitle}>Adresse</Text>
         <Text style={styles.subTitle}>Voie et numéro de voie</Text>
-        <TextInput style={styles.textInput} placeholder="25 Rue Exemple" />
+        <TextInput
+          style={styles.textInput}
+          placeholder="25 Rue Exemple"
+          value={street}
+          onChangeText={onChangeStreet}
+          onEndEditing={canSubmitOrNot}
+        />
 
         <Text style={styles.subTitle}>Ville</Text>
-        <TextInput style={styles.textInput} placeholder="Paris" />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Paris"
+          onChangeText={onChangeCity}
+          onEndEditing={canSubmitOrNot}
+        />
 
         <Text style={styles.subTitle}>Code postal</Text>
         <TextInput
@@ -23,16 +64,25 @@ export default function FormCard({style}) {
           placeholder="75000"
           keyboardType="numeric"
           maxLength={5}
+          onChangeText={onChangeZipcode}
+          onEndEditing={canSubmitOrNot}
         />
 
         <Text style={styles.smallTitle}>Nom</Text>
-        <TextInput style={styles.textInput} placeholder="Ma belle plante" />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Ma belle plante"
+          onChangeText={onChangePlantName}
+          onEndEditing={canSubmitOrNot}
+        />
 
         <Text style={styles.smallTitle}>Description</Text>
         <TextInput
           style={styles.textArea}
           placeholder="Une anecdote ou un conseil sur la plante"
           multiline
+          onChangeText={onChangeDescription}
+          onEndEditing={canSubmitOrNot}
         />
       </View>
     </View>
