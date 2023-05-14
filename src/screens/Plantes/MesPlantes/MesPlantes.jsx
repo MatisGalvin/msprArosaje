@@ -2,8 +2,11 @@ import { Text, View } from "react-native";
 import { LargeButton } from "../../../components/LargeButton/LargeButton";
 import { DetailsPlantCard } from "../../../components/DetailsPlantCard/DetailsPlantCard";
 import { SimplePlantCard } from "../../../components/SimplePlantCard/SimplePlantCard";
+import { useNavigation } from "@react-navigation/native";
 
 export default function MesPlantes() {
+
+  const navigation = useNavigation()
 
   const renderViews = () => {
     const views = [];
@@ -11,7 +14,7 @@ export default function MesPlantes() {
       views.push(
         <View key={i} style={{marginTop: 15}}>
           <SimplePlantCard
-            style={{ marginTop: 30 }}
+            style={{ marginTop: 30}}
             image={require("../../../../assets/images/examples/feey--9c16pMI9uU-unsplash.jpg")}
             name="Ficus"
             description="Vieux et résistant mais toujours de bon poil"
@@ -23,10 +26,10 @@ export default function MesPlantes() {
   };
 
   return (
-    <View style={{ width: "100%", marginTop: 25 }}>
+    <View style={{ width: "100%", marginTop: 25}}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
-        handlePress
+        handlePress={() => navigation.navigate("AddPlante")}
       >
         Ajouter une nouvelle plante
       </LargeButton>

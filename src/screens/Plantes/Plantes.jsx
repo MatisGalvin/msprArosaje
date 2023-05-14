@@ -27,7 +27,7 @@ export default function Plantes() {
         <View style={{flex:1}}>
         <Header screenName="Plantes" />
         <View style={{flex: 6}} >
-            <ScrollView style={{overflow: 'visible', flex: 1}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', gap: 10}} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{overflow: "visible", flex: 1}} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', gap: 10}} showsVerticalScrollIndicator={false}>
 
             <PlantTypeSelector style={{marginTop: 20}} typeSelected={typeSelected} setTypeSelected={setTypeSelected} />
             {renderPage()}
