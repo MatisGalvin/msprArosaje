@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 import colors from "../../../colors";
 
 export default function CardMap({ style, name, image, city }) {
