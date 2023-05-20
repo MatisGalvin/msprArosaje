@@ -13,6 +13,7 @@ import { Notifications } from './src/screens/Notifications/Notifications';
 import Plantes from "./src/screens/Plantes/Plantes";
 import PlantesNavigation from "./src/navigations/PlantesNavigation/PlantesNavigation";
 import Carte from "./src/screens/Carte/Carte";
+import Analyse from "./src/screens/Analyse/Analyse";
 
 const Tab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ const BottomTabNavigator = () => {
         >
             <Tab.Screen name="Home">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Plantes">{() => <WrapperScreen><PlantesNavigation /></WrapperScreen>}</Tab.Screen>
-            <Tab.Screen name="Analyse">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Analyse">{() => <WrapperScreen><Analyse /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Garde">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Carte">{() => <WrapperScreen><Carte /></WrapperScreen>}</Tab.Screen>
         </Tab.Navigator>
