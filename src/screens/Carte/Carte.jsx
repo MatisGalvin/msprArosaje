@@ -6,6 +6,7 @@ import {
 import MapView from "react-native-maps";
 import CardMap from "../../components/CardMap/CardMap";
 import { useRef } from "react";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
@@ -33,6 +34,7 @@ export default function Carte() {
   return (
     <>
       <MapView initialRegion={initialRegion} style={StyleSheet.absoluteFill} />
+      <SearchBar />
       <Animated.ScrollView
         ref={_scrollView}
         horizontal
