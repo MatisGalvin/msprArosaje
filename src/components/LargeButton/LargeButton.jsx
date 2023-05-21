@@ -1,11 +1,11 @@
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../../../colors";
 
-export const LargeButton = ({ children, image, handlePress = () => {} , dark = false}) => {
+export const LargeButton = ({ children, image, handlePress = () => {} , dark = false, grey = false}) => {
   return (
-    <TouchableOpacity style={[s.container, dark && s.containerDark]} onPress={handlePress}>
+    <TouchableOpacity style={[s.container, dark && s.containerDark, grey && s.containerGrey]} onPress={handlePress}>
       <Image style={s.sizeImg} source={image} />
-      <Text style={[s.textBtn, dark && s.textBtnDark]}>{children}</Text>
+      <Text style={[s.textBtn, dark && s.textBtnDark, grey && s.textBtnGrey]}>{children}</Text>
     </TouchableOpacity>
   );
 };
@@ -24,12 +24,18 @@ const s = StyleSheet.create({
   containerDark: {
     backgroundColor: colors.gray[600]
   },
+  containerGrey: {
+    backgroundColor: colors.gray[200]
+  },
   textBtn: {
     color: colors.gray[600],
     fontWeight: "bold",
   },
   textBtnDark: {
     color: colors.white
+  },
+  textBtnGrey: {
+    color: colors.gray[400]
   },
   sizeImg: {
     height: 16,
