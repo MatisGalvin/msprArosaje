@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from "./src/screens/Home/Home";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { WrapperScreen } from "./src/components/WrapperScreen/WrapperScreen";
-import { Image, Text } from "react-native";
+import { Image, StyleSheet, Text } from "react-native";
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Notifications } from './src/screens/Notifications/Notifications';
@@ -14,6 +14,8 @@ import Plantes from "./src/screens/Plantes/Plantes";
 import PlantesNavigation from "./src/navigations/PlantesNavigation/PlantesNavigation";
 import Carte from "./src/screens/Carte/Carte";
 import Analyse from "./src/screens/Analyse/Analyse";
+import { Provider, useSelector } from 'react-redux';
+import store from "./src/redux/appStore";
 
 const Tab = createBottomTabNavigator();
 
@@ -48,17 +50,7 @@ const BottomTabNavigator = () => {
                         {route.name}
                     </Text>
                 },
-                tabBarStyle: {
-                    borderTopWidth: 0,
-
-                    shadowColor: colors.black,
-                    shadowOffset: {
-                        width: 0,
-                        height: -5
-                    },
-                    shadowOpacity: .15,
-                    shadowRadius: 10,
-                },
+                tabBarStyle: styles.tabbarShadow,
                 headerShown: false
             })}
         >
@@ -83,23 +75,45 @@ export default function App() {
         },
     };
 
-    return <NavigationContainer theme={navTheme}>
-        <SafeAreaProvider>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
-            >
-                <Stack.Screen name="Default" component={BottomTabNavigator} />
-                <Stack.Screen
-                    name="Notifications"
-                    component={Notifications}
-                    options={{
-                        presentation: "modal",
-                        cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
+    return (
+    <Provider store={store}>
+        <NavigationContainer theme={navTheme}>
+            <SafeAreaProvider>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false
                     }}
-                />
-            </Stack.Navigator>
-        </SafeAreaProvider>
-    </NavigationContainer>
+                >
+                    <Stack.Screen name="Default" component={BottomTabNavigator} />
+                    <Stack.Screen
+                        name="Notifications"
+                        component={Notifications}
+                        options={{
+                            presentation: "modal",
+                            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
+                        }}
+                    />
+                </Stack.Navigator>
+            </SafeAreaProvider>
+        </NavigationContainer>
+    </Provider>
+    )
+    
 }
+
+const styles = StyleSheet.create({
+    tabbarShadow: {
+        borderTopWidth: 0,
+
+        shadowColor: colors.black,
+        shadowOffset: {
+            width: 0,
+            height: -5
+        },
+        shadowOpacity: .15,
+        shadowRadius: 10,
+    },
+    noTabbarShadow: {
+        borderTopWidth: 0,
+    },
+})
