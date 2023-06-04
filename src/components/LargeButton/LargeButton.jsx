@@ -12,7 +12,7 @@ export const LargeButton = ({ children, image, handlePress = () => {} , dark = f
 
 const s = StyleSheet.create({
   container: {
-    width: "100%",
+    minWidth: "100%",
     backgroundColor: colors.green[400],
     flexDirection: "row",
     alignItems: "center",

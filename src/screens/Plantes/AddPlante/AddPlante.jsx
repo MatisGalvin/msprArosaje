@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
+import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
 
 export default function AddPlante() {
   const navigation = useNavigation();
@@ -26,13 +27,19 @@ export default function AddPlante() {
   const [plantDescription, setPlantDescription] = useState("");
 
   const submitPlant = () => {
-
-    setLargePicture("https://www.decodujardin.fr/4186-large_default/palmier-du-chili.jpg")
+    setLargePicture(
+      "https://www.decodujardin.fr/4186-large_default/palmier-du-chili.jpg"
+    );
 
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
     const owner = appStore.username;
 
-    Plants.addPlant(plantName, plantDescription, owner, images.filter((item) => item != ""))
+    Plants.addPlant(
+      plantName,
+      plantDescription,
+      owner,
+      images.filter((item) => item != "")
+    )
       .then(() => {
         navigation.navigate("Home");
       })
@@ -42,11 +49,13 @@ export default function AddPlante() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Header screenName="Accueil" />
-      <View style={{ flex: 6 }}>
+    <WrapperScreen>
+      <View style={{ flex: 1 }}>
         <ScrollView
-          style={{ flex: 1 }}
+          style={{
+            overflow: "visible",
+            flex: 1,
+          }}
           contentContainerStyle={{
             alignItems: "center",
             justifyContent: "start",
@@ -54,51 +63,59 @@ export default function AddPlante() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <SectionTitle
-            image={require("../../../../assets/images/static/plant.png")}
+          <View
+            style={{ gap: 10 }}
           >
-            Ajouter une nouvelle plante
-          </SectionTitle>
-
-          <GalleryCard
-            largePicture={largePicture}
-            setLargePicture={setLargePicture}
-            smallPicture1={smallPicture1}
-            setSmallPicture1={setSmallPicture1}
-            smallPicture2={smallPicture2}
-            setSmallPicture2={setSmallPicture2}
-            smallPicture3={smallPicture3}
-            setSmallPicture3={setSmallPicture3}
-          />
-
-          <FormCard
-            setCanSubmit={setCanSubmit}
-            streetProp={appStore.address}
-            cityProp={appStore.city}
-            zipcodeProp={appStore.zipcode}
-            plantName={plantName}
-            setPlantName={setPlantName}
-            plantDescription={plantDescription}
-            setPlantDescription={setPlantDescription}
-          />
-          {canSubmit ? (
-            <LargeButton
-              image={require("../../../../assets/images/static/plus.png")}
-              handlePress={submitPlant}
+            <Header
+                screenName="Plantes"
+                handlePress={() => navigation.goBack()}
+              />
+            <SectionTitle
+              image={require("../../../../assets/images/static/plant.png")}
             >
-              Ajouter ma plante
-            </LargeButton>
-          ) : (
-            <LargeButton
-              image={require("../../../../assets/images/static/plus.png")}
-              dark
-              handlePress
-            >
-              Ajouter ma plante
-            </LargeButton>
-          )}
+              Ajouter une nouvelle plante
+            </SectionTitle>
+
+            <GalleryCard
+              largePicture={largePicture}
+              setLargePicture={setLargePicture}
+              smallPicture1={smallPicture1}
+              setSmallPicture1={setSmallPicture1}
+              smallPicture2={smallPicture2}
+              setSmallPicture2={setSmallPicture2}
+              smallPicture3={smallPicture3}
+              setSmallPicture3={setSmallPicture3}
+            />
+
+            <FormCard
+              setCanSubmit={setCanSubmit}
+              streetProp={appStore.address}
+              cityProp={appStore.city}
+              zipcodeProp={appStore.zipcode}
+              plantName={plantName}
+              setPlantName={setPlantName}
+              plantDescription={plantDescription}
+              setPlantDescription={setPlantDescription}
+            />
+            {canSubmit ? (
+              <LargeButton
+                image={require("../../../../assets/images/static/plus.png")}
+                handlePress={submitPlant}
+              >
+                Ajouter ma plante
+              </LargeButton>
+            ) : (
+              <LargeButton
+                image={require("../../../../assets/images/static/plus.png")}
+                dark
+                handlePress
+              >
+                Ajouter ma plante
+              </LargeButton>
+            )}
+          </View>
         </ScrollView>
       </View>
-    </View>
+    </WrapperScreen>
   );
 }

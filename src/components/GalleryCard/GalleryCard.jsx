@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Keyboard,
   StyleSheet,
@@ -12,12 +13,50 @@ import { LargeButton } from "../LargeButton/LargeButton";
 import colors from "../../../colors";
 import { EditBtn } from "../EditBtn/EditBtn";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export default function GalleryCard({ style, largePicture, setLargePicture, smallPicture1, setSmallPicture1, smallPicture2, setSmallPicture2, smallPicture3, setSmallPicture3 }) {
+export default function GalleryCard({
+  largePicture,
+  setLargePicture,
+  smallPicture1,
+  setSmallPicture1,
+  smallPicture2,
+  setSmallPicture2,
+  smallPicture3,
+  setSmallPicture3,
+  style,
+}) {
+  const [whichPictureState, setWhichPictureState] = useState('');
 
-  // This function is triggered when the "Select an image" button pressed
-  const showImagePicker = async (whichPicture) => {
+  // useEffect(() => {
+  //   console.log("useeffect")
+  //   console.log(whichPictureState)
+  // }, [whichPictureState])
+
+
+  const handleChooseOption = (whichPicture) => {
+    Alert.alert(
+      "Ajouter une photo",
+      "Choisissez une option pour ajouter une photo",
+      [
+        {
+          text: "Galerie",
+          onPress: () => openImagePicker(whichPicture),
+        },
+        {
+          text: "Appareil photo",
+          onPress: () => openCamera(whichPicture),
+        },
+        {
+          text: "Annuler",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
+
+  const openImagePicker = async (whichPicture) => {
     // Ask the user for the permission to access the media library
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -50,12 +89,46 @@ export default function GalleryCard({ style, largePicture, setLargePicture, smal
     }
   };
 
+  const openCamera = async (whichPicture) => {
+    // Ask the user for the permission to access the media library
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
+
+    if (!result.canceled) {
+      switch (whichPicture) {
+        case "large":
+          setLargePicture(result.assets[0].uri);
+          break;
+        case "small1":
+          setSmallPicture1(result.assets[0].uri);
+          break;
+        case "small2":
+          setSmallPicture2(result.assets[0].uri);
+          break;
+        case "small3":
+          setSmallPicture3(result.assets[0].uri);
+          break;
+
+        default:
+          break;
+      }
+    }
+  };
+
   const renderLargePicture = () => {
     if (!largePicture) {
       return (
         <TouchableOpacity
           style={styles.largeNoPicture}
-          onPress={() => showImagePicker("large")}
+          onPress={() => {
+            handleChooseOption("large");
+          }}
         >
           <Image
             source={require("../../../assets/images/static/add-picture.png")}
@@ -67,7 +140,9 @@ export default function GalleryCard({ style, largePicture, setLargePicture, smal
       return (
         <TouchableOpacity
           style={styles.largePicture}
-          onPress={() => showImagePicker("large")}
+          onPress={() => {
+            handleChooseOption("large");
+          }}
         >
           <Image
             source={{ uri: largePicture }}
@@ -97,7 +172,9 @@ export default function GalleryCard({ style, largePicture, setLargePicture, smal
       return (
         <TouchableOpacity
           style={styles.smallNoPicture}
-          onPress={() => showImagePicker(picture)}
+          onPress={() => {
+            handleChooseOption(picture);
+          }}
         >
           <Image
             source={require("../../../assets/images/static/add-picture.png")}
@@ -109,7 +186,9 @@ export default function GalleryCard({ style, largePicture, setLargePicture, smal
       return (
         <TouchableOpacity
           style={styles.smallPicture}
-          onPress={() => showImagePicker(picture)}
+          onPress={() => {
+            handleChooseOption(picture);
+          }}
         >
           <Image
             source={{ uri: checkingPicture }}
@@ -139,7 +218,7 @@ export default function GalleryCard({ style, largePicture, setLargePicture, smal
 
 const styles = StyleSheet.create({
   body: {
-    width: "100%",
+    minWidth: "100%",
     padding: 10,
     backgroundColor: colors.white,
     borderRadius: 12,
@@ -235,6 +314,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 6,
-    overflow: "hidden"
+    overflow: "hidden",
   },
 });

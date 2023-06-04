@@ -12,45 +12,72 @@ import BottomSearchBar from "../../../../components/BottomSearchBar/BottomSearch
 import colors from "../../../../../colors";
 import { WrapperScreen } from "../../../../components/WrapperScreen/WrapperScreen";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { formatDateWitouthHour } from "../../../../utils/tools";
 
 export default function NewReportScreen({ route }) {
   const owner = route.params.owner;
   const image = route.params.image;
-  const plantId = route.params.plantId;
+  const plant = route.params.plant;
+  const isNewReport = route.params.isNewReport;
 
+  const navigation = useNavigation();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const renderSectionTitle = () => {
+    if (isNewReport) {
+      return (
+        <SectionTitle
+          image={require("../../../../../assets/images/static/report.png")}
+        >
+          Nouveau Rapport
+        </SectionTitle>
+      );
+    } else {
+      return (
+        <SectionTitle
+          image={require("../../../../../assets/images/static/report.png")}
+        >
+          {owner} - {formatDateWitouthHour(plant.attributes.publishedAt)}
+        </SectionTitle>
+      );
+    }
+  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{width: '100%', height: '100%'}}
+      style={{ width: "100%", height: "100%" }}
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
-          <Header screenName="Accueil" />
-          <View style={{ flex: 6 }}>
-            <ScrollView
-              style={{
-                overflow: "visible",
-                flex: 1,
-                marginBottom: 60
-              }}
-              contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "start",
-                gap: 10,
-              }}
-              showsVerticalScrollIndicator={false}
-            >
-              <SectionTitle
-                image={require("../../../../../assets/images/static/report.png")}
-              >
-                Nouveau Rapport
-              </SectionTitle>
+          <ScrollView
+            style={{ 
+              overflow: "visible",
+              flex: 1,
+              marginBottom: 60,
+            }}
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "start",
+              gap: 10,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={{ flex: 1 }}>
+              <Header
+                screenName="Plantes"
+                handlePress={() => navigation.goBack()}
+              />
+              {renderSectionTitle()}
 
-              <NewReportingCard image={image} owner={owner} plantId={plantId} isSubmitted={isSubmitted} />
+              <NewReportingCard
+                image={image}
+                owner={owner}
+                plantId={plant.id}
+                isSubmitted={isSubmitted}
+              />
 
               {/* <LargeButton
               grey
@@ -59,8 +86,8 @@ export default function NewReportScreen({ route }) {
             >
               Publier mon raport
             </LargeButton> */}
-            </ScrollView>
-          </View>
+            </View>
+          </ScrollView>
         </View>
         <View
           style={{
@@ -85,7 +112,7 @@ export default function NewReportScreen({ route }) {
             shadowRadius: 10,
           }}
         >
-          <BottomSearchBar plantId={plantId} setIsSubmitted={setIsSubmitted} />
+          <BottomSearchBar plantId={plant.id} setIsSubmitted={setIsSubmitted} />
         </View>
       </WrapperScreen>
     </KeyboardAvoidingView>

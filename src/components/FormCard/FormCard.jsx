@@ -91,7 +91,7 @@ export default function FormCard({ style, setCanSubmit, streetProp, cityProp, zi
 
 const styles = StyleSheet.create({
   body: {
-    width: "100%",
+    minWidth: "100%",
     padding: 10,
     backgroundColor: colors.white,
     borderRadius: 12,

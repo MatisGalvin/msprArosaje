@@ -7,12 +7,12 @@ import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
 
 
-export const Header = ({screenName}) => {
+export const Header = ({screenName, handlePress}) => {
     const navigation = useNavigation();
 
     return <View style={styles.body}>
         <View style={[styles.container, {gap: 8}]}>
-            <HeaderLogo />
+            <HeaderLogo screenName={screenName} handlePress={handlePress} />
             <Text style={styles.titleText}>{screenName}</Text>
         </View>
         <View style={[styles.container, {gap: 16}]}>

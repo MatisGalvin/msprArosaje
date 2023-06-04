@@ -128,7 +128,7 @@ export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
           owner && <Tag image={require('../../../assets/images/static/profile.png')} >{owner}</Tag>
         }
         <Text style={styles.nameText}>Tous les commentaires</Text>
-        {!isLoaded && <View style={{marginTop: 20}}><ActivityIndicator/></View>}
+        {!isLoaded && <View style={{marginTop: 20, width: "100%", height: "100%"}}><ActivityIndicator/></View>}
         {isLoaded && commentaires.map((item, id) => {
           return (
             <View key={id} style={styles.commentContainer}>
@@ -151,8 +151,9 @@ export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
 }
 const styles = StyleSheet.create({
   body: {
-    width: "100%",
+    minWidth: "100%",
     paddingBottom: 15,
+    flex: 1,
     // height: "100%",
     padding: 10,
     backgroundColor: colors.white,
