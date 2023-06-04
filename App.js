@@ -16,6 +16,11 @@ import Carte from "./src/screens/Carte/Carte";
 import Analyse from "./src/screens/Analyse/Analyse";
 import { Provider, useSelector } from 'react-redux';
 import store from "./src/redux/appStore";
+import { initState } from "./src/utils/initState";
+import AddPlante from "./src/screens/Plantes/AddPlante/AddPlante";
+import NewReportScreen from "./src/screens/Plantes/MesPlantes/Reports/NewReportScreen";
+
+const stateLoaded = initState("BobSmith", "6 rue de la Plante", "Paris", "75000")
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +60,7 @@ const BottomTabNavigator = () => {
             })}
         >
             <Tab.Screen name="Home">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
-            <Tab.Screen name="Plantes">{() => <WrapperScreen><PlantesNavigation /></WrapperScreen>}</Tab.Screen>
+            <Tab.Screen name="Plantes">{() => <WrapperScreen><Plantes /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Analyse">{() => <WrapperScreen><Analyse /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Garde">{() => <WrapperScreen><Home /></WrapperScreen>}</Tab.Screen>
             <Tab.Screen name="Carte">{() => <WrapperScreen><Carte /></WrapperScreen>}</Tab.Screen>
@@ -74,6 +79,7 @@ export default function App() {
             background: colors.background,
         },
     };
+    if (stateLoaded) {
 
     return (
     <Provider store={store}>
@@ -93,11 +99,15 @@ export default function App() {
                             cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
                         }}
                     />
+                    <Stack.Screen name="MyPlantes" component={Plantes} />
+                    <Stack.Screen name="AddPlante" component={AddPlante} />
+                    <Stack.Screen name="NewReport" component={NewReportScreen} />
                 </Stack.Navigator>
             </SafeAreaProvider>
         </NavigationContainer>
     </Provider>
     )
+    }
     
 }
 

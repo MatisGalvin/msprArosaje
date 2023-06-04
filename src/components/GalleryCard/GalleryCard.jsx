@@ -14,11 +14,7 @@ import { EditBtn } from "../EditBtn/EditBtn";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 
-export default function GalleryCard({ style }) {
-  const [largePicture, setLargePicture] = useState("");
-  const [smallPicture1, setSmallPicture1] = useState("");
-  const [smallPicture2, setSmallPicture2] = useState("");
-  const [smallPicture3, setSmallPicture3] = useState("");
+export default function GalleryCard({ style, largePicture, setLargePicture, smallPicture1, setSmallPicture1, smallPicture2, setSmallPicture2, smallPicture3, setSmallPicture3 }) {
 
   // This function is triggered when the "Select an image" button pressed
   const showImagePicker = async (whichPicture) => {

@@ -2,12 +2,10 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "../../../colors";
 import { useState } from "react";
 
-export default function FormCard({ style, setCanSubmit }) {
-  const [street, setStreet] = useState();
-  const [city, setCity] = useState();
-  const [zipcode, setZipcode] = useState();
-  const [plantName, setPlantName] = useState();
-  const [description, setDescription] = useState();
+export default function FormCard({ style, setCanSubmit, streetProp, cityProp, zipcodeProp, plantName, setPlantName, plantDescription, setPlantDescription }) {
+  const [street, setStreet] = useState(streetProp);
+  const [city, setCity] = useState(cityProp);
+  const [zipcode, setZipcode] = useState(zipcodeProp);
 
   const canSubmitOrNot = () => {
     if (street && city && zipcode && zipcode.length === 5 && plantName) {
@@ -34,7 +32,7 @@ export default function FormCard({ style, setCanSubmit }) {
   };
 
   const onChangeDescription = (value) => {
-    setDescription(value);
+    setPlantDescription(value);
   };
 
   return (
@@ -44,7 +42,7 @@ export default function FormCard({ style, setCanSubmit }) {
         <Text style={styles.subTitle}>Voie et numéro de voie</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="25 Rue Exemple"
+          placeholder="Votre rue"
           value={street}
           onChangeText={onChangeStreet}
           onEndEditing={canSubmitOrNot}
@@ -53,7 +51,8 @@ export default function FormCard({ style, setCanSubmit }) {
         <Text style={styles.subTitle}>Ville</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Paris"
+          placeholder="Votre ville"
+          value={city}
           onChangeText={onChangeCity}
           onEndEditing={canSubmitOrNot}
         />
@@ -64,6 +63,7 @@ export default function FormCard({ style, setCanSubmit }) {
           placeholder="75000"
           keyboardType="numeric"
           maxLength={5}
+          value={zipcode}
           onChangeText={onChangeZipcode}
           onEndEditing={canSubmitOrNot}
         />

@@ -1,13 +1,30 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import colors from "../../../colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { Tag } from "../Tag/Tag";
+import { Tips } from "../../api/Tips";
 
-export default function NewReportingCard() {
-  const [largePicture, setLargePicture] = useState("");
+export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
+  const [largePicture, setLargePicture] = useState(image ? image : "");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Je créé ici un state avec des commentaires puisqu'à la création du rapport, les commentaires seront créés directement à partir de ce composant
   const [commentaires, setCommentaires] = useState([]);
+
+  function fetchComments() {
+    Tips.getTipsByPlantId(plantId)
+      .then((resultFetch) => {
+        setCommentaires(resultFetch.data);
+        setIsLoaded(true)
+      })
+      .catch((error) => console.log(error));
+  }
+
+  useEffect(() => {
+    setIsLoaded(false)
+    fetchComments()
+  }, [isSubmitted])
 
   const handleChooseOption = () => {
     Alert.alert(
@@ -64,6 +81,17 @@ export default function NewReportingCard() {
     }
   };
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    const hours = ("0" + date.getHours()).slice(-2);
+    const minutes = ("0" + date.getMinutes()).slice(-2);
+  
+    return `${hours}h${minutes} ${day}/${month}/${year}`;
+  }
+
   const renderLargePicture = () => {
     if (!largePicture) {
       return (
@@ -96,19 +124,23 @@ export default function NewReportingCard() {
     <View style={styles.body}>
       <View style={styles.container}>
         {renderLargePicture()}
+        {
+          owner && <Tag image={require('../../../assets/images/static/profile.png')} >{owner}</Tag>
+        }
         <Text style={styles.nameText}>Tous les commentaires</Text>
-        {commentaires.map((item) => {
+        {!isLoaded && <View style={{marginTop: 20}}><ActivityIndicator/></View>}
+        {isLoaded && commentaires.map((item, id) => {
           return (
-            <View key={item} style={styles.commentContainer}>
+            <View key={id} style={styles.commentContainer}>
               <View style={styles.imageContainer}>
-                <Image source={item.picture} style={styles.profilePic} />
+                <Image source={{uri: item.attributes.botanist.data.attributes.profile_picture.data.attributes.base64}} style={styles.profilePic} />
               </View>
               <View style={styles.contentContainer}>
                 <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.nameComment}>{item.name} </Text>
-                  <Text style={styles.hourComment}>{item.hour}</Text>
+                  <Text style={styles.nameComment}>{item.attributes.botanist.data.attributes.username} </Text>
+                  <Text style={styles.hourComment}>{formatDate(item.attributes.publishedAt)}</Text>
                 </View>
-                <Text style={styles.messageComment}>{item.message}</Text>
+                <Text style={styles.messageComment}>{item.attributes.tip}</Text>
               </View>
             </View>
           );
@@ -120,6 +152,8 @@ export default function NewReportingCard() {
 const styles = StyleSheet.create({
   body: {
     width: "100%",
+    paddingBottom: 15,
+    // height: "100%",
     padding: 10,
     backgroundColor: colors.white,
     borderRadius: 12,
@@ -184,6 +218,7 @@ const styles = StyleSheet.create({
   profilePic: {
     width: 30,
     height: 30,
+    borderRadius: 50
   },
   nameComment: {
     fontSize: 12,
