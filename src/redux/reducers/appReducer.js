@@ -1,27 +1,40 @@
+import { StrapiDatas } from "../../api/api";
 import { Roles } from "../../utils/Roles";
 
 const initalState = {
-  firstname: "John",
-  lastname: "Doe",
-  email: "johndoe@gmail.com",
-  phoneNumber: "0607080910",
-  roles: [Roles.Proprietaire],
-  picture: "",
-  listePlantes: [],
+  id: null,
+  username: "John",
+  email: "",
+  address: "",
+  zipcode: "",
+  city: "",
+  lat: "",
+  long: "",
+  ownPlants: {},
 };
 
 // Reducer
 const appReducer = (state = initalState, action) => {
   switch (action.type) {
-    case 'CHANGE_NAME':
+    case "INIT_STATE":
       return {
         ...state,
-        firstname: action.name
-      }
+        id: action.id,
+        username: action.username,
+        address: action.address,
+        city: action.city,
+        zipcode: action.zipcode,
+      };
       break;
-  
+    case "INIT_OWN_PLANTS":
+      return {
+        ...state,
+        ownPlants: action.plants,
+      };
+      break;
+
     default:
-      return state
+      return state;
       break;
   }
 };

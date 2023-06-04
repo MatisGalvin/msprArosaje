@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import colors from "../../../colors";
+import base64 from 'react-native-base64'
 
 export const SimplePlantCard = ({image, owner, name, description, handlePress = () => {}}) => {
 
