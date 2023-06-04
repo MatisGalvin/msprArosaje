@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  Keyboard,
 } from "react-native";
 import colors from "../../../colors";
 import { Tips } from "../../api/Tips";
@@ -25,6 +26,7 @@ export default function BottomSearchBar({plantId, setIsSubmitted}) {
     await Tips.postTip(message, plantId, appStore.id)
     setMessage("");
     setIsSubmitted(true)
+    Keyboard.dismiss()
   };
 
   return (

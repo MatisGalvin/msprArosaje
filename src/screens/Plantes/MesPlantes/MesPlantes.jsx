@@ -40,13 +40,19 @@ export default function MesPlantes() {
       </LargeButton>
       {/* {renderViews()} */}
 
-      {mesPlantes.map((item) => (
-        <View key={item.id} style={{ marginTop: 15 }}>
+      {mesPlantes.map((plant) => (
+        <View key={plant.id} style={{ marginTop: 15 }}>
           <SimplePlantCard
             style={{ marginTop: 30 }}
-            image={{uri: item.attributes.images.data[0].attributes.base64}}
-            name={item.attributes.name}
-            description={item.attributes.description}
+            image={{uri: plant.attributes.images.data[0].attributes.base64}}
+            name={plant.attributes.name}
+            description={plant.attributes.description}
+            handlePress={() => navigation.navigate("NewReport", {
+              owner: plant.attributes.owner.data.attributes.username,
+              image: plant.attributes.images.data[0].attributes.base64,
+              plant: plant,
+              isNewReport: false
+            })}
           />
         </View>
       ))}

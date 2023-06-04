@@ -59,11 +59,9 @@ export default function MesProteges() {
     <View style={{ marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/shovel.png")}
-        handlePress
       >
         Garder une nouvelle plante
       </LargeButton>
-      <ScrollView style={styles.scrollview}>
         {!isLoaded && <View style={{marginTop: 60}}><ActivityIndicator/></View>}
         {isLoaded && allPlants.map((plant) => {
           const mytips = getTheTips(plant.id)
@@ -77,13 +75,13 @@ export default function MesProteges() {
             handlePress={() => navigation.navigate("NewReport", {
               owner: plant.attributes.owner.data.attributes.username,
               image: plant.attributes.images.data[0].attributes.base64,
-              plantId: plant.id,
+              plant: plant,
+              isNewReport: false
             })}
           />
         </View>
         )
       })}
-      </ScrollView>
       
     </View>
   );

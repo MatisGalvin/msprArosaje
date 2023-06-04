@@ -7,6 +7,7 @@ const initalState = {
   email: "",
   address: "",
   zipcode: "",
+  profile_picture: "",
   city: "",
   lat: "",
   long: "",
@@ -24,6 +25,8 @@ const appReducer = (state = initalState, action) => {
         address: action.address,
         city: action.city,
         zipcode: action.zipcode,
+        profile_picture: action.profile_picture
+
       };
       break;
     case "INIT_OWN_PLANTS":
