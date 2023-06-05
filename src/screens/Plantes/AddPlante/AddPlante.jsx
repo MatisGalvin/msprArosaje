@@ -1,5 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { ScrollView, Button, Text, View, Dimensions } from "react-native";
+import {
+  ScrollView,
+  Button,
+  Text,
+  View,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Header } from "../../../components/Header/Header";
 import { SectionTitle } from "../../../components/SectionTitle/SectionTitle";
 import GalleryCard from "../../../components/GalleryCard/GalleryCard";
@@ -10,6 +17,7 @@ import { useSelector } from "react-redux";
 import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
+import { initState } from "../../../utils/initState";
 
 export default function AddPlante() {
   const navigation = useNavigation();
@@ -27,21 +35,14 @@ export default function AddPlante() {
   const [plantDescription, setPlantDescription] = useState("");
 
   const submitPlant = () => {
-    setLargePicture(
-      "https://www.decodujardin.fr/4186-large_default/palmier-du-chili.jpg"
-    );
 
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
-    const owner = appStore.username;
+    const ownerId = appStore.id;
 
-    Plants.addPlant(
-      plantName,
-      plantDescription,
-      owner,
-      images.filter((item) => item != "")
-    )
+    Plants.addPlant(plantName, plantDescription, ownerId)
       .then(() => {
-        navigation.navigate("Home");
+        initState(appStore.username, appStore.address, appStore.city, appStore.zipcode)
+        navigation.navigate("Plantes");
       })
       .catch((error) => {
         console.log(error);
@@ -49,73 +50,76 @@ export default function AddPlante() {
   };
 
   return (
-    <WrapperScreen>
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{
-            overflow: "visible",
-            flex: 1,
-          }}
-          contentContainerStyle={{
-            alignItems: "center",
-            justifyContent: "start",
-            gap: 10,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={{ gap: 10 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <WrapperScreen>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{
+              overflow: "visible",
+              flex: 1,
+              minHeight: "100%",
+            }}
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "start",
+              gap: 10,
+            }}
+            showsVerticalScrollIndicator={false}
           >
-            <Header
+            <View style={{ gap: 10 }}>
+              <Header
                 screenName="Plantes"
                 handlePress={() => navigation.goBack()}
               />
-            <SectionTitle
-              image={require("../../../../assets/images/static/plant.png")}
-            >
-              Ajouter une nouvelle plante
-            </SectionTitle>
-
-            <GalleryCard
-              largePicture={largePicture}
-              setLargePicture={setLargePicture}
-              smallPicture1={smallPicture1}
-              setSmallPicture1={setSmallPicture1}
-              smallPicture2={smallPicture2}
-              setSmallPicture2={setSmallPicture2}
-              smallPicture3={smallPicture3}
-              setSmallPicture3={setSmallPicture3}
-            />
-
-            <FormCard
-              setCanSubmit={setCanSubmit}
-              streetProp={appStore.address}
-              cityProp={appStore.city}
-              zipcodeProp={appStore.zipcode}
-              plantName={plantName}
-              setPlantName={setPlantName}
-              plantDescription={plantDescription}
-              setPlantDescription={setPlantDescription}
-            />
-            {canSubmit ? (
-              <LargeButton
-                image={require("../../../../assets/images/static/plus.png")}
-                handlePress={submitPlant}
+              <SectionTitle
+                image={require("../../../../assets/images/static/plant.png")}
               >
-                Ajouter ma plante
-              </LargeButton>
-            ) : (
-              <LargeButton
-                image={require("../../../../assets/images/static/plus.png")}
-                dark
-                handlePress
-              >
-                Ajouter ma plante
-              </LargeButton>
-            )}
-          </View>
-        </ScrollView>
-      </View>
-    </WrapperScreen>
+                Ajouter une nouvelle plante
+              </SectionTitle>
+
+              <GalleryCard
+                largePicture={largePicture}
+                setLargePicture={setLargePicture}
+                smallPicture1={smallPicture1}
+                setSmallPicture1={setSmallPicture1}
+                smallPicture2={smallPicture2}
+                setSmallPicture2={setSmallPicture2}
+                smallPicture3={smallPicture3}
+                setSmallPicture3={setSmallPicture3}
+              />
+
+              <FormCard
+                setCanSubmit={setCanSubmit}
+                streetProp={appStore.address}
+                cityProp={appStore.city}
+                zipcodeProp={appStore.zipcode}
+                plantName={plantName}
+                setPlantName={setPlantName}
+                plantDescription={plantDescription}
+                setPlantDescription={setPlantDescription}
+              />
+              {canSubmit ? (
+                <LargeButton
+                  image={require("../../../../assets/images/static/plus.png")}
+                  handlePress={submitPlant}
+                >
+                  Ajouter ma plante
+                </LargeButton>
+              ) : (
+                <LargeButton
+                  image={require("../../../../assets/images/static/plus.png")}
+                  dark
+                >
+                  Ajouter ma plante
+                </LargeButton>
+              )}
+            </View>
+          </ScrollView>
+        </View>
+      </WrapperScreen>
+      </KeyboardAvoidingView>
   );
 }
