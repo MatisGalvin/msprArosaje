@@ -20,7 +20,7 @@ import { initState } from "./src/utils/initState";
 import AddPlante from "./src/screens/Plantes/AddPlante/AddPlante";
 import NewReportScreen from "./src/screens/Plantes/MesPlantes/Reports/NewReportScreen";
 
-const stateLoaded = initState("BobSmith", "6 rue de la Plante", "Paris", "75000")
+const stateLoaded = initState("JohnDoe")
 
 const Tab = createBottomTabNavigator();
 

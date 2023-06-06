@@ -41,7 +41,7 @@ export default function AddPlante() {
 
     Plants.addPlant(plantName, plantDescription, ownerId)
       .then(() => {
-        initState(appStore.username, appStore.address, appStore.city, appStore.zipcode)
+        initState(appStore.username)
         navigation.navigate("Plantes");
       })
       .catch((error) => {
