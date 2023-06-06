@@ -14,7 +14,7 @@ export const ProfileButton = () => {
         return;
     }
     setProfilePicture(appStore.profile_picture);
-  }, []);
+  }, [appStore]);
 
   return (
     <TouchableOpacity>

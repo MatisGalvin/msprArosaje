@@ -11,7 +11,7 @@ export default function MesPlantes() {
 
   const appStore = useSelector((state) => state.appStore);
 
-  const [mesPlantes, setMesPlantes] = useState();
+  const [mesPlantes, setMesPlantes] = useState([]);
 
   useEffect(() => {
     setMesPlantes(appStore.ownPlants);
@@ -35,7 +35,7 @@ export default function MesPlantes() {
   //   return views;
   // };
 
-  return mesPlantes ?
+  return mesPlantes.length > 0 ?
     <View style={{ flex: 1, marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
