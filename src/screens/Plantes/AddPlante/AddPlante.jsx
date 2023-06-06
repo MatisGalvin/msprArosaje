@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
+import utilsStylesheet from "../../../utils/utilsStylesheet";
 
 export default function AddPlante() {
   const navigation = useNavigation();
@@ -49,8 +50,12 @@ export default function AddPlante() {
   };
 
   return (
-    <WrapperScreen>
-      <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
+      <Header
+        screenName="Accueil"
+        customStylesheet={utilsStylesheet.containerPadding}
+      />
+      <View style={{ flex: 6 }}>
         <ScrollView
           style={{
             overflow: "visible",
@@ -63,13 +68,11 @@ export default function AddPlante() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <View
-            style={{ gap: 10 }}
-          >
+          <View style={{ gap: 10 }}>
             <Header
-                screenName="Plantes"
-                handlePress={() => navigation.goBack()}
-              />
+              screenName="Plantes"
+              handlePress={() => navigation.goBack()}
+            />
             <SectionTitle
               image={require("../../../../assets/images/static/plant.png")}
             >
@@ -116,6 +119,6 @@ export default function AddPlante() {
           </View>
         </ScrollView>
       </View>
-    </WrapperScreen>
+    </View>
   );
 }

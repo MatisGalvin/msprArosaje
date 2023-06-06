@@ -12,29 +12,15 @@ import {
 } from "react-native";
 import TipCardsSlider from "../../components/TipCard/TipCardsSlider";
 import { useSelector } from "react-redux";
+import utilsStylesheet from "../../utils/utilsStylesheet";
 
 export const Home = () => {
   const appStore = useSelector((state) => state.appStore);
 
-  return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 6 }}>
-        <ScrollView
-          style={{ overflow: "visible", flex: 1 }}
-          contentContainerStyle={{
-            alignItems: "center",
-            justifyContent: "start",
-            gap: 10,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={{ flex: 1, gap: 10 }}>
-            <Header screenName="Accueil" />
-            {/* <TouchableOpacity
-            onPress={console.log(appStore.ownPlants[0].attributes.images.data[0].attributes.base64)}
-          >
-            <Text>Hello</Text>
-          </TouchableOpacity> */}
+    return <View style={{flex: 1}}>
+        <Header screenName="Accueil" customStylesheet={utilsStylesheet.containerPadding} />
+        <View style={{flex: 6}} >
+            <ScrollView style={utilsStylesheet.containerPadding} contentContainerStyle={{alignItems: 'center', justifyContent: 'start', gap: 10}} showsVerticalScrollIndicator={false}>
 
             <SectionTitle
               image={require("../../../assets/images/static/plant.png")}
@@ -85,11 +71,9 @@ export const Home = () => {
             </SectionTitle>
 
             <TipCardsSlider />
-          </View>
         </ScrollView>
       </View>
-    </View>
-  );
+    </View>;
 };
 
 const styles = StyleSheet.create({});
