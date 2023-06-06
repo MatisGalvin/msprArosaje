@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defaultImage } from "./defaultImage";
 import { Images } from "./Images";
-global.Buffer = require("buffer").Buffer;
+import Image from "./Image";
 
 const baseURL = "http://arosaje.maximebaudoin.fr:1337";
 
@@ -28,19 +28,32 @@ export class Plants {
     return response.data.data;
   }
 
+  static async pushImagesIntoStrapi(images) {
+    let imageIds = [];
+    for (let index = 0; index < images.length; index++) {
+      if (images[index] !== "") {
+        const responseImage = await Image.post(images[index]);
+        imageIds.push(responseImage.data.id);
+      }
+    }
+    return imageIds;
+  }
 
-  static async addPlant(name, description, ownerID /*, images*/) {
-    const responseImage = await Images.addImage(defaultImage);
-  
+  static async addPlant(name, description, ownerID, images) {
+    // images est un tableau d'images
+
+    const imageIds = await this.pushImagesIntoStrapi(images);
+
     const response = await axios.post(`${plantsURLbasic}`, {
       data: {
         name: name,
         description: description,
         owner: ownerID,
-        images: [responseImage.data.id],
+        images: imageIds,
+        // images: [responseImage.data.id],
       },
     });
-  
+
     return response.data;
   }
 }
