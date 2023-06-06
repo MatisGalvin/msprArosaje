@@ -16,7 +16,7 @@ class PlantID {
             }, {
                 headers: {
                     'content-type': 'application/json',
-                    'Api-Key': 'aGkjPMAPaTpfjpH5Ljgk9trToOfp7HCQcI7gC7hhqE43FFJ6wi'
+                    'Api-Key': process.env.API_KEY
                 }
             });
 
