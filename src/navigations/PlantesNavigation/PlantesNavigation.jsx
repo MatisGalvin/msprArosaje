@@ -11,7 +11,6 @@ export default function PlantesNavigation() {
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
-        
       }}
     >
       <Stack.Screen name="MyPlantes" component={Plantes} />

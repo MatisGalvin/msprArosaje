@@ -67,7 +67,7 @@ export default function NewReportScreen({ route }) {
           >
             <View style={{ flex: 1 }}>
               <Header
-                screenName="Plantes"
+                screenName={plant.attributes.name}
                 handlePress={() => navigation.goBack()}
               />
               {renderSectionTitle()}

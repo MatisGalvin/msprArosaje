@@ -21,6 +21,24 @@ const DATA = [
     name: "Ariane H.",
     content: "Super couleur, peut être vérifier si ce n’est pas une espèce rare !",
   },
+  {
+    img: require("../../../assets/images/static/woman-showing-thumbs-up.png"),
+    date: "15/03/2023",
+    name: "Ariane H.",
+    content: "Super couleur, peut être vérifier si ce n’est pas une espèce rare !",
+  },
+  {
+    img: require("../../../assets/images/static/woman-showing-thumbs-up.png"),
+    date: "15/03/2023",
+    name: "Ariane H.",
+    content: "Super couleur, peut être vérifier si ce n’est pas une espèce rare !",
+  },
+  {
+    img: require("../../../assets/images/static/woman-showing-thumbs-up.png"),
+    date: "15/03/2023",
+    name: "Ariane H.",
+    content: "Super couleur, peut être vérifier si ce n’est pas une espèce rare !",
+  },
 ];
 
 const { width: screenWidth } = Dimensions.get("window");

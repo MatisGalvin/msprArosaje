@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
+import utilsStylesheet from "../../../utils/utilsStylesheet";
 import { initState } from "../../../utils/initState";
 
 export default function AddPlante() {
@@ -35,7 +36,6 @@ export default function AddPlante() {
   const [plantDescription, setPlantDescription] = useState("");
 
   const submitPlant = () => {
-
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
     const ownerId = appStore.id;
 
@@ -54,13 +54,16 @@ export default function AddPlante() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ width: "100%", height: "100%" }}
     >
-      <WrapperScreen>
-        <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <Header
+          screenName="Accueil"
+          customStylesheet={utilsStylesheet.containerPadding}
+        />
+        <View style={{ flex: 6 }}>
           <ScrollView
             style={{
               overflow: "visible",
               flex: 1,
-              minHeight: "100%",
             }}
             contentContainerStyle={{
               alignItems: "center",
@@ -112,6 +115,7 @@ export default function AddPlante() {
                 <LargeButton
                   image={require("../../../../assets/images/static/plus.png")}
                   dark
+                  handlePress
                 >
                   Ajouter ma plante
                 </LargeButton>
@@ -119,7 +123,7 @@ export default function AddPlante() {
             </View>
           </ScrollView>
         </View>
-      </WrapperScreen>
-      </KeyboardAvoidingView>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
