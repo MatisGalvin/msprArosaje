@@ -18,10 +18,15 @@ import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
 import utilsStylesheet from "../../../utils/utilsStylesheet";
+import ImgToBase64 from "react-native-image-base64";
+import * as FileSystem from "expo-file-system";
 import { initState } from "../../../utils/initState";
+import Image from "../../../api/Image";
 
 export default function AddPlante() {
   const navigation = useNavigation();
+
+  [waitSubmit, setWaitSubmit] = useState(false);
 
   [canSubmit, setCanSubmit] = useState(false);
 
@@ -35,13 +40,16 @@ export default function AddPlante() {
   const [plantName, setPlantName] = useState("");
   const [plantDescription, setPlantDescription] = useState("");
 
-  const submitPlant = () => {
+  const submitPlant = async () => {
+    setWaitSubmit(true)
+
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
     const ownerId = appStore.id;
 
-    Plants.addPlant(plantName, plantDescription, ownerId)
+    Plants.addPlant(plantName, plantDescription, ownerId, images)
       .then(() => {
-        initState(appStore.username)
+        initState(appStore.username);
+    setWaitSubmit(false)
         navigation.navigate("Plantes");
       })
       .catch((error) => {
@@ -104,7 +112,10 @@ export default function AddPlante() {
                 plantDescription={plantDescription}
                 setPlantDescription={setPlantDescription}
               />
-              {canSubmit ? (
+              {
+
+              }
+              {canSubmit && !waitSubmit ? (
                 <LargeButton
                   image={require("../../../../assets/images/static/plus.png")}
                   handlePress={submitPlant}
