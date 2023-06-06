@@ -12,6 +12,10 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
         return require("../../../assets/images/static/plant.png");
         break;
 
+      case "Analyse":
+        return require("../../../assets/images/static/bottomBar/photo_active.png");
+        break;
+
       default:
         break;
     }

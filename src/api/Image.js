@@ -2,7 +2,7 @@ import axios from "axios";
 
 class Image {
 
-    static baseUrl = 'http://192.168.1.77:1337/api';
+    static baseUrl = 'http://arosaje.maximebaudoin.fr:1337/api';
 
     static post = async (base64) => {
 

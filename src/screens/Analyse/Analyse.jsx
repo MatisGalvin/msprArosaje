@@ -20,6 +20,7 @@ import colors from "../../../colors";
 import ImageApi from "../../api/Image";
 import PlantID from "../../api/PlantID";
 import AnalyseApi from "../../api/Analyse";
+import AnalyseDetails from "./AnalyseDetails";
 
 export default function Analyse() {
   const navigation = useNavigation();
@@ -55,10 +56,15 @@ export default function Analyse() {
   const sendPicture = async () => {
     setIsLoaded(false);
     const resultUpload = await ImageApi.post(largePicture.base64);
-    // const resultHealth = await PlantID.post(largePicture.base64);
-    let resultHealth = {};
-    const resultAnalyse = await AnalyseApi.post(resultHealth);
-    setIsLoaded(true);
+    const resultHealth = await PlantID.post(largePicture.base64);
+    // let resultHealth = {};
+    console.log(resultHealth);
+    const resultAnalyse = await AnalyseApi.post(JSON.parse(resultHealth));
+    if (resultAnalyse) {
+      setPlantDetails(JSON.parse(resultHealth));
+    } else {
+      setIsLoaded(true);
+    }
   };
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export default function Analyse() {
     }
   }, [isFocused]);
 
-  {!plantDetails ?
+  return !plantDetails ? (
     <View style={styles.container}>
       <Header
         screenName="Analyse"
@@ -103,14 +109,38 @@ export default function Analyse() {
             Veillez à ce que le soucis de votre plante soit bien visible sur
             l'image
           </InformationSimple>
-          <PhotoButton handlePress={isLoaded ? (largePicture ? sendPicture : openCamera) : ()=>{}}>
-            {isLoaded ? (largePicture ? "Scanner" : "Prendre une photo") : <ActivityIndicator color='#000000' />}
+          <PhotoButton
+            handlePress={
+              isLoaded ? (largePicture ? sendPicture : openCamera) : () => {}
+            }
+          >
+            {isLoaded ? (
+              largePicture ? (
+                "Scanner"
+              ) : (
+                "Prendre une photo"
+              )
+            ) : (
+              <ActivityIndicator color="#000000" />
+            )}
           </PhotoButton>
         </View>
       </View>
-    </View> : <View>
-
-    </View>}
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <Header
+        screenName="Analyse"
+        customStylesheet={utilsStylesheet.containerPadding}
+      />
+      <AnalyseDetails
+        plantHealth={plantDetails}
+        setPlantDetails={setPlantDetails}
+        setIsLoaded={setIsLoaded}
+        setLargePicture={setLargePicture}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

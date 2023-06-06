@@ -4,7 +4,7 @@ import colors from "../../../colors";
 export const SectionTitle = ({image, children}) => {
 
     return <View style={styles.body}>
-        <Image source={image} style={styles.image} />
+        {image && <Image source={image} style={styles.image} />}
         <Text style={styles.text}>{children}</Text>
     </View>
 
