@@ -24,11 +24,11 @@ export default function Plantes() {
 
   const heightScreen = Dimensions.get("screen").height;
   return (
-    <View style={utilsStylesheet.container}>
-      <Header screenName="Plantes" />
+    <View style={{flex:1}}>
+      <Header screenName="Plantes" customStylesheet={utilsStylesheet.containerPadding} />
       <View style={{ flex: 6 }}>
         <ScrollView
-          style={{ overflow: "visible", flex: 1 }}
+          style={utilsStylesheet.containerPadding}
           contentContainerStyle={{
             alignItems: "center",
             justifyContent: "start",

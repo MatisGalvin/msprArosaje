@@ -67,16 +67,17 @@ export default function Carte() {
   }, []);
 
   useEffect(() => {
-    const regionTimeout = setTimeout(() => {
-      mapAnimation.addListener(({ value }) => {
-        let index = Math.floor(value / CARD_WIDTH);
-        if (index >= allPlants.length) {
-          index = allPlants.length - 1;
-        }
-        if (index <= 0) {
-          index = 0;
-        }
+    mapAnimation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH);
+      if (index >= allPlants.length) {
+        index = allPlants.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
 
+      clearTimeout(regionTimeout);
+      const regionTimeout = setTimeout(() => {
         if (mapIndex !== index) {
           mapIndex = index;
           const { coordinates } = allPlants[index];
@@ -91,12 +92,8 @@ export default function Carte() {
 
           Haptics.selectionAsync();
         }
-      });
-    }, 10);
-
-    return () => {
-      clearTimeout(regionTimeout);
-    };
+      }, 10);
+    });
   }, []);
 
   const interpolations = allPlants.map((marker, index) => {
@@ -181,18 +178,13 @@ export default function Carte() {
           bottom: 0,
           right: 0,
         }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
+        onScroll={Animated.event([{
+            nativeEvent: {
                 contentOffset: {
-                  x: mapAnimation,
-                },
-              },
+                    x: mapAnimation,
+                }
             },
-          ],
-          { useNativeDriver: true }
-        )}
+        }], {useNativeDriver: true})}
       >
         {allPlants.map((plant, index) => {
           return (

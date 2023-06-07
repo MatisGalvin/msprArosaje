@@ -14,6 +14,7 @@ import { WrapperScreen } from "../../../../components/WrapperScreen/WrapperScree
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { formatDateWitouthHour } from "../../../../utils/tools";
+import utilsStylesheet from "../../../../utils/utilsStylesheet";
 
 export default function NewReportScreen({ route }) {
   const owner = route.params.owner;
@@ -52,12 +53,13 @@ export default function NewReportScreen({ route }) {
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
+          <Header
+            screenName={plant.attributes.name}
+            handlePress={() => navigation.goBack()}
+            customStylesheet={utilsStylesheet.containerPadding}
+          />
           <ScrollView
-            style={{ 
-              overflow: "visible",
-              flex: 1,
-              marginBottom: 60,
-            }}
+            style={[{ marginBottom: 60 }, utilsStylesheet.containerPadding]}
             contentContainerStyle={{
               alignItems: "center",
               justifyContent: "start",
@@ -65,28 +67,22 @@ export default function NewReportScreen({ route }) {
             }}
             showsVerticalScrollIndicator={false}
           >
-            <View style={{ flex: 1 }}>
-              <Header
-                screenName={plant.attributes.name}
-                handlePress={() => navigation.goBack()}
-              />
-              {renderSectionTitle()}
+            {renderSectionTitle()}
 
-              <NewReportingCard
-                image={image}
-                owner={owner}
-                plantId={plant.id}
-                isSubmitted={isSubmitted}
-              />
+            <NewReportingCard
+              image={image}
+              owner={owner}
+              plantId={plant.id}
+              isSubmitted={isSubmitted}
+            />
 
-              {/* <LargeButton
+            {/* <LargeButton
               grey
               image={require("../../../../../assets/images/static/report-grey.png")}
               handlePress={() => {}}
             >
               Publier mon raport
             </LargeButton> */}
-            </View>
           </ScrollView>
         </View>
         <View
