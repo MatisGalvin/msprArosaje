@@ -1,5 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { ScrollView, Button, Text, View, Dimensions } from "react-native";
+import {
+  ScrollView,
+  Button,
+  Text,
+  View,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Header } from "../../../components/Header/Header";
 import { SectionTitle } from "../../../components/SectionTitle/SectionTitle";
 import GalleryCard from "../../../components/GalleryCard/GalleryCard";
@@ -10,9 +17,16 @@ import { useSelector } from "react-redux";
 import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
+import utilsStylesheet from "../../../utils/utilsStylesheet";
+import ImgToBase64 from "react-native-image-base64";
+import * as FileSystem from "expo-file-system";
+import { initState } from "../../../utils/initState";
+import Image from "../../../api/Image";
 
 export default function AddPlante() {
   const navigation = useNavigation();
+
+  [waitSubmit, setWaitSubmit] = useState(false);
 
   [canSubmit, setCanSubmit] = useState(false);
 
@@ -26,22 +40,17 @@ export default function AddPlante() {
   const [plantName, setPlantName] = useState("");
   const [plantDescription, setPlantDescription] = useState("");
 
-  const submitPlant = () => {
-    setLargePicture(
-      "https://www.decodujardin.fr/4186-large_default/palmier-du-chili.jpg"
-    );
+  const submitPlant = async () => {
+    setWaitSubmit(true);
 
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
-    const owner = appStore.username;
+    const ownerId = appStore.id;
 
-    Plants.addPlant(
-      plantName,
-      plantDescription,
-      owner,
-      images.filter((item) => item != "")
-    )
+    Plants.addPlant(plantName, plantDescription, ownerId, images)
       .then(() => {
-        navigation.navigate("Home");
+        initState(appStore.username);
+        setWaitSubmit(false);
+        navigation.navigate("Plantes");
       })
       .catch((error) => {
         console.log(error);
@@ -49,27 +58,26 @@ export default function AddPlante() {
   };
 
   return (
-    <WrapperScreen>
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{
-            overflow: "visible",
-            flex: 1,
-          }}
-          contentContainerStyle={{
-            alignItems: "center",
-            justifyContent: "start",
-            gap: 10,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={{ gap: 10 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <WrapperScreen>
+        <View style={{ flex: 1 }}>
+          <Header
+            screenName="Plantes"
+            handlePress={() => navigation.goBack()}
+            customStylesheet={utilsStylesheet.containerPadding}
+          />
+          <ScrollView
+            style={utilsStylesheet.containerPadding}
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "start",
+              gap: 10,
+            }}
+            showsVerticalScrollIndicator={false}
           >
-            <Header
-                screenName="Plantes"
-                handlePress={() => navigation.goBack()}
-              />
             <SectionTitle
               image={require("../../../../assets/images/static/plant.png")}
             >
@@ -97,7 +105,8 @@ export default function AddPlante() {
               plantDescription={plantDescription}
               setPlantDescription={setPlantDescription}
             />
-            {canSubmit ? (
+            {}
+            {canSubmit && !waitSubmit ? (
               <LargeButton
                 image={require("../../../../assets/images/static/plus.png")}
                 handlePress={submitPlant}
@@ -113,9 +122,9 @@ export default function AddPlante() {
                 Ajouter ma plante
               </LargeButton>
             )}
-          </View>
-        </ScrollView>
-      </View>
-    </WrapperScreen>
+          </ScrollView>
+        </View>
+      </WrapperScreen>
+    </KeyboardAvoidingView>
   );
 }

@@ -19,6 +19,7 @@ const colors = {
     },
     green: {
         background: '#F4FFF7',
+        200: '#acffca',
         400: '#4ADE80'
     }
 }

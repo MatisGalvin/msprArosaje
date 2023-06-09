@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableHighlight, View } from "react-native";
+import { Image, StyleSheet, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import colors from "../../../colors";
 
 export const HeaderLogo = ({ screenName, handlePress }) => {
@@ -12,6 +12,10 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
         return require("../../../assets/images/static/plant.png");
         break;
 
+      case "Analyse":
+        return require("../../../assets/images/static/bottomBar/photo_active.png");
+        break;
+
       default:
         break;
     }
@@ -19,16 +23,16 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
 
   return (
     <View style={styles.body}>
-      <TouchableHighlight onPress={handlePress}>
+      <TouchableOpacity onPress={handlePress}>
         <Image
           source={
             handlePress
-              ? require("../../../assets/images/static/back-arrow.png")
+              ? require("../../../assets/images/static/arrow-left.png")
               : renderIconHeader()
           }
           style={styles.image}
         />
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
   );
 };

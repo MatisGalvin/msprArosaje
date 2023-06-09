@@ -66,21 +66,25 @@ export default function GalleryCard({
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync();
+    const result = await ImagePicker.launchImageLibraryAsync({mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0,
+      base64: true,});
 
     if (!result.canceled) {
       switch (whichPicture) {
         case "large":
-          setLargePicture(result.assets[0].uri);
+          setLargePicture(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small1":
-          setSmallPicture1(result.assets[0].uri);
+          setSmallPicture1(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small2":
-          setSmallPicture2(result.assets[0].uri);
+          setSmallPicture2(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small3":
-          setSmallPicture3(result.assets[0].uri);
+          setSmallPicture3(`data:image/png;base64,${result.assets[0].base64}`);
           break;
 
         default:
@@ -89,7 +93,7 @@ export default function GalleryCard({
     }
   };
 
-  const openCamera = async (whichPicture) => {
+  const openCamera = async (whichPicture) => { 
     // Ask the user for the permission to access the media library
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -98,21 +102,25 @@ export default function GalleryCard({
       return;
     }
 
-    const result = await ImagePicker.launchCameraAsync();
+    const result = await ImagePicker.launchCameraAsync({mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0,
+      base64: true,});
 
     if (!result.canceled) {
       switch (whichPicture) {
         case "large":
-          setLargePicture(result.assets[0].uri);
+          setLargePicture(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small1":
-          setSmallPicture1(result.assets[0].uri);
+          setSmallPicture1(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small2":
-          setSmallPicture2(result.assets[0].uri);
+          setSmallPicture2(`data:image/png;base64,${result.assets[0].base64}`);
           break;
         case "small3":
-          setSmallPicture3(result.assets[0].uri);
+          setSmallPicture3(`data:image/png;base64,${result.assets[0].base64}`);
           break;
 
         default:

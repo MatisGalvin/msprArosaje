@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 70,
-        height: undefined,
+        height: 55,
         alignSelf: 'stretch',
         resizeMode: 'cover',
         borderRadius: 6

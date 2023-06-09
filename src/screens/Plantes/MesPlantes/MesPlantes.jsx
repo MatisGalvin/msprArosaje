@@ -4,13 +4,18 @@ import { DetailsPlantCard } from "../../../components/DetailsPlantCard/DetailsPl
 import { SimplePlantCard } from "../../../components/SimplePlantCard/SimplePlantCard";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function MesPlantes() {
   const navigation = useNavigation();
 
   const appStore = useSelector((state) => state.appStore);
 
-  const mesPlantes = appStore.ownPlants;
+  const [mesPlantes, setMesPlantes] = useState([]);
+
+  useEffect(() => {
+    setMesPlantes(appStore.ownPlants);
+  }, []);
 
   // const renderViews = () => {
   //   const views = [];
@@ -30,7 +35,7 @@ export default function MesPlantes() {
   //   return views;
   // };
 
-  return (
+  return mesPlantes.length > 0 ?
     <View style={{ flex: 1, marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
@@ -56,6 +61,5 @@ export default function MesPlantes() {
           />
         </View>
       ))}
-    </View>
-  );
+    </View> : <View></View>;
 }
