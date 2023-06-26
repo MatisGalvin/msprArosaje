@@ -59,7 +59,7 @@ export default function Carte() {
         setIsLoaded(true);
         setMarkers(resultFetch.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('Carte:fetchPlants', error));
   }
 
   useEffect(() => {

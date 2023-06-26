@@ -14,7 +14,6 @@ import FormCard from "../../../components/FormCard/FormCard";
 import { LargeButton } from "../../../components/LargeButton/LargeButton";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { StrapiDatas } from "../../../api/api";
 import { Plants } from "../../../api/Plants";
 import { WrapperScreen } from "../../../components/WrapperScreen/WrapperScreen";
 import utilsStylesheet from "../../../utils/utilsStylesheet";
@@ -53,7 +52,7 @@ export default function AddPlante() {
         navigation.navigate("Plantes");
       })
       .catch((error) => {
-        console.log(error);
+        console.log('AddPlante:submitPlant', error);
       });
   };
 

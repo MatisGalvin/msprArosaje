@@ -26,7 +26,7 @@ class PlantID {
             return response;
 
         } catch (error) {
-            console.log(error);
+            console.log('PlantID:post', error);
         }
     }
 }

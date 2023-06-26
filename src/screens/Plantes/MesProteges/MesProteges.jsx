@@ -19,7 +19,7 @@ export default function MesProteges() {
         setAllPlants(resultFetch.data);
         setIsLoaded(true);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('MesProteges:fetchPlants', error));
   }
 
   async function getTheTips(plantId) {
@@ -27,7 +27,7 @@ export default function MesProteges() {
       .then((resultFetch) => {
         return resultFetch.data
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('MesProteges:getTheTips', error));
   }
 
 
