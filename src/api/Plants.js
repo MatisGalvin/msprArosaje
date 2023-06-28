@@ -1,7 +1,7 @@
 import axios from "axios";
 import Image from "./Image";
 
-const baseURL = "https://arosaje.maximebaudoin.fr";
+const baseURL = "https://api.arosaje.com";
 
 const plantsURLbasic = `${baseURL}/api/plants`;
 const plantsURL = `${baseURL}/api/plants?populate=*`;

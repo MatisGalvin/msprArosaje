@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "../redux/appStore";
 global.Buffer = require('buffer').Buffer;
 
-const baseURL = "https://arosaje.maximebaudoin.fr"
+const baseURL = "https://api.arosaje.com"
 
 const tipsURLDeep = `${baseURL}/api/tips?populate=deep`
 const tipsURL = `${baseURL}/api/tips`

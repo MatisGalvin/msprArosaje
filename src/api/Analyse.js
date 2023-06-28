@@ -2,7 +2,7 @@ import axios from "axios";
 
 class Analyse {
 
-    static baseUrl = 'https://arosaje.maximebaudoin.fr/api';
+    static baseUrl = 'https://api.arosaje.com/api';
 
     static post = async (data, jwt) => {
 
