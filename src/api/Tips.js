@@ -9,8 +9,14 @@ const tipsURL = `${baseURL}/api/tips`
 const imageURL = `${baseURL}/api/images`
 
 export class Tips {
-    static async getTips() {
-        const response = await axios.get(`${plantsURL}`);
+    static async getTips(jwt) {
+        const response = await axios.get(`${plantsURL}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
+
         return response.data;
     }
 
@@ -27,7 +33,7 @@ export class Tips {
         return response.data;
     }
 
-    static async postTip(tip, plantId, botanistId) {
+    static async postTip(tip, plantId, botanistId, jwt) {
         const response = await axios.post(
             `${tipsURL}`,
             {
@@ -38,7 +44,7 @@ export class Tips {
                 }
             },
             {
-                'Authorization': `Bearer ${appStore.appStore.jwt}`
+                'Authorization': `Bearer ${jwt}`
             }
         );
         return response.data;

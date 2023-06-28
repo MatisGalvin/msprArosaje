@@ -1,9 +1,5 @@
 import axios from "axios";
-import { defaultImage } from "./defaultImage";
 import Image from "./Image";
-import { useSelector } from "react-redux";
-import store from "../redux/appStore";
-import { selectJWT } from "../redux/reducers/authReducer";
 
 const baseURL = "https://arosaje.maximebaudoin.fr";
 
@@ -13,35 +9,28 @@ const plantsURLDeep = `${baseURL}/api/plants?populate=deep`;
 const imageURL = `${baseURL}/api/images`;
 
 export class Plants {
-    static async getPlants() {
-
-        const appStore = store.getState();
-        useSelector(selectIsLoggedIn)
+    static async getPlants(jwt) {
 
         const response = await axios.get(`${plantsURL}`, {
             headers: {
-                'Authorization': `Bearer ${appStore.appStore.jwt}`
+                'Authorization': `Bearer ${jwt}`
             }
         });
 
         return response.data;
     }
 
-    static async getPlantsDeep() {
-
-        const appStore = store.getState();
+    static async getPlantsDeep(jwt) {
 
         const response = await axios.get(`${plantsURLDeep}`, {
             headers: {
-                'Authorization': `Bearer ${appStore.appStore.jwt}`
+                'Authorization': `Bearer ${jwt}`
             }
         });
         return response.data;
     }
 
-    static async getPlantsByUsername(username) {
-
-        const jwt = useSelector(selectJWT);
+    static async getPlantsByUsername(username, jwt) {
 
         try {
 
@@ -97,23 +86,21 @@ export class Plants {
         }
     }
 
-    static async pushImagesIntoStrapi(images) {
+    static async pushImagesIntoStrapi(images, jwt) {
         let imageIds = [];
         for (let index = 0; index < images.length; index++) {
             if (images[index] !== "") {
-                const responseImage = await Image.post(images[index]);
+                const responseImage = await Image.post(images[index], jwt);
                 imageIds.push(responseImage.data.id);
             }
         }
         return imageIds;
     }
 
-    static async addPlant(name, description, ownerID, images) {
+    static async addPlant(name, description, ownerID, images, jwt) {
         // images est un tableau d'images
 
-        const appStore = store.getState();
-
-        const imageIds = await this.pushImagesIntoStrapi(images);
+        const imageIds = await this.pushImagesIntoStrapi(images, jwt);
 
         const response = await axios.post(`${plantsURLbasic}`, {
             data: {
@@ -124,7 +111,7 @@ export class Plants {
                 // images: [responseImage.data.id],
             },
         }, {
-            'Authorization': `Bearer ${appStore.appStore.jwt}`
+            'Authorization': `Bearer ${jwt}`
         });
 
         return response.data;
