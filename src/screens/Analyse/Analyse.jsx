@@ -55,11 +55,12 @@ export default function Analyse() {
 
   const sendPicture = async () => {
     setIsLoaded(false);
+
     const resultUpload = await ImageApi.post(`data:image/png;base64,${largePicture.base64}`);
     const resultHealth = await PlantID.post(largePicture.base64);
-    // let resultHealth = {};
-    console.log(resultHealth);
+    
     const resultAnalyse = await AnalyseApi.post(JSON.parse(resultHealth));
+    
     if (resultAnalyse) {
       setPlantDetails(JSON.parse(resultHealth));
     } else {

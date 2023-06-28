@@ -28,12 +28,6 @@ export default function GalleryCard({
 }) {
   const [whichPictureState, setWhichPictureState] = useState('');
 
-  // useEffect(() => {
-  //   console.log("useeffect")
-  //   console.log(whichPictureState)
-  // }, [whichPictureState])
-
-
   const handleChooseOption = (whichPicture) => {
     Alert.alert(
       "Ajouter une photo",

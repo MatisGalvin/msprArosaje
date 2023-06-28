@@ -17,6 +17,7 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
         break;
 
       default:
+        return require("../../../assets/images/static/plant.png");
         break;
     }
   };

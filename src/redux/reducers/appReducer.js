@@ -1,32 +1,21 @@
-import { StrapiDatas } from "../../api/api";
-import { Roles } from "../../utils/Roles";
-
-const initalState = {
-  id: null,
-  username: "John",
-  email: "",
+const initialState = {
   address: "",
   zipcode: "",
-  profile_picture: "",
   city: "",
   lat: "",
   long: "",
-  ownPlants: {},
+  ownPlants: [],
 };
 
 // Reducer
-const appReducer = (state = initalState, action) => {
+const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case "INIT_STATE":
       return {
         ...state,
-        id: action.id,
-        username: action.username,
         address: action.address,
         city: action.city,
-        zipcode: action.zipcode,
-        profile_picture: action.profile_picture
-
+        zipcode: action.zipcode
       };
       break;
     case "INIT_OWN_PLANTS":
@@ -41,5 +30,7 @@ const appReducer = (state = initalState, action) => {
       break;
   }
 };
+
+export const selectOwnPlants = (state) => state.appStore.ownPlants;
 
 export default appReducer;

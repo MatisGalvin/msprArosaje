@@ -1,10 +1,13 @@
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 class Analyse {
 
-    static baseUrl = 'http://arosaje.maximebaudoin.fr:1337/api';
+    static baseUrl = 'https://arosaje.maximebaudoin.fr/api';
 
     static post = async (data) => {
+
+        const appStore = useSelector((state) => state.appStore);
 
         try {
 
@@ -15,7 +18,7 @@ class Analyse {
             }, {
                 headers: {
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${process.env.API_TOKEN}`
+                    'Authorization': `Bearer ${appStore.jwt}`
                 }
             });
 
@@ -25,7 +28,7 @@ class Analyse {
             return false;
 
         } catch (error) {
-            console.log(error);
+            console.log('Analyse:post', error);
         }
     }
 }

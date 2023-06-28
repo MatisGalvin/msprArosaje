@@ -3,6 +3,7 @@ import {
   ScrollView,
   Dimensions,
   KeyboardAvoidingView,
+  SafeAreaView,
 } from "react-native";
 import { Header } from "../../../../components/Header/Header";
 import { SectionTitle } from "../../../../components/SectionTitle/SectionTitle";
@@ -49,68 +50,67 @@ export default function NewReportScreen({ route }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ width: "100%", height: "100%" }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 48 : 0}
+      style={{
+        width: "100%",
+        flex: 1,
+      }}
     >
-      <WrapperScreen>
-        <View style={{ flex: 1 }}>
-          <Header
-            screenName={plant.attributes.name}
-            handlePress={() => navigation.goBack()}
-            customStylesheet={utilsStylesheet.containerPadding}
+      <View style={{ flex: 1 }}>
+        <Header
+          screenName={plant.attributes.name}
+          handlePress={() => navigation.goBack()}
+          customStylesheet={utilsStylesheet.containerPadding}
+        />
+        <ScrollView
+          style={[utilsStylesheet.containerPadding]}
+          contentContainerStyle={{
+            alignItems: "center",
+            justifyContent: "start",
+            gap: 10,
+            paddingBottom: 20,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          {renderSectionTitle()}
+
+          <NewReportingCard
+            image={image}
+            owner={owner}
+            plantId={plant.id}
+            isSubmitted={isSubmitted}
           />
-          <ScrollView
-            style={[{ marginBottom: 60 }, utilsStylesheet.containerPadding]}
-            contentContainerStyle={{
-              alignItems: "center",
-              justifyContent: "start",
-              gap: 10,
-            }}
-            showsVerticalScrollIndicator={false}
-          >
-            {renderSectionTitle()}
 
-            <NewReportingCard
-              image={image}
-              owner={owner}
-              plantId={plant.id}
-              isSubmitted={isSubmitted}
-            />
-
-            {/* <LargeButton
+          {/* <LargeButton
               grey
               image={require("../../../../../assets/images/static/report-grey.png")}
               handlePress={() => {}}
             >
               Publier mon raport
             </LargeButton> */}
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            backgroundColor: "white",
-            minWidth: "100%",
-            position: "absolute",
-            paddingBottom: 40,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-            zIndex: 10,
-            elevation: 50,
+        </ScrollView>
+      </View>
+      <View
+        style={{
+          backgroundColor: "white",
+          minWidth: "100%",
+          height: 70,
+          paddingBottom: 20,
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          zIndex: 10,
 
-            shadowColor: colors.black,
-            shadowOffset: {
-              width: 0,
-              height: -5,
-            },
-            shadowOpacity: 0.15,
-            shadowRadius: 10,
-          }}
-        >
-          <BottomSearchBar plantId={plant.id} setIsSubmitted={setIsSubmitted} />
-        </View>
-      </WrapperScreen>
+          shadowColor: colors.black,
+          shadowOffset: {
+            width: 0,
+            height: -5,
+          },
+          shadowOpacity: 0.15,
+          shadowRadius: 10,
+        }}
+      >
+        <BottomSearchBar plantId={plant.id} setIsSubmitted={setIsSubmitted} />
+      </View>
     </KeyboardAvoidingView>
   );
 }
