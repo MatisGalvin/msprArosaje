@@ -2,7 +2,7 @@ import axios from "axios";
 
 class Auth {
 
-    static baseUrl = 'https://arosaje.maximebaudoin.fr/api/auth';
+    static baseUrl = 'https://api.arosaje.com/api/auth';
 
     static localConnect = async (identifier, password) => {
 
