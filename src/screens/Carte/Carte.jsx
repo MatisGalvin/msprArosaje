@@ -10,6 +10,10 @@ import { useNavigation } from "@react-navigation/native";
 import { Plants } from "../../api/Plants";
 import { Tips } from "../../api/Tips";
 import MarkersJson from "./Markers.json";
+import { useSelector } from "react-redux";
+import { selectAllPlants } from "../../redux/reducers/appReducer";
+import { selectJWT } from "../../redux/reducers/authReducer";
+import store from "../../redux/appStore";
 
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
@@ -52,18 +56,26 @@ export default function Carte() {
 
   const [region, setRegion] = useState(initialRegion);
 
-  function fetchPlants() {
-    Plants.getPlantsDeep()
-      .then((resultFetch) => {
-        setAllPlants(resultFetch.data);
-        setIsLoaded(true);
-        setMarkers(resultFetch.data);
-      })
-      .catch((error) => console.log('Carte:fetchPlants', error));
+  const allPlantsRedux = useSelector(selectAllPlants);
+  const jwt = useSelector(selectJWT);
+
+  const getPlants = async () => {
+    const plants = await Plants.getPlantsDeep(jwt);
+    
+    store.dispatch({ type: "INIT_ALL_PLANTS", plants: plants.data });
+    setAllPlants(plants.data);
+    setMarkers(plants.data);
+    setIsLoaded(true);
   }
 
   useEffect(() => {
-    fetchPlants();
+    if(allPlantsRedux.length !== 0) {
+        setAllPlants(allPlantsRedux);
+        setMarkers(allPlantsRedux);
+        setIsLoaded(true);
+    }
+
+    getPlants();
   }, []);
 
   useEffect(() => {

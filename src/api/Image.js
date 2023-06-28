@@ -1,13 +1,10 @@
 import axios from "axios";
-import store from "../redux/appStore";
 
 class Image {
 
     static baseUrl = 'https://arosaje.maximebaudoin.fr/api';
 
-    static post = async (base64) => {
-
-        const appStore = store.getState();
+    static post = async (base64, jwt) => {
 
         try {
 
@@ -18,7 +15,7 @@ class Image {
             }, {
                 headers: {
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${appStore.appStore.jwt}`
+                    'Authorization': `Bearer ${jwt}`
                 }
             });
 

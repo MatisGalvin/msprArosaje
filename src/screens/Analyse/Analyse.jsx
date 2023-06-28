@@ -21,6 +21,8 @@ import ImageApi from "../../api/Image";
 import PlantID from "../../api/PlantID";
 import AnalyseApi from "../../api/Analyse";
 import AnalyseDetails from "./AnalyseDetails";
+import { useSelector } from "react-redux";
+import { selectJWT } from "../../redux/reducers/authReducer";
 
 export default function Analyse() {
   const navigation = useNavigation();
@@ -28,6 +30,8 @@ export default function Analyse() {
   const [largePicture, setLargePicture] = useState();
   const [isLoaded, setIsLoaded] = useState(true);
   const [plantDetails, setPlantDetails] = useState();
+
+  const jwt = useSelector(selectJWT);
 
   const openCamera = async () => {
     // Ask the user for the permission to access the media library
@@ -56,11 +60,14 @@ export default function Analyse() {
   const sendPicture = async () => {
     setIsLoaded(false);
 
-    const resultUpload = await ImageApi.post(`data:image/png;base64,${largePicture.base64}`);
+    const resultUpload = await ImageApi.post(
+      `data:image/png;base64,${largePicture.base64}`,
+      jwt
+    );
     const resultHealth = await PlantID.post(largePicture.base64);
-    
-    const resultAnalyse = await AnalyseApi.post(JSON.parse(resultHealth));
-    
+
+    const resultAnalyse = await AnalyseApi.post(JSON.parse(resultHealth), jwt);
+
     if (resultAnalyse) {
       setPlantDetails(JSON.parse(resultHealth));
     } else {

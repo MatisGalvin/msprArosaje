@@ -1,13 +1,10 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 class Analyse {
 
     static baseUrl = 'https://arosaje.maximebaudoin.fr/api';
 
-    static post = async (data) => {
-
-        const appStore = useSelector((state) => state.appStore);
+    static post = async (data, jwt) => {
 
         try {
 
@@ -18,7 +15,7 @@ class Analyse {
             }, {
                 headers: {
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${appStore.jwt}`
+                    'Authorization': `Bearer ${jwt}`
                 }
             });
 
