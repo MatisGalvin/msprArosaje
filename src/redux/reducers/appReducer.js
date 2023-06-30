@@ -15,13 +15,25 @@ const appReducer = (state = initialState, action) => {
         ...state,
         address: action.address,
         city: action.city,
-        zipcode: action.zipcode
+        zipcode: action.zipcode,
       };
       break;
     case "INIT_OWN_PLANTS":
       return {
         ...state,
         ownPlants: action.plants,
+      };
+      break;
+
+    case "APP_SIGNOUT":
+      return {
+        ...state,
+        address: "",
+        zipcode: "",
+        city: "",
+        lat: "",
+        long: "",
+        ownPlants: [],
       };
       break;
 

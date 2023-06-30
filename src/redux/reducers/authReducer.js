@@ -1,42 +1,54 @@
 const initialState = {
-    isLoggedIn: false,
-    id: null,
-    email: null,
-    username: null,
-    profile_picture: null,
-    jwt: null
+  isLoggedIn: false,
+  id: null,
+  email: null,
+  username: null,
+  profile_picture: null,
+  isSharedAdress: false,
+  jwt: null,
 };
 
 // Reducer
 const authReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case "setSignIn":
-            return {
-                ...state,
-                id: action.id,
-                email: action.email,
-                username: action.username,
-                profile_picture: action.profile_picture,
-                isLoggedIn: action.isLoggedIn,
-                jwt: action.jwt
-            };
-            break;
-        case "setSignOut":
-            return {
-                ...state,
-                id: null,
-                email: null,
-                username: null,
-                profile_picture: null,
-                isLoggedIn: null,
-                jwt: null
-            };
-            break;
+  switch (action.type) {
+    case "setSignIn":
+      return {
+        ...state,
+        id: action.id,
+        email: action.email,
+        username: action.username,
+        profile_picture: action.profile_picture,
+        isLoggedIn: action.isLoggedIn,
+        jwt: action.jwt,
+      };
+      break;
+    case "setSignOut":
+      return {
+        ...state,
+        id: null,
+        email: null,
+        username: null,
+        profile_picture: null,
+        isLoggedIn: null,
+        jwt: null,
+      };
+      break;
 
-        default:
-            return state;
-            break;
-    }
+    case "auth_state_reset":
+      return {
+        isLoggedIn: false,
+        id: null,
+        email: null,
+        username: null,
+        profile_picture: null,
+        jwt: null,
+      };
+      break;
+
+    default:
+      return state;
+      break;
+  }
 };
 
 export const selectIsLoggedIn = (state) => state.authStore.isLoggedIn;

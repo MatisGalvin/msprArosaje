@@ -3,7 +3,7 @@ import store from "../redux/appStore";
 
 class Image {
 
-    static baseUrl = 'https://arosaje.maximebaudoin.fr/api';
+    static baseUrl = 'https://api.arosaje.com/api';
 
     static post = async (base64) => {
 

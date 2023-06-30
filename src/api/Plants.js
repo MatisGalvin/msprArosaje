@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import store from "../redux/appStore";
 import { selectJWT } from "../redux/reducers/authReducer";
 
-const baseURL = "https://arosaje.maximebaudoin.fr";
+const baseURL = 'https://api.arosaje.com/api';
 
 const plantsURLbasic = `${baseURL}/api/plants`;
 const plantsURL = `${baseURL}/api/plants?populate=*`;
