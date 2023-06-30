@@ -12,7 +12,8 @@ const colors = {
         50: '#F9FAFB'
     },
     red: {
-        500: '#ef4444'
+        500: '#ef4444',
+        600: '#DC2626'
     },
     orange: {
         300: '#FDBA74'

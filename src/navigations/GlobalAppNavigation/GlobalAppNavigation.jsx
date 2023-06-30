@@ -21,6 +21,8 @@ import { useSelector } from "react-redux";
 import Login from "../../screens/Login/Login";
 import { selectIsLoggedIn, selectUser, selectUsername } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
+import Profile from "../../screens/Profile/Profile";
+import Parameters from "../../screens/Parameters/Parameters";
 
 const Tab = createBottomTabNavigator();
 
@@ -132,6 +134,7 @@ export default function GlobalAppNavigation() {
     <NavigationContainer theme={navTheme}>
       <SafeAreaProvider>
         {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
+        {/* <AppNavigator /> */}
       </SafeAreaProvider>
     </NavigationContainer>
   );
@@ -177,6 +180,14 @@ const AppNavigator = () => {
           presentation: "modal",
           cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
         }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+      />
+      <Stack.Screen
+        name="Parameters"
+        component={Parameters}
       />
     </Stack.Navigator>
   );

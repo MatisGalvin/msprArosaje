@@ -3,7 +3,7 @@ import store from "../redux/appStore";
 import { useSelector } from "react-redux";
 import { selectJWT } from "../redux/reducers/authReducer";
 
-const baseURL = "https://api.arosaje.com"
+const baseURL = 'https://api.arosaje.com';
 
 const usersURLDeep = `${baseURL}/api/users?populate=*`
 const usersURL = `${baseURL}/api/users`

@@ -1,6 +1,7 @@
 import axios from "axios";
 import Image from "./Image";
 
+
 const baseURL = "https://api.arosaje.com";
 
 const plantsURLbasic = `${baseURL}/api/plants`;
