@@ -2,7 +2,7 @@
 import axios from "axios";
 global.Buffer = require('buffer').Buffer;
 
-const baseURL = 'https://api.arosaje.com/api';
+const baseURL = "https://api.arosaje.com"
 
 const plantsURL = `${baseURL}/api/plants`
 const imageURL = `${baseURL}/api/images`

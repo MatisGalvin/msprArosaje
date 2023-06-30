@@ -1,10 +1,11 @@
 const initialState = {
-  address: "",
-  zipcode: "",
-  city: "",
-  lat: "",
-  long: "",
-  ownPlants: [],
+    address: "",
+    zipcode: "",
+    city: "",
+    lat: "",
+    long: "",
+    ownPlants: [],
+    allPlants: [],
 };
 
 // Reducer
@@ -44,5 +45,6 @@ const appReducer = (state = initialState, action) => {
 };
 
 export const selectOwnPlants = (state) => state.appStore.ownPlants;
+export const selectAllPlants = (state) => state.appStore.allPlants;
 
 export default appReducer;

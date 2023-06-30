@@ -10,9 +10,7 @@ const usersURL = `${baseURL}/api/users`
 
 export class Users {
 
-    static async findById(id, jwtDefault = '') {
-
-        const jwt = jwtDefault !== '' ? jwtDefault : useSelector(selectJWT);
+    static async findById(id, jwt) {
 
         try {
 
@@ -42,8 +40,7 @@ export class Users {
         }
     }
 
-    static async getUserIdByUsername(username) {
-        const jwt = useSelector(selectJWT);
+    static async getUserIdByUsername(username, jwt) {
 
         const response = await axios.get(
             `${usersURL}?filters[username][$eq]=${username}`,
