@@ -37,6 +37,10 @@ export default function Parameters() {
     }
   };
 
+  const handlePressURL = (url) => {
+    Linking.openURL(url)
+  }
+
   return (
     <WrapperScreen>
       <View style={{ flex: 1 }}>
@@ -88,8 +92,12 @@ export default function Parameters() {
           text="Inforations légales"
           style={{ marginTop: 10 }}
         />
-        <ParametersLine topic="Politique de confidentialité" />
-        <ParametersLine topic="Mentions légales" />
+        <ParametersLine topic="Politique de confidentialité"
+        handlePress={() => handlePressURL("https://www.arosaje.com/politique-de-confidentialite")}
+        />
+        <ParametersLine topic="Mentions légales" 
+        handlePress={() => handlePressURL("https://www.arosaje.com/mentions-legales")}
+        />
 
         <ParametersLineTitle text="Compte" style={{ marginTop: 10 }} />
         <ParametersLine
