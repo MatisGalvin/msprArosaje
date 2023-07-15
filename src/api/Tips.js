@@ -4,6 +4,7 @@ global.Buffer = require('buffer').Buffer;
 
 const baseURL = "https://api.arosaje.com"
 
+
 const tipsURLDeep = `${baseURL}/api/tips?populate=deep`
 const tipsURL = `${baseURL}/api/tips`
 const imageURL = `${baseURL}/api/images`
