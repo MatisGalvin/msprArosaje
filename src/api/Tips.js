@@ -35,20 +35,52 @@ export class Tips {
     }
 
     static async postTip(tip, plantId, botanistId, jwt) {
-        const response = await axios.post(
-            `${tipsURL}`,
-            {
-                "data": {
-                    "tip": tip,
-                    "plant": plantId,
-                    "botanist": botanistId
+
+        try {
+
+            const response = await axios.post(
+                `${tipsURL}`,
+                {
+                    data: {
+                        tip: tip,
+                        plant: plantId,
+                        botanist: botanistId
+                    }
+                },
+                {
+                    headers: {
+                        'content-type': 'application/json',
+                        'Authorization': `Bearer ${jwt}`
+                    }
                 }
-            },
-            {
-                'Authorization': `Bearer ${jwt}`
+            );
+
+            if (response.status === 201 || response.status === 200) {
+                return response.data;
             }
-        );
-        return response.data;
+
+            return false;
+
+        } catch (error) {
+            console.log('Tips:postTip', error);
+
+            return false;
+        }
+
+        // const response = await axios.post(
+        //     `${tipsURL}`,
+        //     {
+        //         "data": {
+        //             "tip": tip,
+        //             "plant": plantId,
+        //             "botanist": botanistId
+        //         }
+        //     },
+        //     {
+        //         'Authorization': `Bearer ${jwt}`
+        //     }
+        // );
+        // return response.data;
     }
 
 }

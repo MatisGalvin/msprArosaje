@@ -34,7 +34,7 @@ export default function MesPlantes() {
     getPlants();
   }, []);
 
-  return ownPlants.length > 0 ?
+  return(
     <View style={{ flex: 1, marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
@@ -43,8 +43,7 @@ export default function MesPlantes() {
         Ajouter une nouvelle plante
       </LargeButton>
       {/* {renderViews()} */}
-
-      {ownPlants.map((plant) => (
+      {ownPlants.length > 0 && ownPlants.map((plant) => (
         <View key={plant.id} style={{ marginTop: 15 }}>
           <SimplePlantCard
             style={{ marginTop: 30 }}
@@ -60,5 +59,6 @@ export default function MesPlantes() {
           />
         </View>
       ))}
-    </View> : <View><Text>test</Text></View>;
+    </View>
+  )
 }

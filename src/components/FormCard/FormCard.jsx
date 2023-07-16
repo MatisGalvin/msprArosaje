@@ -1,14 +1,27 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "../../../colors";
 import { useState } from "react";
+import Checkbox from "expo-checkbox";
 
-export default function FormCard({ style, setCanSubmit, streetProp, cityProp, zipcodeProp, plantName, setPlantName, plantDescription, setPlantDescription }) {
+export default function FormCard({
+  style,
+  setCanSubmit,
+  streetProp,
+  cityProp,
+  zipcodeProp,
+  plantName,
+  setPlantName,
+  plantDescription,
+  setPlantDescription,
+}) {
   const [street, setStreet] = useState(streetProp);
   const [city, setCity] = useState(cityProp);
   const [zipcode, setZipcode] = useState(zipcodeProp);
 
+  const [isChecked, setIsChecked] = useState(false);
+
   const canSubmitOrNot = () => {
-    if (street && city && zipcode && zipcode.length === 5 && plantName) {
+    if (street && city && zipcode && zipcode.length === 5 && plantName && isChecked) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -84,6 +97,18 @@ export default function FormCard({ style, setCanSubmit, streetProp, cityProp, zi
           onChangeText={onChangeDescription}
           onEndEditing={canSubmitOrNot}
         />
+        <View style={styles.checkBoxForm}>
+          <Checkbox
+            value={isChecked}
+            onValueChange={setIsChecked}
+            color={colors.green[400]}
+          />
+          <Text style={styles.textCheckBox}>
+            En cochant cette case, je consent à partager la localisation
+            approximative de ma plante afin de l’afficher sur la carte. Sinon,
+            mon adresse précise sera partagée uniquement au gardien(ne).
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -147,5 +172,18 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+  },
+  checkBoxForm: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 10
+  },
+  textCheckBox: {
+    marginHorizontal: 10,
+    color: colors.gray[600],
+  },
+  checkBoxLinks: {
+    textDecorationLine: "underline",
   },
 });

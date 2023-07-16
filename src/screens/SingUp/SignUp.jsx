@@ -27,17 +27,16 @@ import { Users } from "../../api/Users";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
 
 export default function SignUp() {
-  const [userName, setUserName] = useState();
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState();
-  const [confirmationPassword, setConfirmationPassword] = useState();
-  const [rememberMe, setRememberMe] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmationPassword, setConfirmationPassword] = useState("");
   const [isCGUSelected, setCGUSelection] = useState(false);
   const [isMLSelected, setMLSelection] = useState(false);
   const [colorCGU, setColorCGU] = useState(colors.green[400]);
   const [colorML, setColorML] = useState(colors.green[400]);
 
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorUsernameMessage, setErrorUsernameMessage] = useState(false);
 
   const [errorEmailMessage, setErrorEmailMessage] = useState(false);
   const [errorPassWordRobustMessage, setErrorPasswordRobustMessage] =
@@ -46,20 +45,28 @@ export default function SignUp() {
     useState(false);
   const [errorCheckboxMessage, setErrorCheckboxMessage] = useState(false);
 
+  const regexUserName = /^[a-zA-Z0-9_]{1,25}$/
+  const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{12,}$/;
 
   const handleFieldsVerification = () => {
-    if (email === "") {
+
+    if (!regexUserName.test(userName)) {
+      setErrorUsernameMessage(true);
+      return false;
+    }
+
+    if (!regexEmail.test(email)) {
       setErrorEmailMessage(true);
-      return;
+      return false;
     }
     if (!regexPassword.test(password)) {
       setErrorPasswordRobustMessage(true);
-      return;
+      return false;
     }
     if (password !== confirmationPassword) {
       setErrorPasswordSameMessage(true);
-      return;
+      return false;
     }
     if (!isCGUSelected || !isMLSelected) {
       setErrorCheckboxMessage(true);
@@ -69,20 +76,58 @@ export default function SignUp() {
       if (!isMLSelected) {
         setColorML(colors.red[600]);
       }
-      return;
+      return false;
     }
     setErrorEmailMessage(false);
     setErrorPasswordSameMessage(false);
     setErrorPasswordRobustMessage(false);
     setErrorCheckboxMessage(false);
-    console.log("SignUp!");
-    console.log("");
-    console.log("email : " + email);
-    console.log("password : " + password);
+    return true;
   };
 
   const handleSignUp = async () => {
-    handleFieldsVerification();
+    if (handleFieldsVerification() === true) {
+      const authResponse = await Auth.localRegister(userName, email, password);
+
+      if (!authResponse) {
+        console.log("SignUp:handleSignUpAuthResponse", "error", authResponse);
+        return;
+      }
+
+      if (!authResponse.jwt || !authResponse.user) {
+        return;
+      }
+
+      const userResponse = await Users.findById(
+        authResponse.user.id,
+        authResponse.jwt
+      );
+
+      if (typeof userResponse[0] == "undefined") {
+        console.log("SignUp:handleSignUpUserResponse", "error", userResponse);
+        return;
+      }
+
+      if (!userResponse[0].id || userResponse[0].id !== authResponse.user.id) {
+        console.log(
+          "SignUp:handleSignUp",
+          "error",
+          !userResponse[0].id,
+          userResponse[0].id !== authResponse.user.id
+        );
+        return;
+      }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+      store.dispatch({
+        type: "setSignIn",
+        isLoggedIn: true,
+        id: authResponse.user.id,
+        email: authResponse.user.email,
+        username: authResponse.user.username,
+        jwt: authResponse.jwt,
+      });
+    }
   };
 
   useEffect(() => {
@@ -134,24 +179,36 @@ export default function SignUp() {
               <View
                 style={[
                   styles.inputGroup,
-                  errorMessage && { borderColor: colors.red[500] },
+                  errorUsernameMessage && { borderColor: colors.red[500] },
                 ]}
               >
                 <Image
                   style={[
                     styles.inputImage,
-                    errorMessage && { tintColor: colors.red[500] },
+                    errorUsernameMessage && { tintColor: colors.red[500] },
                   ]}
                   source={require("../../../assets/images/static/profile.png")}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder="JohnDoe"
-                  onChangeText={setUserName}
+                  onChangeText={(text) => {
+                    setErrorUsernameMessage(false);
+                    setUserName(text)
+                  }}
                   value={userName}
+                  autoCapitalize="none"
                 />
               </View>
             </View>
+
+            {errorUsernameMessage && (
+              <Text style={styles.error}>
+                Votre nom d'utilisateur n'est pas valide. Ce dernier ne doit comporter que des caractères alphanumériques sans accents ni espaces.
+              </Text>
+            )}
+
+
             <View style={styles.formGroup}>
               <Text style={styles.label}>Email</Text>
               <View
@@ -175,6 +232,7 @@ export default function SignUp() {
                     setEmail(text);
                   }}
                   value={email}
+                  autoCapitalize="none"
                 />
               </View>
             </View>
@@ -218,6 +276,7 @@ export default function SignUp() {
                   }}
                   secureTextEntry={true}
                   value={password}
+                  autoCapitalize="none"
                 />
               </View>
             </View>
@@ -251,6 +310,7 @@ export default function SignUp() {
                   }}
                   secureTextEntry={true}
                   value={confirmationPassword}
+                  autoCapitalize="none"
                 />
               </View>
             </View>

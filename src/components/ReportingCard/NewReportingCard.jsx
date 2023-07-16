@@ -158,10 +158,12 @@ export default function NewReportingCard({
               <View key={id} style={styles.commentContainer}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{
-                      uri: item.attributes.botanist.data.attributes
-                        .profile_picture.data.attributes.base64,
-                    }}
+                  source={(item.attributes.botanist.data.attributes
+                    .profile_picture.data !== null ? {
+                      uri: (item.attributes.botanist.data.attributes
+                        .profile_picture.data !== null ? item.attributes.botanist.data.attributes
+                        .profile_picture.data.attributes.base64 : '../../../assets/images/static/profile.png'),
+                    } : require("../../../assets/images/static/profile.png"))}
                     style={styles.profilePic}
                   />
                 </View>

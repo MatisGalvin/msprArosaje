@@ -58,15 +58,13 @@ export default function Login() {
 
     if (
       !userResponse[0].id ||
-      userResponse[0].id !== authResponse.user.id ||
-      !userResponse[0].profile_picture
+      userResponse[0].id !== authResponse.user.id
     ) {
       console.log(
         "Login:handleLogin",
         "error",
         !userResponse[0].id,
         userResponse[0].id !== authResponse.user.id,
-        !userResponse[0].profile_picture
       );
       return;
     }
@@ -78,7 +76,7 @@ export default function Login() {
       isLoggedIn: true,
       id: authResponse.user.id,
       email: authResponse.user.email,
-      profile_picture: userResponse[0].profile_picture.base64,
+      profile_picture: userResponse[0].profile_picture !== null ? userResponse[0].profile_picture.base64 : null,
       username: authResponse.user.username,
       jwt: authResponse.jwt,
     });
@@ -130,6 +128,7 @@ export default function Login() {
                   placeholder="johndoa@mail.com"
                   onChangeText={setEmail}
                   value={email}
+                  autoCapitalize="none"
                 />
               </View>
             </View>
@@ -154,6 +153,7 @@ export default function Login() {
                   onChangeText={setPassword}
                   secureTextEntry={true}
                   value={password}
+                  autoCapitalize="none"
                 />
               </View>
               {errorMessage && (
