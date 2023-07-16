@@ -6,6 +6,7 @@ import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
 import ParametersButton from "../ParametersButton/ParametersButton";
+import { MessageButton } from "../MessageButton/MessageButton";
 
 export const Header = ({
   screenName,
@@ -22,8 +23,9 @@ export const Header = ({
         <HeaderLogo screenName={screenName} handlePress={handlePress} />
         <Text style={styles.titleText}>{screenName}</Text>
       </View>
-      <View style={[styles.container, { gap: 16 }]}>
-        <NotificationButton
+      {showButtons && (
+        <View style={[styles.container, { gap: 16 }]}>
+          <NotificationButton
           unread={3}
           handlePress={() => navigation.navigate("Notifications")}
         />
@@ -31,15 +33,6 @@ export const Header = ({
           unread={2}
           handlePress={() => navigation.navigate("Discussion")}
         />
-        <Separator />
-        <ProfileButton />
-      </View>
-      {showButtons && (
-        <View style={[styles.container, { gap: 16 }]}>
-          <NotificationButton
-            unread={3}
-            handlePress={() => navigation.navigate("Notifications")}
-          />
           <Separator />
           {showParameters ? <ParametersButton /> : <ProfileButton />}
         </View>
