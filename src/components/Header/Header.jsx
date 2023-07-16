@@ -22,6 +22,18 @@ export const Header = ({
         <HeaderLogo screenName={screenName} handlePress={handlePress} />
         <Text style={styles.titleText}>{screenName}</Text>
       </View>
+      <View style={[styles.container, { gap: 16 }]}>
+        <NotificationButton
+          unread={3}
+          handlePress={() => navigation.navigate("Notifications")}
+        />
+        <MessageButton
+          unread={2}
+          handlePress={() => navigation.navigate("Discussion")}
+        />
+        <Separator />
+        <ProfileButton />
+      </View>
       {showButtons && (
         <View style={[styles.container, { gap: 16 }]}>
           <NotificationButton

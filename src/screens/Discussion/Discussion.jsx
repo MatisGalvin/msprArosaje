@@ -2,6 +2,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
@@ -9,7 +10,7 @@ import { Header } from "../../components/Header/Header";
 import utilsStylesheet from "../../utils/utilsStylesheet";
 import { useNavigation } from "@react-navigation/native";
 
-export const Notifications = () => {
+export const Discussion = () => {
   const navigation = useNavigation();
   return (
     <KeyboardAvoidingView
@@ -19,7 +20,7 @@ export const Notifications = () => {
       <WrapperScreen>
         <View style={{ flex: 1 }}>
           <Header
-            screenName="Notifications"
+            screenName="Messages"
             handlePress={() => navigation.goBack()}
             customStylesheet={utilsStylesheet.containerPadding}
           />

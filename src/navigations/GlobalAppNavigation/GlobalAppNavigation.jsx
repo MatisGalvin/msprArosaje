@@ -19,8 +19,13 @@ import Analyse from "../../../src/screens/Analyse/Analyse";
 import { initState } from "../../../src/utils/initState";
 import { useSelector } from "react-redux";
 import Login from "../../screens/Login/Login";
-import { selectIsLoggedIn, selectUser, selectUsername } from "../../redux/reducers/authReducer";
+import {
+  selectIsLoggedIn,
+  selectUser,
+  selectUsername,
+} from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
+import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
 
@@ -173,22 +178,10 @@ const AppNavigator = () => {
       }}
     >
       <Stack.Screen name="Default" component={BottomTabNavigator} />
-      <Stack.Screen
-        name="Notifications"
-        component={Notifications}
-        options={{
-          presentation: "modal",
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-        }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-      />
-      <Stack.Screen
-        name="Parameters"
-        component={Parameters}
-      />
+      <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="Discussion" component={Discussion} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Parameters" component={Parameters} />
     </Stack.Navigator>
   );
 };
