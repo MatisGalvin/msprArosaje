@@ -23,12 +23,15 @@ import { dispatch } from "react-redux";
 import { setSignIn } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
 import { Users } from "../../api/Users";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
   const [email, setEmail] = useState("alicejones@example.com");
   const [password, setPassword] = useState("9QzRftmQBNT5kJzp");
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const navigation = useNavigation()
 
   const handleLogin = async () => {
     const authResponse = await Auth.localConnect(email, password);
@@ -214,7 +217,7 @@ export default function Login() {
 
           <View style={styles.signinContainer}>
             <Text style={styles.signinPreText}>Pas encore de compte ? </Text>
-            <TouchableOpacity style={styles.signinButton}>
+            <TouchableOpacity style={styles.signinButton} onPress={() => navigation.navigate("SignUp")}>
               <Text style={styles.signinText}>Créer votre compte</Text>
             </TouchableOpacity>
           </View>
