@@ -21,6 +21,7 @@ import ImgToBase64 from "react-native-image-base64";
 import * as FileSystem from "expo-file-system";
 import { initState } from "../../../utils/initState";
 import Image from "../../../api/Image";
+import { selectID, selectJWT } from "../../../redux/reducers/authReducer";
 
 export default function AddPlante() {
   const navigation = useNavigation();
@@ -39,20 +40,22 @@ export default function AddPlante() {
   const [plantName, setPlantName] = useState("");
   const [plantDescription, setPlantDescription] = useState("");
 
+  const userID = useSelector(selectID);
+  const jwt = useSelector(selectJWT);
+
   const submitPlant = async () => {
     setWaitSubmit(true);
 
     const images = [largePicture, smallPicture1, smallPicture2, smallPicture3];
-    const ownerId = appStore.id;
 
-    Plants.addPlant(plantName, plantDescription, ownerId, images)
+    Plants.addPlant(plantName, plantDescription, userID, images, jwt)
       .then(() => {
         initState(appStore.username);
         setWaitSubmit(false);
         navigation.navigate("Plantes");
       })
       .catch((error) => {
-        console.log('AddPlante:submitPlant', error);
+        console.log("AddPlante:submitPlant", error);
       });
   };
 
@@ -104,7 +107,6 @@ export default function AddPlante() {
               plantDescription={plantDescription}
               setPlantDescription={setPlantDescription}
             />
-            {}
             {canSubmit && !waitSubmit ? (
               <LargeButton
                 image={require("../../../../assets/images/static/plus.png")}
@@ -116,7 +118,6 @@ export default function AddPlante() {
               <LargeButton
                 image={require("../../../../assets/images/static/plus.png")}
                 dark
-                handlePress
               >
                 Ajouter ma plante
               </LargeButton>

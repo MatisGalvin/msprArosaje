@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Linking,
   NativeModules,
@@ -15,8 +16,14 @@ import { useNavigation } from "@react-navigation/native";
 import ParametersLine from "../../components/ParametersLine/ParametersLine";
 import ParametersLineTitle from "../../components/ParametersLineTitle/ParametersLineTitle";
 import store from "../../redux/appStore";
+import { Users } from "../../api/Users";
+import { useSelector } from "react-redux";
+import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 export default function Parameters() {
   const navigation = useNavigation();
+
+  const userID = useSelector(selectID);
+  const jwt = useSelector(selectJWT);
 
   const logout = () => {
     store.dispatch({
@@ -38,8 +45,38 @@ export default function Parameters() {
   };
 
   const handlePressURL = (url) => {
-    Linking.openURL(url)
-  }
+    Linking.openURL(url);
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Suppression de compte",
+      "Voulez-vous supprimer votre compte définitivement ?",
+      [
+        {
+          text: "Annuler",
+          style: "default",
+        },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            const deletionResponse = await Users.deleteById(userID, jwt);
+            if (typeof deletionResponse == "undefined") {
+              console.log(
+                "Parameters:handleDeleteAccount",
+                "error",
+                deletionResponse
+              );
+              return;
+            }
+
+            logout();
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <WrapperScreen>
@@ -92,11 +129,19 @@ export default function Parameters() {
           text="Inforations légales"
           style={{ marginTop: 10 }}
         />
-        <ParametersLine topic="Politique de confidentialité"
-        handlePress={() => handlePressURL("https://www.arosaje.com/politique-de-confidentialite")}
+        <ParametersLine
+          topic="Politique de confidentialité"
+          handlePress={() =>
+            handlePressURL(
+              "https://www.arosaje.com/politique-de-confidentialite"
+            )
+          }
         />
-        <ParametersLine topic="Mentions légales" 
-        handlePress={() => handlePressURL("https://www.arosaje.com/mentions-legales")}
+        <ParametersLine
+          topic="Mentions légales"
+          handlePress={() =>
+            handlePressURL("https://www.arosaje.com/mentions-legales")
+          }
         />
 
         <ParametersLineTitle text="Compte" style={{ marginTop: 10 }} />
@@ -108,6 +153,7 @@ export default function Parameters() {
         <ParametersLine
           topic="Supprimer mon compte"
           colorText={colors.red[600]}
+          handlePress={handleDeleteAccount}
         />
       </View>
     </WrapperScreen>
