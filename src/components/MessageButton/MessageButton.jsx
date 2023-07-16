@@ -5,7 +5,7 @@ export const MessageButton = ({ unread, handlePress = () => {} }) => {
   return (
     <TouchableOpacity style={styles.body} onPress={handlePress}>
       <Image
-        source={require("../../../assets/images/static/message.png")}
+        source={require("../../../assets/images/static/discussion.png")}
         style={styles.image}
       />
       {unread && (

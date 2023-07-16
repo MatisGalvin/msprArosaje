@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Linking,
 } from "react-native";
 import { Header } from "../../components/Header/Header";
 import { BigSimpleHeader } from "../../components/BigSimpleHeader/BigSimpleHeader";
@@ -27,12 +28,14 @@ export default function Login() {
   const [email, setEmail] = useState("alicejones@example.com");
   const [password, setPassword] = useState("9QzRftmQBNT5kJzp");
   const [rememberMe, setRememberMe] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleLogin = async () => {
     const authResponse = await Auth.localConnect(email, password);
 
     if (!authResponse) {
       console.log("Login:handleLogin", "error", authResponse);
+      setErrorMessage(true);
       return;
     }
 
@@ -45,13 +48,23 @@ export default function Login() {
       authResponse.jwt
     );
 
-    if (typeof userResponse[0] == 'undefined') {
+    if (typeof userResponse[0] == "undefined") {
       console.log("Login:handleLogin", "error", userResponse);
       return;
     }
 
-    if (!userResponse[0].id || userResponse[0].id !== authResponse.user.id || !userResponse[0].profile_picture) {
-      console.log("Login:handleLogin", "error", !userResponse[0].id, userResponse[0].id !== authResponse.user.id, !userResponse[0].profile_picture);
+    if (
+      !userResponse[0].id ||
+      userResponse[0].id !== authResponse.user.id ||
+      !userResponse[0].profile_picture
+    ) {
+      console.log(
+        "Login:handleLogin",
+        "error",
+        !userResponse[0].id,
+        userResponse[0].id !== authResponse.user.id,
+        !userResponse[0].profile_picture
+      );
       return;
     }
 
@@ -96,9 +109,17 @@ export default function Login() {
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.label}>Identifiant ou adresse mail</Text>
-              <View style={styles.inputGroup}>
+              <View
+                style={[
+                  styles.inputGroup,
+                  errorMessage && { borderColor: colors.red[500] },
+                ]}
+              >
                 <Image
-                  style={styles.inputImage}
+                  style={[
+                    styles.inputImage,
+                    errorMessage && { tintColor: colors.red[500] },
+                  ]}
                   source={require("../../../assets/images/static/profile.png")}
                 />
                 <TextInput
@@ -111,9 +132,17 @@ export default function Login() {
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.label}>Mot de passe</Text>
-              <View style={styles.inputGroup}>
+              <View
+                style={[
+                  styles.inputGroup,
+                  errorMessage && { borderColor: colors.red[500] },
+                ]}
+              >
                 <Image
-                  style={styles.inputImage}
+                  style={[
+                    styles.inputImage,
+                    errorMessage && { tintColor: colors.red[500] },
+                  ]}
                   source={require("../../../assets/images/static/lock.png")}
                 />
                 <TextInput
@@ -124,6 +153,21 @@ export default function Login() {
                   value={password}
                 />
               </View>
+              {errorMessage && (
+                <Text style={styles.error}>
+                  Vous vous êtes planté sur votre identifiant ou votre mot de
+                  passe. Merci de réessayer ou de faire une
+                  <Text
+                    onPress={() =>
+                      Linking.openURL("https://arosaje.scarbonk.fr/")
+                    }
+                    style={styles.errorLink}
+                  >
+                    {" "}
+                    demande de récupération de compte.
+                  </Text>
+                </Text>
+              )}
             </View>
             <View style={styles.formFooter}>
               <TouchableOpacity style={styles.lostPasswordContainer}>
@@ -248,6 +292,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 10,
+  },
+  error: {
+    color: colors.red[500],
+    textAlign: "justify",
+  },
+  errorLink: {
+    textDecorationLine: "underline",
+    textDecorationColor: colors.red[500],
   },
   formFooter: {
     flexDirection: "row",

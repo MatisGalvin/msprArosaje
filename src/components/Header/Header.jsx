@@ -5,9 +5,15 @@ import { Separator } from "../Separator/Separator";
 import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
-import { MessageButton } from "../MessageButton/MessageButton";
+import ParametersButton from "../ParametersButton/ParametersButton";
 
-export const Header = ({ screenName, handlePress, customStylesheet }) => {
+export const Header = ({
+  screenName,
+  handlePress,
+  customStylesheet,
+  showButtons = true,
+  showParameters = false,
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -28,6 +34,16 @@ export const Header = ({ screenName, handlePress, customStylesheet }) => {
         <Separator />
         <ProfileButton />
       </View>
+      {showButtons && (
+        <View style={[styles.container, { gap: 16 }]}>
+          <NotificationButton
+            unread={3}
+            handlePress={() => navigation.navigate("Notifications")}
+          />
+          <Separator />
+          {showParameters ? <ParametersButton /> : <ProfileButton />}
+        </View>
+      )}
     </View>
   );
 };
