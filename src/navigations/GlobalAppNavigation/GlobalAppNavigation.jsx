@@ -28,6 +28,7 @@ import store from "../../redux/appStore";
 import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
+import SignUp from "../../screens/SingUp/SignUp";
 
 const Tab = createBottomTabNavigator();
 
@@ -159,10 +160,10 @@ const AuthNavigator = () => {
           </WrapperScreen>
         )}
       </Stack.Screen>
-      <Stack.Screen name="Signin">
+      <Stack.Screen name="SignUp">
         {() => (
           <WrapperScreen>
-            <Login />
+            <SignUp />
           </WrapperScreen>
         )}
       </Stack.Screen>
