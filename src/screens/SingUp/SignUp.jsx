@@ -27,12 +27,12 @@ import { Users } from "../../api/Users";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
 
 export default function SignUp() {
-  const [userName, setUserName] = useState("antoninsimon");
-  const [email, setEmail] = useState("antonin7simon@hotmail.com");
-  const [password, setPassword] = useState("18An03To02Nin!");
-  const [confirmationPassword, setConfirmationPassword] = useState("18An03To02Nin!");
-  const [isCGUSelected, setCGUSelection] = useState(true);
-  const [isMLSelected, setMLSelection] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmationPassword, setConfirmationPassword] = useState("");
+  const [isCGUSelected, setCGUSelection] = useState(false);
+  const [isMLSelected, setMLSelection] = useState(false);
   const [colorCGU, setColorCGU] = useState(colors.green[400]);
   const [colorML, setColorML] = useState(colors.green[400]);
 
