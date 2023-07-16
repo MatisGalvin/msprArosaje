@@ -5,37 +5,36 @@ import { SimplePlantCard } from "../../../components/SimplePlantCard/SimplePlant
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { selectOwnPlants } from "../../../redux/reducers/appReducer";
+import { Plants } from "../../../api/Plants";
+import { selectID, selectJWT } from "../../../redux/reducers/authReducer";
+import store from "../../../redux/appStore";
 
 export default function MesPlantes() {
   const navigation = useNavigation();
 
-  const appStore = useSelector((state) => state.appStore);
+  const plants = useSelector(selectOwnPlants);
+  const userID = useSelector(selectID);
+  const jwt = useSelector(selectJWT);
 
-  const [mesPlantes, setMesPlantes] = useState([]);
+  const [ownPlants, setOwnPlants] = useState([]);
+
+  const getPlants = async () => {
+    const plants = await Plants.getPlantsByUserId(userID, jwt);
+    
+    store.dispatch({ type: "INIT_OWN_PLANTS", plants: plants.data });
+    setOwnPlants(plants.data);
+  }
 
   useEffect(() => {
-    setMesPlantes(appStore.ownPlants);
+    if(ownPlants.length !== 0) {
+        setOwnPlants(plants);
+    }
+
+    getPlants();
   }, []);
 
-  // const renderViews = () => {
-  //   const views = [];
-
-  //   for (let i = 0; i < 4; i++) {
-  //     views.push(
-  //       <View key={i} style={{ marginTop: 15 }}>
-  //         <SimplePlantCard
-  //           style={{ marginTop: 30 }}
-  //           image={require("../../../../assets/images/examples/feey--9c16pMI9uU-unsplash.jpg")}
-  //           name="Ficus"
-  //           description="Vieux et résistant mais toujours de bon poil"
-  //         />
-  //       </View>
-  //     );
-  //   }
-  //   return views;
-  // };
-
-  return mesPlantes.length > 0 ?
+  return(
     <View style={{ flex: 1, marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
@@ -44,8 +43,7 @@ export default function MesPlantes() {
         Ajouter une nouvelle plante
       </LargeButton>
       {/* {renderViews()} */}
-
-      {mesPlantes.map((plant) => (
+      {ownPlants.length > 0 && ownPlants.map((plant) => (
         <View key={plant.id} style={{ marginTop: 15 }}>
           <SimplePlantCard
             style={{ marginTop: 30 }}
@@ -61,5 +59,6 @@ export default function MesPlantes() {
           />
         </View>
       ))}
-    </View> : <View></View>;
+    </View>
+  )
 }

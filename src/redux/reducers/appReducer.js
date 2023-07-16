@@ -1,32 +1,22 @@
-import { StrapiDatas } from "../../api/api";
-import { Roles } from "../../utils/Roles";
-
-const initalState = {
-  id: null,
-  username: "John",
-  email: "",
-  address: "",
-  zipcode: "",
-  profile_picture: "",
-  city: "",
-  lat: "",
-  long: "",
-  ownPlants: {},
+const initialState = {
+    address: "",
+    zipcode: "",
+    city: "",
+    lat: "",
+    long: "",
+    ownPlants: [],
+    allPlants: [],
 };
 
 // Reducer
-const appReducer = (state = initalState, action) => {
+const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case "INIT_STATE":
       return {
         ...state,
-        id: action.id,
-        username: action.username,
         address: action.address,
         city: action.city,
         zipcode: action.zipcode,
-        profile_picture: action.profile_picture
-
       };
       break;
     case "INIT_OWN_PLANTS":
@@ -36,10 +26,25 @@ const appReducer = (state = initalState, action) => {
       };
       break;
 
+    case "APP_SIGNOUT":
+      return {
+        ...state,
+        address: "",
+        zipcode: "",
+        city: "",
+        lat: "",
+        long: "",
+        ownPlants: [],
+      };
+      break;
+
     default:
       return state;
       break;
   }
 };
+
+export const selectOwnPlants = (state) => state.appStore.ownPlants;
+export const selectAllPlants = (state) => state.appStore.allPlants;
 
 export default appReducer;

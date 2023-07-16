@@ -4,7 +4,7 @@ import colors from "../../../colors";
 export const LargeButton = ({ children, image, handlePress = () => {} , dark = false, grey = false}) => {
   return (
     <TouchableOpacity style={[s.container, dark && s.containerDark, grey && s.containerGrey]} onPress={handlePress}>
-      <Image style={s.sizeImg} source={image} />
+      {image && <Image style={s.sizeImg} source={image} />}
       <Text style={[s.textBtn, dark && s.textBtnDark, grey && s.textBtnGrey]}>{children}</Text>
     </TouchableOpacity>
   );

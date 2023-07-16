@@ -1,30 +1,48 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import colors from "../../../colors";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Tag } from "../Tag/Tag";
 import { Tips } from "../../api/Tips";
+import { useSelector } from "react-redux";
+import { selectJWT } from "../../redux/reducers/authReducer";
 
-export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
+export default function NewReportingCard({
+  image,
+  owner,
+  plantId,
+  isSubmitted,
+}) {
   const [largePicture, setLargePicture] = useState(image ? image : "");
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Je créé ici un state avec des commentaires puisqu'à la création du rapport, les commentaires seront créés directement à partir de ce composant
   const [commentaires, setCommentaires] = useState([]);
 
+  const jwt = useSelector(selectJWT);
+
   function fetchComments() {
-    Tips.getTipsByPlantId(plantId)
+
+    Tips.getTipsByPlantId(plantId, jwt)
       .then((resultFetch) => {
         setCommentaires(resultFetch.data);
-        setIsLoaded(true)
+        setIsLoaded(true);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("NewReportingCard:fetchComments", error));
   }
 
   useEffect(() => {
-    setIsLoaded(false)
-    fetchComments()
-  }, [isSubmitted])
+    setIsLoaded(false);
+    fetchComments();
+  }, [isSubmitted]);
 
   const handleChooseOption = () => {
     Alert.alert(
@@ -49,32 +67,31 @@ export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
 
   const openImagePicker = async () => {
     // Ask the user for the permission to access the media library
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      if (permissionResult.granted === false) {
-        alert("You've refused to allow this appp to access your photos!");
-        return;
-      }
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
 
-      const result = await ImagePicker.launchImageLibraryAsync();
+    const result = await ImagePicker.launchImageLibraryAsync();
 
-      if (!result.canceled) {
-        setLargePicture(result.assets[0].uri);
-        }
-      }
+    if (!result.canceled) {
+      setLargePicture(result.assets[0].uri);
+    }
+  };
 
   const openCamera = async () => {
     // Ask the user for the permission to access the media library
-      const permissionResult =
-        await ImagePicker.requestCameraPermissionsAsync();
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-      if (permissionResult.granted === false) {
-        alert("You've refused to allow this appp to access your photos!");
-        return;
-      }
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
 
-      const result = await ImagePicker.launchCameraAsync();
+    const result = await ImagePicker.launchCameraAsync();
 
     if (!result.canceled) {
       setLargePicture(result.assets[0].uri);
@@ -88,7 +105,7 @@ export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
     const year = date.getFullYear();
     const hours = ("0" + date.getHours()).slice(-2);
     const minutes = ("0" + date.getMinutes()).slice(-2);
-  
+
     return `${hours}h${minutes} ${day}/${month}/${year}`;
   }
 
@@ -124,27 +141,48 @@ export default function NewReportingCard({image, owner, plantId, isSubmitted}) {
     <View style={styles.body}>
       <View style={styles.container}>
         {renderLargePicture()}
-        {
-          owner && <Tag image={require('../../../assets/images/static/profile.png')} >{owner}</Tag>
-        }
+        {owner && (
+          <Tag image={require("../../../assets/images/static/profile.png")}>
+            {owner}
+          </Tag>
+        )}
         <Text style={styles.nameText}>Tous les commentaires</Text>
-        {!isLoaded && <View style={{marginTop: 20, width: "100%", height: "100%"}}><ActivityIndicator/></View>}
-        {isLoaded && commentaires.map((item, id) => {
-          return (
-            <View key={id} style={styles.commentContainer}>
-              <View style={styles.imageContainer}>
-                <Image source={{uri: item.attributes.botanist.data.attributes.profile_picture.data.attributes.base64}} style={styles.profilePic} />
-              </View>
-              <View style={styles.contentContainer}>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.nameComment}>{item.attributes.botanist.data.attributes.username} </Text>
-                  <Text style={styles.hourComment}>{formatDate(item.attributes.publishedAt)}</Text>
+        {!isLoaded && (
+          <View style={{ marginTop: 20, width: "100%", height: "100%" }}>
+            <ActivityIndicator />
+          </View>
+        )}
+        {isLoaded &&
+          commentaires.map((item, id) => {
+            return (
+              <View key={id} style={styles.commentContainer}>
+                <View style={styles.imageContainer}>
+                  <Image
+                  source={(item.attributes.botanist.data.attributes
+                    .profile_picture.data !== null ? {
+                      uri: (item.attributes.botanist.data.attributes
+                        .profile_picture.data !== null ? item.attributes.botanist.data.attributes
+                        .profile_picture.data.attributes.base64 : '../../../assets/images/static/profile.png'),
+                    } : require("../../../assets/images/static/profile.png"))}
+                    style={styles.profilePic}
+                  />
                 </View>
-                <Text style={styles.messageComment}>{item.attributes.tip}</Text>
+                <View style={styles.contentContainer}>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={styles.nameComment}>
+                      {item.attributes.botanist.data.attributes.username}{" "}
+                    </Text>
+                    <Text style={styles.hourComment}>
+                      {formatDate(item.attributes.publishedAt)}
+                    </Text>
+                  </View>
+                  <Text style={styles.messageComment}>
+                    {item.attributes.tip}
+                  </Text>
+                </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })}
       </View>
     </View>
   );
@@ -219,7 +257,7 @@ const styles = StyleSheet.create({
   profilePic: {
     width: 30,
     height: 30,
-    borderRadius: 50
+    borderRadius: 50,
   },
   nameComment: {
     fontSize: 12,

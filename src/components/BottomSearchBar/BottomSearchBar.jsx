@@ -10,12 +10,15 @@ import {
 import colors from "../../../colors";
 import { Tips } from "../../api/Tips";
 import { useSelector } from "react-redux";
+import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 
 export default function BottomSearchBar({plantId, setIsSubmitted}) {
   const [message, setMessage] = useState("");
   const [inputHeight, setInputHeight] = useState(40);
 
   const appStore = useSelector((state) => state.appStore);
+  const jwt = useSelector(selectJWT)
+  const userID = useSelector(selectID)
 
   const handleContentSizeChange = (event) => {
     setInputHeight(event.nativeEvent.contentSize.height);
@@ -23,7 +26,7 @@ export default function BottomSearchBar({plantId, setIsSubmitted}) {
 
   const sendMessage = async () => {
     // Code pour envoyer le message
-    await Tips.postTip(message, plantId, appStore.id)
+    const tipsresponse = await Tips.postTip(message, plantId, userID, jwt)
     setMessage("");
     setIsSubmitted(true)
     Keyboard.dismiss()

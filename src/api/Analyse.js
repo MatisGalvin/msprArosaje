@@ -2,9 +2,9 @@ import axios from "axios";
 
 class Analyse {
 
-    static baseUrl = 'http://arosaje.maximebaudoin.fr:1337/api';
+    static baseUrl = 'https://api.arosaje.com/api';
 
-    static post = async (data) => {
+    static post = async (data, jwt) => {
 
         try {
 
@@ -15,7 +15,7 @@ class Analyse {
             }, {
                 headers: {
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${process.env.API_TOKEN}`
+                    'Authorization': `Bearer ${jwt}`
                 }
             });
 
@@ -25,7 +25,7 @@ class Analyse {
             return false;
 
         } catch (error) {
-            console.log(error);
+            console.log('Analyse:post', error);
         }
     }
 }

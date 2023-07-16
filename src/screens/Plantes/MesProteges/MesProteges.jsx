@@ -5,29 +5,33 @@ import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import { Plants } from "../../../api/Plants";
 import { Tips } from "../../../api/Tips";
+import { useSelector } from "react-redux";
+import { selectJWT } from "../../../redux/reducers/authReducer";
 
 export default function MesProteges() {
   const [allPlants, setAllPlants] = useState([]);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const jwt = useSelector(selectJWT)
+
   const navigation = useNavigation();
 
   function fetchPlants() {
-    Plants.getPlants()
+    Plants.getPlants(jwt)
       .then((resultFetch) => {
         setAllPlants(resultFetch.data);
         setIsLoaded(true);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('MesProteges:fetchPlants', error));
   }
 
   async function getTheTips(plantId) {
-    Tips.getTipsByPlantId(plantId)
+    Tips.getTipsByPlantId(plantId, jwt)
       .then((resultFetch) => {
         return resultFetch.data
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('MesProteges:getTheTips', error));
   }
 
 
