@@ -30,7 +30,7 @@ import { Garde } from "../../screens/Garde/Garde";
 import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
-import SignUp from "../../screens/SingUp/SignUp";
+import SignUp from "../../screens/SignUp/SignUp";
 
 const Tab = createBottomTabNavigator();
 

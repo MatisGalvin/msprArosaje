@@ -9,10 +9,6 @@ import { useEffect } from "react";
 
 export const Garde = () => {
 
-    useEffect(() => {
-        socket.emit('join', {username: 'maxime'});
-    })
-
     return <View style={{flex: 1}}>
         <Header screenName="Accueil" customStylesheet={utilsStylesheet.containerPadding} />
         <View style={{flex: 6}} >
