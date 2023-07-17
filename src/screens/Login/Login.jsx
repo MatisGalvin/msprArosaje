@@ -16,7 +16,7 @@ import { LargeButton } from "../../components/LargeButton/LargeButton";
 import colors from "../../../colors";
 import Checkbox from "expo-checkbox";
 import { PanGestureHandler } from "react-native-gesture-handler";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Auth from "../../api/Auth";
 import * as Haptics from "expo-haptics";
 import { dispatch } from "react-redux";
@@ -24,6 +24,7 @@ import { setSignIn } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
 import { Users } from "../../api/Users";
 import { useNavigation } from "@react-navigation/native";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function Login() {
   const [email, setEmail] = useState("alicejones@example.com");
@@ -32,6 +33,12 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigation = useNavigation()
+
+  const { trackScreenView, trackAction } = useMatomo();
+
+  useEffect(() => {
+    trackScreenView({name: 'Login'});
+  });
 
   const handleLogin = async () => {
     const authResponse = await Auth.localConnect(email, password);
@@ -70,6 +77,8 @@ export default function Login() {
     }
 
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+    trackAction({name: 'Login', userInfo: {id: authResponse.user.id}});
 
     store.dispatch({
       type: "setSignIn",

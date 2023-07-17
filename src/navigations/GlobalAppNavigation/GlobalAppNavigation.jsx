@@ -25,6 +25,8 @@ import {
   selectUsername,
 } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
+import { useMatomo } from "matomo-tracker-react-native";
+import { Garde } from "../../screens/Garde/Garde";
 import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
@@ -104,7 +106,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Garde">
         {() => (
           <WrapperScreen>
-            <Home />
+            <Garde />
           </WrapperScreen>
         )}
       </Tab.Screen>
@@ -125,6 +127,12 @@ export default function GlobalAppNavigation() {
   //   store.dispatch({
   //     type: "setSignOut",
   //   });
+
+  const { trackAppStart } = useMatomo();
+
+  useEffect(() => {
+    trackAppStart();
+  }, []);
 
   const navTheme = {
     ...DefaultTheme,

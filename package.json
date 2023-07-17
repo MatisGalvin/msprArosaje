@@ -24,6 +24,7 @@
     "expo-linear-gradient": "~12.1.2",
     "expo-location": "^15.1.1",
     "expo-status-bar": "~1.4.4",
+    "matomo-tracker-react-native": "^0.3.1",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-base64": "^0.2.1",
@@ -39,7 +40,8 @@
     "react-native-touchable-scale": "^2.2.0",
     "react-native-web": "~0.18.10",
     "react-redux": "^8.0.5",
-    "redux": "^4.2.1"
+    "redux": "^4.2.1",
+    "socket.io-client": "^4.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
