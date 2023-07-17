@@ -8,7 +8,7 @@ class Discussion {
 
         try {
 
-            const response = await axios.get(`${this.baseUrl}discussions?populate=*&filters[$or][user1][data][id][$eq]=${userId}&filters[$or][user2][data][id][$eq]=${userId}`, {
+            const response = await axios.get(`${this.baseUrl}discussions?populate=deep&filters[$or][user1][data][id][$eq]=${userId}&filters[$or][user2][data][id][$eq]=${userId}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                 },

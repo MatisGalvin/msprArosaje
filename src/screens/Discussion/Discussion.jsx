@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
@@ -68,9 +69,9 @@ export const Discussion = () => {
                 }
 
                 return (
-                  <View>
+                  <TouchableOpacity onPress={() => navigation.navigate('OneDiscussion', {discussionId: data.item.id})}>
                     <Text>{destUser.data.attributes.username}</Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               }}
               data={ownDiscussions}

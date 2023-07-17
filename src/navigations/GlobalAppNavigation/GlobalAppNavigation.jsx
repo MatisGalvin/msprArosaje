@@ -31,6 +31,7 @@ import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
 import SignUp from "../../screens/SignUp/SignUp";
+import OneDiscussion from "../../screens/OneDiscussion/OneDiscussion";
 
 const Tab = createBottomTabNavigator();
 
@@ -189,6 +190,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Default" component={BottomTabNavigator} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="Discussion" component={Discussion} />
+      <Stack.Screen name="OneDiscussion" component={OneDiscussion} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Parameters" component={Parameters} />
     </Stack.Navigator>
