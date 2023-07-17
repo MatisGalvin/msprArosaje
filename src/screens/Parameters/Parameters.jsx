@@ -115,14 +115,29 @@ export default function Parameters() {
         <ParametersLine
           icon={require("../../../assets/images/static/help.png")}
           topic="Aide"
+          handlePress={() =>
+            handlePressURL(
+              "https://www.arosaje.com/faq"
+            )
+          }
         />
         <ParametersLine
           icon={require("../../../assets/images/static/exclamation-mark.png")}
           topic="À propos"
+          handlePress={() =>
+            handlePressURL(
+              "https://www.arosaje.com/a-propos"
+            )
+          }
         />
         <ParametersLine
           icon={require("../../../assets/images/static/message.png")}
           topic="Nous contacter"
+          handlePress={() =>
+            handlePressURL(
+              "mailto:contact@arosaje.com"
+            )
+          }
         />
 
         <ParametersLineTitle
