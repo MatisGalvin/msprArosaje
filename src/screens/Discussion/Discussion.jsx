@@ -34,7 +34,7 @@ export const Discussion = () => {
     store.dispatch({ type: "INIT_OWN_PLANTS", plants: discussions.data });
     setOwnDiscussions(discussions.data);
 
-    console.log(discussions);
+
   };
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import { selectOwnPlants } from "../../../redux/reducers/appReducer";
 import { Plants } from "../../../api/Plants";
 import { selectID, selectJWT } from "../../../redux/reducers/authReducer";
 import store from "../../../redux/appStore";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function MesPlantes() {
   const navigation = useNavigation();
@@ -18,6 +19,8 @@ export default function MesPlantes() {
   const jwt = useSelector(selectJWT);
 
   const [ownPlants, setOwnPlants] = useState([]);
+
+  const isFocused = useIsFocused();
 
   const getPlants = async () => {
     const plants = await Plants.getPlantsByUserId(userID, jwt);
@@ -32,7 +35,7 @@ export default function MesPlantes() {
     }
 
     getPlants();
-  }, []);
+  }, [isFocused]);
 
   return(
     <View style={{ flex: 1, marginTop: 25 }}>

@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import MyMessage from "../../components/MyMessage/MyMessage";
 import OtherMessage from "../../components/OtherMessage/OtherMessage";
 import MessageDate from "../../components/MessageDate/MessageDate";
+import MessageBubble from "../../components/MessageBubble/MessageBubble";
 
 export default function InteDiscussion() {
 
@@ -27,8 +28,10 @@ export default function InteDiscussion() {
             showsVerticalScrollIndicator={false}
           >
             <MessageDate date="2023-07-17T09:47:32.311Z" />
-            <MyMessage>Let’s get lunch! How about pizza? 🍕</MyMessage>
-            <OtherMessage>Let’s get lunch! How about pizza? 🍕</OtherMessage>
+            <MessageBubble isMine={true}>Let’s get lunch! How about pizza? 🍕</MessageBubble>
+            <MessageBubble isMine={false}>Let’s get lunch! How about pizza? 🍕</MessageBubble>
+            {/* <MyMessage>Let’s get lunch! How about pizza? 🍕</MyMessage>
+            <OtherMessage>Let’s get lunch! How about pizza? 🍕</OtherMessage> */}
           </ScrollView>
         </View>
     )
