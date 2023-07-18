@@ -25,10 +25,13 @@ import {
   selectUsername,
 } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
+import { useMatomo } from "matomo-tracker-react-native";
+import { Garde } from "../../screens/Garde/Garde";
 import { Discussion } from "../../screens/Discussion/Discussion";
 import Profile from "../../screens/Profile/Profile";
 import Parameters from "../../screens/Parameters/Parameters";
-import SignUp from "../../screens/SingUp/SignUp";
+import SignUp from "../../screens/SignUp/SignUp";
+import OneDiscussion from "../../screens/OneDiscussion/OneDiscussion";
 
 const Tab = createBottomTabNavigator();
 
@@ -104,7 +107,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Garde">
         {() => (
           <WrapperScreen>
-            <Home />
+            <Garde />
           </WrapperScreen>
         )}
       </Tab.Screen>
@@ -125,6 +128,12 @@ export default function GlobalAppNavigation() {
   //   store.dispatch({
   //     type: "setSignOut",
   //   });
+
+  const { trackAppStart } = useMatomo();
+
+  useEffect(() => {
+    trackAppStart();
+  }, []);
 
   const navTheme = {
     ...DefaultTheme,
@@ -181,6 +190,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Default" component={BottomTabNavigator} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="Discussion" component={Discussion} />
+      <Stack.Screen name="OneDiscussion" component={OneDiscussion} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Parameters" component={Parameters} />
     </Stack.Navigator>
