@@ -52,7 +52,6 @@ const OneDiscussion = ({ route }) => {
     let newAllMessages = [];
 
     allMessages.data.forEach((value, index) => {
-        console.log(value);
         newAllMessages = [...newAllMessages, {
             discussionID: value.attributes.discussion.data.id,
             sender: value.attributes.sender.data.id,
