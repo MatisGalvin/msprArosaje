@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import colors from "../../../colors";
 
 export const HeaderLogo = ({ screenName, handlePress }) => {

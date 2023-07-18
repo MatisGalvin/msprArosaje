@@ -1,19 +1,7 @@
-import {
-  Alert,
-  Image,
-  Keyboard,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Tag } from "../Tag/Tag";
-import { LargeButton } from "../LargeButton/LargeButton";
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import colors from "../../../colors";
-import { EditBtn } from "../EditBtn/EditBtn";
 import * as ImagePicker from "expo-image-picker";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function GalleryCard({
   largePicture,
@@ -26,7 +14,7 @@ export default function GalleryCard({
   setSmallPicture3,
   style,
 }) {
-  const [whichPictureState, setWhichPictureState] = useState('');
+  const [whichPictureState, setWhichPictureState] = useState("");
 
   const handleChooseOption = (whichPicture) => {
     Alert.alert(
@@ -49,7 +37,6 @@ export default function GalleryCard({
     );
   };
 
-
   const openImagePicker = async (whichPicture) => {
     // Ask the user for the permission to access the media library
     const permissionResult =
@@ -60,11 +47,13 @@ export default function GalleryCard({
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0,
-      base64: true,});
+      base64: true,
+    });
 
     if (!result.canceled) {
       switch (whichPicture) {
@@ -87,7 +76,7 @@ export default function GalleryCard({
     }
   };
 
-  const openCamera = async (whichPicture) => { 
+  const openCamera = async (whichPicture) => {
     // Ask the user for the permission to access the media library
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -96,11 +85,13 @@ export default function GalleryCard({
       return;
     }
 
-    const result = await ImagePicker.launchCameraAsync({mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0,
-      base64: true,});
+      base64: true,
+    });
 
     if (!result.canceled) {
       switch (whichPicture) {

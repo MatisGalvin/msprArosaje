@@ -2,7 +2,6 @@ import {
   FlatList,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,

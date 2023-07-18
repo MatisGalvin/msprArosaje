@@ -1,8 +1,5 @@
 import { StyleSheet, Text, View } from "react-native"
 import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
-import { NotificationButton } from "../NotificationButton/NotificationButton";
-import { Separator } from "../Separator/Separator";
-import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
 
