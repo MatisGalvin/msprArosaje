@@ -341,7 +341,7 @@ export default function SignUp() {
                 <Text
                   style={styles.checkBoxLinks}
                   onPress={() =>
-                    Linking.openURL("https://www.arosaje.com/mentions-legales")
+                    Linking.openURL("https://www.arosaje.com/conditions-generales-dutilisation")
                   }
                 >
                   conditions générales d'utilisation
