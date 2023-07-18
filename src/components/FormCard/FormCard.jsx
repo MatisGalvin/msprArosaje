@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import colors from "../../../colors";
 import { useState } from "react";
 import Checkbox from "expo-checkbox";
+import { useEffect } from "react";
 
 export default function FormCard({
   style,
@@ -13,6 +14,7 @@ export default function FormCard({
   setPlantName,
   plantDescription,
   setPlantDescription,
+  imagesFilled
 }) {
   const [street, setStreet] = useState(streetProp);
   const [city, setCity] = useState(cityProp);
@@ -20,8 +22,12 @@ export default function FormCard({
 
   const [isChecked, setIsChecked] = useState(false);
 
+  useEffect(() => {
+    canSubmitOrNot()
+  }, [street, city, zipcode, plantName, isChecked, imagesFilled]);
+
   const canSubmitOrNot = () => {
-    if (street && city && zipcode && zipcode.length === 5 && plantName && isChecked) {
+    if (street && city && zipcode && zipcode.length === 5 && plantName && isChecked && imagesFilled) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -58,7 +64,7 @@ export default function FormCard({
           placeholder="Votre rue"
           value={street}
           onChangeText={onChangeStreet}
-          onEndEditing={canSubmitOrNot}
+          // onEndEditing={canSubmitOrNot}
         />
 
         <Text style={styles.subTitle}>Ville</Text>
@@ -67,7 +73,7 @@ export default function FormCard({
           placeholder="Votre ville"
           value={city}
           onChangeText={onChangeCity}
-          onEndEditing={canSubmitOrNot}
+          // onEndEditing={canSubmitOrNot}
         />
 
         <Text style={styles.subTitle}>Code postal</Text>
@@ -78,7 +84,7 @@ export default function FormCard({
           maxLength={5}
           value={zipcode}
           onChangeText={onChangeZipcode}
-          onEndEditing={canSubmitOrNot}
+          // onEndEditing={canSubmitOrNot}
         />
 
         <Text style={styles.smallTitle}>Nom</Text>
@@ -86,7 +92,7 @@ export default function FormCard({
           style={styles.textInput}
           placeholder="Ma belle plante"
           onChangeText={onChangePlantName}
-          onEndEditing={canSubmitOrNot}
+          // onEndEditing={canSubmitOrNot}
         />
 
         <Text style={styles.smallTitle}>Description</Text>
@@ -95,7 +101,7 @@ export default function FormCard({
           placeholder="Une anecdote ou un conseil sur la plante"
           multiline
           onChangeText={onChangeDescription}
-          onEndEditing={canSubmitOrNot}
+          // onEndEditing={canSubmitOrNot}
         />
         <View style={styles.checkBoxForm}>
           <Checkbox
