@@ -7,8 +7,7 @@ const utilsStylesheet = StyleSheet.create({
         paddingVertical: 0,
     },
     containerPadding: {
-        padding: 16,
-        paddingVertical: 0,
+        paddingHorizontal: 16,
     }
 });
 
