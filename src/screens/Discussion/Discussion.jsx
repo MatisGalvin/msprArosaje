@@ -69,7 +69,7 @@ export const Discussion = () => {
                 }
 
                 return (
-                  <TouchableOpacity onPress={() => navigation.navigate('OneDiscussion', {discussionId: data.item.id})}>
+                  <TouchableOpacity onPress={() => navigation.navigate('OneDiscussion', {discussion: data.item})}>
                     <Text>{destUser.data.attributes.username}</Text>
                   </TouchableOpacity>
                 );
