@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
@@ -19,6 +20,7 @@ import Message from "../../api/Message";
 import { HeaderDiscussion } from "../../components/HeaderDiscussion/HeaderDiscussion";
 import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import MessageDate from "../../components/MessageDate/MessageDate";
+import { Audio } from "expo-av";
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -95,7 +97,14 @@ const OneDiscussion = ({ route }) => {
     setMessages([...messages, data]);
   });
 
-  socket.on("recipientIsTyping", (data) => {
+  socket.on("recipientIsTyping", async (data) => {
+    if (data.recipientIsTyping) {
+      const { sound } = await Audio.Sound.createAsync(
+        require("../../../assets/sounds/writing.wav")
+      );
+      await sound.playAsync();
+    }
+
     setRecipientIsTyping(data.recipientIsTyping);
   });
 
@@ -144,6 +153,7 @@ const OneDiscussion = ({ route }) => {
         <View style={{ flex: 1 }}>
           <HeaderDiscussion
             destinationUserName={recipient.attributes.username}
+            // imageUser={{uri: }}
             handlePress={() => navigation.goBack()}
             customStylesheet={utilsStylesheet.containerPadding}
           />
@@ -157,7 +167,7 @@ const OneDiscussion = ({ route }) => {
             value={message}
           />
           <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>
-          {recipientIsTyping && <Text>... est en train d'écrire</Text>}
+          
           {messages && (
             <FlatList
               renderItem={(data) => {
@@ -166,6 +176,12 @@ const OneDiscussion = ({ route }) => {
                     messages[data.index - 1].date
                   ).getTime();
                   var dateNow = new Date(data.item.date).getTime();
+                }
+
+                if (typeof messages[data.index + 1] !== 'undefined') {
+                    var dateAfter = new Date(
+                        messages[data.index + 1].date
+                      ).getTime();
                 }
 
                 return (
@@ -177,17 +193,30 @@ const OneDiscussion = ({ route }) => {
                     )}
                     <View
                       key={data.index}
-                      style={{ flexDirection: "row", alignSelf: "stretch", alignItems: 'flex-end', justifyContent: data.item.sender == sender.id ? 'flex-end' : 'flex-start', gap: 8 }}
+                      style={{
+                        flexDirection: "row",
+                        alignSelf: "stretch",
+                        alignItems: "flex-end",
+                        justifyContent:
+                          data.item.sender == sender.id
+                            ? "flex-end"
+                            : "flex-start",
+                        gap: 8,
+                      }}
                     >
-                      {data.item.sender != sender.id && (
-                        (messages[data.index + 1].sender != data.item.sender ? <Image
-                          style={{ width: 38, height: 38, borderRadius: 99 }}
-                          source={{
-                            uri: recipient.attributes.profile_picture.data
-                              .attributes.base64,
-                          }}
-                        /> : <View style={{width: 38, height: 38}}></View>)
-                      )}
+                      {data.item.sender != sender.id &&
+                        ((data.index !== 0 && dateNow - dateBefore > 1000 * 60) || (typeof messages[data.index + 1] !== "undefined" &&
+                        (messages[data.index + 1].sender != data.item.sender || (dateAfter - dateNow > 1000 * 60))) ? (
+                          <Image
+                            style={{ width: 38, height: 38, borderRadius: 99 }}
+                            source={{
+                              uri: recipient.attributes.profile_picture.data
+                                .attributes.base64,
+                            }}
+                          />
+                        ) : (
+                          <View style={{ width: 38, height: 38 }}></View>
+                        ))}
                       <MessageBubble isMine={data.item.sender == sender.id}>
                         {data.item.message}
                       </MessageBubble>
@@ -197,6 +226,20 @@ const OneDiscussion = ({ route }) => {
               }}
               data={messages}
               //   keyExtractor={(data) => Math.random()*1000}
+              ListFooterComponent={() => {
+                return (recipientIsTyping && (
+                    <MessageBubble>
+                      <Image
+                        style={{
+                          width: 28,
+                          height: 15,
+                        //   borderWidth: 1
+                        }}
+                        source={require("../../../assets/images/static/typing.gif")}
+                      />
+                    </MessageBubble>
+                  ))
+              }}
               ListHeaderComponentStyle={{
                 alignItems: "stretch",
                 flexDirection: "row",
