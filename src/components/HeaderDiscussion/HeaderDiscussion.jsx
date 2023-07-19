@@ -12,6 +12,7 @@ import HeaderDiscussionLayout from "../HeaderDiscussionLayout/HeaderDiscussionLa
 
 export const HeaderDiscussion = ({
   destinationUserName,
+  imageUser,
   handlePress,
   customStylesheet,
   showButtons = true,

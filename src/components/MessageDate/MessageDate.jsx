@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     text: {
         color: colors.gray[400],
         fontSize: 12,
-        fontWeight: "400"
+        fontWeight: "400",
+        textAlign: 'center'
     }
 })

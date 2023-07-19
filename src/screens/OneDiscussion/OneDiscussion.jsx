@@ -16,14 +16,17 @@ import socket from "../../utils/socket";
 import { useEffect, useState } from "react";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import Message from "../../api/Message";
+import { HeaderDiscussion } from "../../components/HeaderDiscussion/HeaderDiscussion";
+import MessageBubble from "../../components/MessageBubble/MessageBubble";
+import MessageDate from "../../components/MessageDate/MessageDate";
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(false);
   const [recipientIsTyping, setRecipientIsTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [sender, setSender] = useState();
-  const [recipient, setRecipient] = useState();
+  const [sender, setSender] = useState(false);
+  const [recipient, setRecipient] = useState(false);
   const [recipientOnline, setRecipientOnline] = useState(false);
 
   const navigation = useNavigation();
@@ -52,13 +55,17 @@ const OneDiscussion = ({ route }) => {
     let newAllMessages = [];
 
     allMessages.data.forEach((value, index) => {
-        newAllMessages = [...newAllMessages, {
-            discussionID: value.attributes.discussion.data.id,
-            sender: value.attributes.sender.data.id,
-            recipient: value.attributes.sender.data.id,
-            message: value.attributes.message,
-            read: value.attributes.read
-        }]
+      newAllMessages = [
+        ...newAllMessages,
+        {
+          discussionID: value.attributes.discussion.data.id,
+          sender: value.attributes.sender.data.id,
+          recipient: value.attributes.sender.data.id,
+          message: value.attributes.message,
+          read: value.attributes.read,
+          date: value.attributes.createdAt,
+        },
+      ];
     });
 
     setMessages(newAllMessages);
@@ -124,6 +131,10 @@ const OneDiscussion = ({ route }) => {
     }, 3000);
   };
 
+  if (!messages || !sender || !recipient) {
+    return false;
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -131,8 +142,8 @@ const OneDiscussion = ({ route }) => {
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
-          <Header
-            screenName="Discussion"
+          <HeaderDiscussion
+            destinationUserName={recipient.attributes.username}
             handlePress={() => navigation.goBack()}
             customStylesheet={utilsStylesheet.containerPadding}
           />
@@ -150,19 +161,38 @@ const OneDiscussion = ({ route }) => {
           {messages && (
             <FlatList
               renderItem={(data) => {
+                if (data.index !== 0) {
+                  var dateBefore = new Date(
+                    messages[data.index - 1].date
+                  ).getTime();
+                  var dateNow = new Date(data.item.date).getTime();
+                }
+
                 return (
-                  <View key={data.index} style={{ flexDirection: "row" }}>
-                    {data.item.sender != sender.id && (
-                      <Image
-                        style={{ width: 60, height: 60 }}
-                        source={{
-                          uri: recipient.attributes.profile_picture.data
-                            .attributes.base64,
-                        }}
-                      />
+                  <>
+                    {(data.index == 0 ||
+                      (data.index !== 0 &&
+                        dateNow - dateBefore > 1000 * 60)) && (
+                      <MessageDate date={data.item.date} />
                     )}
-                    <Text>{data.item.message}</Text>
-                  </View>
+                    <View
+                      key={data.index}
+                      style={{ flexDirection: "row", alignSelf: "stretch", alignItems: 'flex-end', justifyContent: data.item.sender == sender.id ? 'flex-end' : 'flex-start', gap: 8 }}
+                    >
+                      {data.item.sender != sender.id && (
+                        (messages[data.index + 1].sender != data.item.sender ? <Image
+                          style={{ width: 38, height: 38, borderRadius: 99 }}
+                          source={{
+                            uri: recipient.attributes.profile_picture.data
+                              .attributes.base64,
+                          }}
+                        /> : <View style={{width: 38, height: 38}}></View>)
+                      )}
+                      <MessageBubble isMine={data.item.sender == sender.id}>
+                        {data.item.message}
+                      </MessageBubble>
+                    </View>
+                  </>
                 );
               }}
               data={messages}
@@ -173,10 +203,10 @@ const OneDiscussion = ({ route }) => {
               }}
               contentContainerStyle={{
                 alignItems: "stretch",
-                gap: 10,
+                gap: 8,
+                padding: 16,
               }}
-              style={{ overflow: "visible" }}
-              on
+              style={{ overflow: "visible", alignSelf: "stretch" }}
             />
           )}
         </View>
