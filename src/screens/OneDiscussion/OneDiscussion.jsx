@@ -13,9 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 import socket from "../../utils/socket";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import Message from "../../api/Message";
+import { MessageInput } from "../../components/MessageInput/MessageInput";
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -32,6 +33,12 @@ const OneDiscussion = ({ route }) => {
   const jwt = useSelector(selectJWT);
 
   const discussionID = route.params.discussion.id;
+
+  const flatListRef = useRef(null);
+
+  const scrollToBottom = () => {
+    flatListRef.current.scrollToEnd({ animated: true }); // Step 2: Scroll the FlatList to the end
+  };
 
   useEffect(() => {
     if (route.params.discussion.attributes.user1.data.id == userID) {
@@ -52,13 +59,16 @@ const OneDiscussion = ({ route }) => {
     let newAllMessages = [];
 
     allMessages.data.forEach((value, index) => {
-        newAllMessages = [...newAllMessages, {
-            discussionID: value.attributes.discussion.data.id,
-            sender: value.attributes.sender.data.id,
-            recipient: value.attributes.sender.data.id,
-            message: value.attributes.message,
-            read: value.attributes.read
-        }]
+      newAllMessages = [
+        ...newAllMessages,
+        {
+          discussionID: value.attributes.discussion.data.id,
+          sender: value.attributes.sender.data.id,
+          recipient: value.attributes.sender.data.id,
+          message: value.attributes.message,
+          read: value.attributes.read,
+        },
+      ];
     });
 
     setMessages(newAllMessages);
@@ -127,7 +137,7 @@ const OneDiscussion = ({ route }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ width: "100%", height: "100%" }}
+      style={{ flex: 1 }}
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
@@ -139,16 +149,17 @@ const OneDiscussion = ({ route }) => {
           {recipientOnline && (
             <Text>{recipient.attributes.username} est en ligne</Text>
           )}
-          <TextInput
+          {/* <TextInput
             onChangeText={setMessage}
             onChange={handleTyping}
             style={{ borderWidth: 1, padding: 10, fontSize: 16 }}
             value={message}
           />
-          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>
+          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton> */}
           {recipientIsTyping && <Text>... est en train d'écrire</Text>}
           {messages && (
             <FlatList
+              ref={flatListRef}
               renderItem={(data) => {
                 return (
                   <View key={data.index} style={{ flexDirection: "row" }}>
@@ -181,6 +192,7 @@ const OneDiscussion = ({ route }) => {
           )}
         </View>
       </WrapperScreen>
+      <MessageInput handlePress={handleNewMessage} />
     </KeyboardAvoidingView>
   );
 };
