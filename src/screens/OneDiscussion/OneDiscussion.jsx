@@ -69,7 +69,7 @@ const OneDiscussion = ({ route }) => {
       };
     });
 
-    setMessages([]);
+    setMessages(allMessages);
   };
 
   useEffect(() => {
@@ -94,10 +94,11 @@ const OneDiscussion = ({ route }) => {
     });
 
     socket.on("newMessage", (data) => {
-    //   let newMessages = messages;
-        console.log([...messages]);
-    //   newMessages.push(data);
-    //   setMessages(newMessages);
+      let newMessages = new Array();
+      messages.map(item => newMessages.push(item));
+      newMessages.push(data);
+      console.log(newMessages);
+      setMessages(newMessages);
     });
 
     socket.on("recipientIsTyping", async (data) => {
@@ -285,7 +286,7 @@ const OneDiscussion = ({ route }) => {
           )}
         </View>
       </WrapperScreen>
-      <MessageInput handlePress={handleNewMessage} />
+      <MessageInput handlePress={handleNewMessage} setMessage={setMessage} message={message} />
     </KeyboardAvoidingView>
   );
 };
