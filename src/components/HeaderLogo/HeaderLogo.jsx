@@ -1,5 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import colors from "../../../colors";
+import { SquircleView } from "react-native-figma-squircle";
 
 export const HeaderLogo = ({ screenName, handlePress }) => {
   const renderIconHeader = () => {
@@ -23,8 +24,15 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
   };
 
   return (
-    <View style={styles.body}>
-      <TouchableOpacity onPress={handlePress}>
+    <SquircleView
+      squircleParams={{
+        cornerSmoothing: .6,
+        cornerRadius: 12,
+        fillColor: colors.white,
+      }}
+      style={styles.container}
+    >
+      <TouchableOpacity onPress={handlePress} style={styles.body}>
         <Image
           source={
             handlePress
@@ -34,19 +42,14 @@ export const HeaderLogo = ({ screenName, handlePress }) => {
           style={styles.image}
         />
       </TouchableOpacity>
-    </View>
+    </SquircleView>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
+  container: {
     width: 38,
     height: 38,
-    padding: 10,
-    borderRadius: 12,
     shadowOffset: {
       width: 2,
       height: 2,
@@ -54,6 +57,11 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowRadius: 6,
     shadowOpacity: 0.1,
+  },
+  body: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
   },
   image: {
     width: 20,

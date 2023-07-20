@@ -49,32 +49,24 @@ const OneDiscussion = ({ route }) => {
   }, []);
 
   const getMessages = async () => {
-    const allMessages = await Message.getMessagesByDiscussionID(
-      discussionID,
-      jwt
-    );
+    const { data } = await Message.getMessagesByDiscussionID(discussionID, jwt);
 
-    let newAllMessages = [];
-
-    allMessages.data.forEach((value, index) => {
-      newAllMessages = [
-        ...newAllMessages,
-        {
-          discussionID: value.attributes.discussion.data.id,
-          sender: value.attributes.sender.data.id,
-          recipient: value.attributes.sender.data.id,
-          message: value.attributes.message,
-          read: value.attributes.read,
-          date: value.attributes.createdAt,
-        },
-      ];
+    const allMessages = data.map((value) => {
+      return {
+        discussionID: value.attributes.discussion.data.id,
+        sender: value.attributes.sender.data.id,
+        recipient: value.attributes.sender.data.id,
+        message: value.attributes.message,
+        read: value.attributes.read,
+        date: value.attributes.createdAt,
+      };
     });
 
-    setMessages(newAllMessages);
+    setMessages([]);
   };
 
   useEffect(() => {
-    if (messages.length > 0) {
+    if (messages) {
       return;
     }
 
@@ -85,28 +77,33 @@ const OneDiscussion = ({ route }) => {
     socket.emit("join", { discussionID: discussionID });
   }, []);
 
-  socket.on("recipientJoin", () => {
-    // if(!recipientOnline) {
-    //     socket.emit("join", { discussionID: discussionID });
-    // }
-    // console.log(true);
-    setRecipientOnline(true);
-  });
+  useEffect(() => {
+    socket.on("recipientJoin", () => {
+      // if(!recipientOnline) {
+      //     socket.emit("join", { discussionID: discussionID });
+      // }
+      // console.log(true);
+      setRecipientOnline(true);
+    });
 
-  socket.on("newMessage", (data) => {
-    setMessages([...messages, data]);
-  });
+    socket.on("newMessage", (data) => {
+    //   let newMessages = messages;
+        console.log([...messages]);
+    //   newMessages.push(data);
+    //   setMessages(newMessages);
+    });
 
-  socket.on("recipientIsTyping", async (data) => {
-    if (data.recipientIsTyping) {
-      const { sound } = await Audio.Sound.createAsync(
-        require("../../../assets/sounds/writing.wav")
-      );
-      await sound.playAsync();
-    }
+    socket.on("recipientIsTyping", async (data) => {
+      if (data.recipientIsTyping) {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../../assets/sounds/writing.wav")
+        );
+        await sound.playAsync();
+      }
 
-    setRecipientIsTyping(data.recipientIsTyping);
-  });
+      setRecipientIsTyping(data.recipientIsTyping);
+    });
+  }, []);
 
   const handleNewMessage = () => {
     if (message == "") {
@@ -118,6 +115,7 @@ const OneDiscussion = ({ route }) => {
       sender: sender.id,
       recipient: recipient.id,
       message: message,
+      date: new Date().toISOString(),
     };
 
     socket.emit("sendMessage", { newMessage: newMessage, jwt: jwt });
@@ -127,18 +125,23 @@ const OneDiscussion = ({ route }) => {
     setMessage("");
   };
 
-  const handleTyping = () => {
-    clearTimeout(timeOutTyping);
-    setIsTyping(true);
+  useEffect(() => {
+    if (message == "") {
+      return;
+    }
+
     if (!isTyping) {
       socket.emit("isTyping", { isTyping: true, discussionID: discussionID });
     }
+    setIsTyping(true);
 
-    var timeOutTyping = setTimeout(() => {
+    const timeOutTyping = setTimeout(() => {
       socket.emit("isTyping", { isTyping: false, discussionID: discussionID });
       setIsTyping(false);
     }, 3000);
-  };
+
+    return () => clearTimeout(timeOutTyping);
+  }, [message]);
 
   if (!messages || !sender || !recipient) {
     return false;
@@ -162,12 +165,11 @@ const OneDiscussion = ({ route }) => {
           )}
           <TextInput
             onChangeText={setMessage}
-            onChange={handleTyping}
             style={{ borderWidth: 1, padding: 10, fontSize: 16 }}
             value={message}
           />
           <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>
-          
+
           {messages && (
             <FlatList
               renderItem={(data) => {
@@ -178,10 +180,10 @@ const OneDiscussion = ({ route }) => {
                   var dateNow = new Date(data.item.date).getTime();
                 }
 
-                if (typeof messages[data.index + 1] !== 'undefined') {
-                    var dateAfter = new Date(
-                        messages[data.index + 1].date
-                      ).getTime();
+                if (typeof messages[data.index + 1] !== "undefined") {
+                  var dateAfter = new Date(
+                    messages[data.index + 1].date
+                  ).getTime();
                 }
 
                 return (
@@ -205,8 +207,12 @@ const OneDiscussion = ({ route }) => {
                       }}
                     >
                       {data.item.sender != sender.id &&
-                        ((data.index !== 0 && dateNow - dateBefore > 1000 * 60) || (typeof messages[data.index + 1] !== "undefined" &&
-                        (messages[data.index + 1].sender != data.item.sender || (dateAfter - dateNow > 1000 * 60))) ? (
+                        ((data.index !== 0 &&
+                          dateNow - dateBefore > 1000 * 60) ||
+                        (typeof messages[data.index + 1] !== "undefined" &&
+                          (messages[data.index + 1].sender !=
+                            data.item.sender ||
+                            dateAfter - dateNow > 1000 * 60)) ? (
                           <Image
                             style={{ width: 38, height: 38, borderRadius: 99 }}
                             source={{
@@ -225,20 +231,38 @@ const OneDiscussion = ({ route }) => {
                 );
               }}
               data={messages}
-              //   keyExtractor={(data) => Math.random()*1000}
+              keyExtractor={(data) => data.date}
               ListFooterComponent={() => {
-                return (recipientIsTyping && (
-                    <MessageBubble>
+                return (
+                  recipientIsTyping && (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignSelf: "stretch",
+                        alignItems: "flex-end",
+                        justifyContent: "flex-start",
+                        gap: 8,
+                      }}
+                    >
                       <Image
-                        style={{
-                          width: 28,
-                          height: 15,
-                        //   borderWidth: 1
+                        style={{ width: 38, height: 38, borderRadius: 99 }}
+                        source={{
+                          uri: recipient.attributes.profile_picture.data
+                            .attributes.base64,
                         }}
-                        source={require("../../../assets/images/static/typing.gif")}
                       />
-                    </MessageBubble>
-                  ))
+                      <MessageBubble>
+                        <Image
+                          style={{
+                            width: 28,
+                            height: 15,
+                          }}
+                          source={require("../../../assets/images/static/typing.gif")}
+                        />
+                      </MessageBubble>
+                    </View>
+                  )
+                );
               }}
               ListHeaderComponentStyle={{
                 alignItems: "stretch",

@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
         color: colors.gray[400],
         fontSize: 12,
         fontWeight: "400",
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: 8
     }
 })
