@@ -14,13 +14,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 import socket from "../../utils/socket";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import Message from "../../api/Message";
 import { HeaderDiscussion } from "../../components/HeaderDiscussion/HeaderDiscussion";
 import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import MessageDate from "../../components/MessageDate/MessageDate";
 import { Audio } from "expo-av";
+import { MessageInput } from "../../components/MessageInput/MessageInput";
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -37,6 +38,12 @@ const OneDiscussion = ({ route }) => {
   const jwt = useSelector(selectJWT);
 
   const discussionID = route.params.discussion.id;
+
+  const flatListRef = useRef(null);
+
+  const scrollToBottom = () => {
+    flatListRef.current.scrollToEnd({ animated: true }); // Step 2: Scroll the FlatList to the end
+  };
 
   useEffect(() => {
     if (route.params.discussion.attributes.user1.data.id == userID) {
@@ -150,7 +157,7 @@ const OneDiscussion = ({ route }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ width: "100%", height: "100%" }}
+      style={{ flex: 1 }}
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
@@ -163,15 +170,15 @@ const OneDiscussion = ({ route }) => {
           {recipientOnline && (
             <Text>{recipient.attributes.username} est en ligne</Text>
           )}
-          <TextInput
+          {/* <TextInput
             onChangeText={setMessage}
             style={{ borderWidth: 1, padding: 10, fontSize: 16 }}
             value={message}
           />
-          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>
-
+          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>*/}
           {messages && (
             <FlatList
+              ref={flatListRef}
               renderItem={(data) => {
                 if (data.index !== 0) {
                   var dateBefore = new Date(
@@ -278,6 +285,7 @@ const OneDiscussion = ({ route }) => {
           )}
         </View>
       </WrapperScreen>
+      <MessageInput handlePress={handleNewMessage} />
     </KeyboardAvoidingView>
   );
 };
