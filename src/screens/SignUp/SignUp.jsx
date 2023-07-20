@@ -25,6 +25,7 @@ import { setSignIn } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
 import { Users } from "../../api/Users";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function SignUp() {
   const [userName, setUserName] = useState("");
@@ -45,12 +46,13 @@ export default function SignUp() {
     useState(false);
   const [errorCheckboxMessage, setErrorCheckboxMessage] = useState(false);
 
-  const regexUserName = /^[a-zA-Z0-9_]{1,25}$/
+  const regexUserName = /^[a-zA-Z0-9_]{1,25}$/;
   const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{12,}$/;
 
-  const handleFieldsVerification = () => {
+  const { trackScreenView, trackAction } = useMatomo();
 
+  const handleFieldsVerification = () => {
     if (!regexUserName.test(userName)) {
       setErrorUsernameMessage(true);
       return false;
@@ -127,6 +129,7 @@ export default function SignUp() {
         username: authResponse.user.username,
         jwt: authResponse.jwt,
       });
+      trackAction({ name: "SignUp", userInfo: { id: authResponse.user.id } });
     }
   };
 
@@ -137,6 +140,10 @@ export default function SignUp() {
   useEffect(() => {
     setColorML(colors.green[400]);
   }, [isMLSelected]);
+
+  useEffect(() => {
+    trackScreenView({ name: "SignUp" });
+  });
 
   return (
     <KeyboardAvoidingView
@@ -194,7 +201,7 @@ export default function SignUp() {
                   placeholder="JohnDoe"
                   onChangeText={(text) => {
                     setErrorUsernameMessage(false);
-                    setUserName(text)
+                    setUserName(text);
                   }}
                   value={userName}
                   autoCapitalize="none"
@@ -204,10 +211,11 @@ export default function SignUp() {
 
             {errorUsernameMessage && (
               <Text style={styles.error}>
-                Votre nom d'utilisateur n'est pas valide. Ce dernier ne doit comporter que des caractères alphanumériques sans accents ni espaces.
+                Votre nom d'utilisateur n'est pas valide. Ce dernier ne doit
+                comporter que des caractères alphanumériques sans accents ni
+                espaces.
               </Text>
             )}
-
 
             <View style={styles.formGroup}>
               <Text style={styles.label}>Email</Text>
@@ -341,7 +349,9 @@ export default function SignUp() {
                 <Text
                   style={styles.checkBoxLinks}
                   onPress={() =>
-                    Linking.openURL("https://www.arosaje.com/conditions-generales-dutilisation")
+                    Linking.openURL(
+                      "https://www.arosaje.com/conditions-generales-dutilisation"
+                    )
                   }
                 >
                   conditions générales d'utilisation

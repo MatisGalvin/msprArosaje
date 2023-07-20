@@ -23,6 +23,7 @@ import AnalyseApi from "../../api/Analyse";
 import AnalyseDetails from "./AnalyseDetails";
 import { useSelector } from "react-redux";
 import { selectJWT } from "../../redux/reducers/authReducer";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function Analyse() {
   const navigation = useNavigation();
@@ -80,6 +81,12 @@ export default function Analyse() {
       //   openCamera();
     }
   }, [isFocused]);
+
+  const { trackScreenView, trackAction } = useMatomo();
+
+  useEffect(() => {
+    trackScreenView({name: 'Analyse'});
+  });
 
   return !plantDetails ? (
     <View style={styles.container}>
