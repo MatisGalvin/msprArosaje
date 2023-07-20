@@ -4,6 +4,8 @@ import {
   KeyboardAvoidingView,
   Text,
   TextInput,
+  Touchable,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";
@@ -17,6 +19,7 @@ import { useEffect, useState, useRef } from "react";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import Message from "../../api/Message";
 import { MessageInput } from "../../components/MessageInput/MessageInput";
+import Reactotron from 'reactotron-react-native'
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -51,6 +54,7 @@ const OneDiscussion = ({ route }) => {
   }, []);
 
   const getMessages = async () => {
+    Reactotron.log("Messages reception");
     const allMessages = await Message.getMessagesByDiscussionID(
       discussionID,
       jwt
@@ -71,6 +75,7 @@ const OneDiscussion = ({ route }) => {
       ];
     });
 
+    Reactotron.log("Messages recieved");
     setMessages(newAllMessages);
   };
 
