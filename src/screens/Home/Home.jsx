@@ -16,12 +16,20 @@ import utilsStylesheet from "../../utils/utilsStylesheet";
 import { useEffect } from "react";
 import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 // import * as Notifications from 'expo-notifications';
+import { useMatomo } from "matomo-tracker-react-native";
+import { useEffect } from "react";
 
 export const Home = () => {
   const appStore = useSelector((state) => state.appStore);
 
   const userId = useSelector(selectID);
   const jwt = useSelector(selectJWT);
+  
+  const { trackScreenView, trackAction } = useMatomo();
+
+  useEffect(() => {
+    trackScreenView({name: 'Home'});
+  });
 
   // const getExpoPushToken = async () => {
   //   const token = await Notifications.getExpoPushTokenAsync({

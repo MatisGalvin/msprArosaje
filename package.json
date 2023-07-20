@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
@@ -50,6 +51,7 @@
     "react-native-web": "~0.18.10",
     "react-pulse-dot": "^2.1.0",
     "react-redux": "^8.0.5",
+    "reactotron-react-native": "^5.0.3",
     "redux": "^4.2.1",
     "socket.io-client": "^4.7.1"
   },

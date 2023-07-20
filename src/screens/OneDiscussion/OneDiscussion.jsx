@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Text,
   TextInput,
+  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,6 +23,7 @@ import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import MessageDate from "../../components/MessageDate/MessageDate";
 import { Audio } from "expo-av";
 import { MessageInput } from "../../components/MessageInput/MessageInput";
+import Reactotron from 'reactotron-react-native'
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -56,6 +58,9 @@ const OneDiscussion = ({ route }) => {
   }, []);
 
   const getMessages = async () => {
+
+    Reactotron.log("Messages reception");
+    
     const { data } = await Message.getMessagesByDiscussionID(discussionID, jwt);
 
     const allMessages = data.map((value) => {
@@ -69,6 +74,8 @@ const OneDiscussion = ({ route }) => {
       };
     });
 
+    Reactotron.log("Messages recieved");
+    
     setMessages(allMessages);
   };
 

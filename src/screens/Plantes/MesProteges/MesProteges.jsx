@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { LargeButton } from "../../../components/LargeButton/LargeButton";
 import { SimplePlantCard } from "../../../components/SimplePlantCard/SimplePlantCard";
 import { useNavigation } from "@react-navigation/native";
@@ -7,13 +13,14 @@ import { Plants } from "../../../api/Plants";
 import { Tips } from "../../../api/Tips";
 import { useSelector } from "react-redux";
 import { selectJWT } from "../../../redux/reducers/authReducer";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function MesProteges() {
   const [allPlants, setAllPlants] = useState([]);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const jwt = useSelector(selectJWT)
+  const jwt = useSelector(selectJWT);
 
   const navigation = useNavigation();
 
@@ -23,21 +30,26 @@ export default function MesProteges() {
         setAllPlants(resultFetch.data);
         setIsLoaded(true);
       })
-      .catch((error) => console.log('MesProteges:fetchPlants', error));
+      .catch((error) => console.log("MesProteges:fetchPlants", error));
   }
 
   async function getTheTips(plantId) {
     Tips.getTipsByPlantId(plantId, jwt)
       .then((resultFetch) => {
-        return resultFetch.data
+        return resultFetch.data;
       })
-      .catch((error) => console.log('MesProteges:getTheTips', error));
+      .catch((error) => console.log("MesProteges:getTheTips", error));
   }
 
+  useEffect(() => {
+    fetchPlants();
+  }, []);
+
+  const { trackScreenView, trackAction } = useMatomo();
 
   useEffect(() => {
-    fetchPlants()
-  }, []);
+    trackScreenView({ name: "Mes Protégées" });
+  });
 
   // const renderViews = () => {
   //   const views = [];
@@ -66,27 +78,35 @@ export default function MesProteges() {
       >
         Garder une nouvelle plante
       </LargeButton>
-        {!isLoaded && <View style={{marginTop: 60}}><ActivityIndicator/></View>}
-        {isLoaded && allPlants.map((plant) => {
-          const mytips = getTheTips(plant.id)
-        return(
-          <View key={plant.id} style={{ marginTop: 15 }}>
-          <SimplePlantCard
-            style={{ marginTop: 30 }}
-            image={{uri: plant.attributes.images.data[0].attributes.base64}}
-            name={plant.attributes.name}
-            description={plant.attributes.description}
-            handlePress={() => navigation.navigate("NewReport", {
-              owner: plant.attributes.owner.data.attributes.username,
-              image: plant.attributes.images.data[0].attributes.base64,
-              plant: plant,
-              isNewReport: false
-            })}
-          />
+      {!isLoaded && (
+        <View style={{ marginTop: 60 }}>
+          <ActivityIndicator />
         </View>
-        )
-      })}
-      
+      )}
+      {isLoaded &&
+        allPlants.map((plant) => {
+          const mytips = getTheTips(plant.id);
+          return (
+            <View key={plant.id} style={{ marginTop: 15 }}>
+              <SimplePlantCard
+                style={{ marginTop: 30 }}
+                image={{
+                  uri: plant.attributes.images.data[0].attributes.base64,
+                }}
+                name={plant.attributes.name}
+                description={plant.attributes.description}
+                handlePress={() =>
+                  navigation.navigate("NewReport", {
+                    owner: plant.attributes.owner.data.attributes.username,
+                    image: plant.attributes.images.data[0].attributes.base64,
+                    plant: plant,
+                    isNewReport: false,
+                  })
+                }
+              />
+            </View>
+          );
+        })}
     </View>
   );
 }
@@ -95,6 +115,6 @@ const styles = StyleSheet.create({
   scrollview: {
     width: "100%",
     height: "100%",
-    overflow: "visible"
-  }
-})
+    overflow: "visible",
+  },
+});
