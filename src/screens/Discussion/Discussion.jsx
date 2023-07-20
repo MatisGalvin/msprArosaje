@@ -20,6 +20,7 @@ import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
 import colors from "../../../colors";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import OnlineDot from "../../components/OnlineDot/OnlineDot";
 
 export const Discussion = () => {
   const discussions = useSelector(selectOwnDiscussions);
@@ -33,8 +34,6 @@ export const Discussion = () => {
 
     store.dispatch({ type: "INIT_OWN_PLANTS", plants: discussions.data });
     setOwnDiscussions(discussions.data);
-
-
   };
 
   useEffect(() => {
@@ -102,20 +101,60 @@ export const Discussion = () => {
                       .base64;
 
                   return (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("OneDiscussion", {
-                          discussion: data.item,
-                        })
-                      }
+                    <View
+                      style={{
+                        gap: 8,
+                        paddingVertical: 10,
+                      }}
                     >
-                      <Image
-                        source={{ uri: base64Image }}
-                        style={{ width: 60, height: 60, borderRadius: 30 }}
-                      />
+                      <TouchableOpacity
+                        style={styles.containerDiscussion}
+                        onPress={() =>
+                          navigation.navigate("OneDiscussion", {
+                            discussion: data.item,
+                          })
+                        }
+                      >
+                        <View style={{ height: 60, width: 60 }}>
+                          <Image
+                            source={{ uri: base64Image }}
+                            style={{ width: 60, height: 60, borderRadius: 30 }}
+                          />
+                          <OnlineDot
+                            isContactConnected={false}
+                            customDotStylesheet={styles.dotStyleSheet}
+                          />
+                        </View>
 
-                      <Text>{destUser.data.attributes.username}</Text>
-                    </TouchableOpacity>
+                        <View>
+                          <Text style={styles.userName}>
+                            {destUser.data.attributes.username}
+                          </Text>
+                          <Text style={styles.textDate}>
+                            Démarrée le{" "}
+                            {new Date(
+                              destUser.data.attributes.createdAt
+                            ).toLocaleDateString("fr-FR")}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <Image
+                          source={require("../../../assets/images/static/calendar.png")}
+                          style={styles.calendar}
+                        />
+                        <Text style={styles.expirationLabelStyle}>
+                          8 jours avant expiration
+                        </Text>
+                      </View>
+                    </View>
                   );
                 }}
                 data={ownDiscussions}
@@ -123,10 +162,6 @@ export const Discussion = () => {
                 ListHeaderComponentStyle={{
                   alignItems: "stretch",
                   flexDirection: "row",
-                }}
-                contentContainerStyle={{
-                  alignItems: "stretch",
-                  gap: 10,
                 }}
                 style={[{ overflow: "hidden" }]}
               />
@@ -148,5 +183,35 @@ const styles = StyleSheet.create({
     color: colors.gray[600],
     fontWeight: "400",
     fontSize: 14,
+  },
+  dotStyleSheet: {
+    position: "absolute",
+    bottom: -3,
+    right: -3,
+  },
+  userName: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.gray[600],
+    lineHeight: 18,
+  },
+  containerDiscussion: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+  textDate: {
+    fontSize: 12,
+    fontWeight: "400",
+    color: colors.gray[400],
+    marginTop: 4,
+  },
+  expirationLabelStyle: {
+    fontSize: 12,
+    fontWeight: "200",
+  },
+  calendar: {
+    height: 10,
+    width: 10,
   },
 });
