@@ -23,7 +23,8 @@ import MessageBubble from "../../components/MessageBubble/MessageBubble";
 import MessageDate from "../../components/MessageDate/MessageDate";
 import { Audio } from "expo-av";
 import { MessageInput } from "../../components/MessageInput/MessageInput";
-import Reactotron from 'reactotron-react-native'
+import Reactotron from "reactotron-react-native";
+import InvertibleScrollView from "react-native-invertible-scroll-view";
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
@@ -44,6 +45,9 @@ const OneDiscussion = ({ route }) => {
   const flatListRef = useRef(null);
 
   const scrollToBottom = () => {
+    if (flatListRef.current == null) {
+      return;
+    }
     flatListRef.current.scrollToEnd({ animated: true }); // Step 2: Scroll the FlatList to the end
   };
 
@@ -58,9 +62,8 @@ const OneDiscussion = ({ route }) => {
   }, []);
 
   const getMessages = async () => {
-
     Reactotron.log("Messages reception");
-    
+
     const { data } = await Message.getMessagesByDiscussionID(discussionID, jwt);
 
     const allMessages = data.map((value) => {
@@ -75,7 +78,7 @@ const OneDiscussion = ({ route }) => {
     });
 
     Reactotron.log("Messages recieved");
-    
+
     setMessages(allMessages);
   };
 
@@ -97,15 +100,19 @@ const OneDiscussion = ({ route }) => {
       //     socket.emit("join", { discussionID: discussionID });
       // }
       // console.log(true);
-      setRecipientOnline(true);
+      //   setRecipientOnline(true);
     });
 
     socket.on("newMessage", (data) => {
-      let newMessages = new Array();
-      messages.map(item => newMessages.push(item));
-      newMessages.push(data);
-      console.log(newMessages);
-      setMessages(newMessages);
+      //   let newMessages = new Array();
+      //   //   messages.map(element => {
+      //   //     newMessages.push(element);
+      //   //   });
+      //   console.log(messages);
+      //   newMessages.push(data);
+      //   console.log(newMessages);
+      //   setMessages(newMessages);
+      setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     socket.on("recipientIsTyping", async (data) => {
@@ -135,20 +142,21 @@ const OneDiscussion = ({ route }) => {
 
     socket.emit("sendMessage", { newMessage: newMessage, jwt: jwt });
 
+    socket.emit("isTyping", { isTyping: false, discussionID: discussionID });
+    setIsTyping(false);
+
     setMessages([...messages, { ...newMessage, read: false }]);
 
     setMessage("");
   };
 
   useEffect(() => {
-    if (message == "") {
-      return;
+    if (message != "") {
+      if (!isTyping) {
+        socket.emit("isTyping", { isTyping: true, discussionID: discussionID });
+      }
+      setIsTyping(true);
     }
-
-    if (!isTyping) {
-      socket.emit("isTyping", { isTyping: true, discussionID: discussionID });
-    }
-    setIsTyping(true);
 
     const timeOutTyping = setTimeout(() => {
       socket.emit("isTyping", { isTyping: false, discussionID: discussionID });
@@ -157,6 +165,10 @@ const OneDiscussion = ({ route }) => {
 
     return () => clearTimeout(timeOutTyping);
   }, [message]);
+
+  useEffect(() => {
+    // scrollToBottom();
+  }, [messages]);
 
   if (!messages || !sender || !recipient) {
     return false;
@@ -175,17 +187,22 @@ const OneDiscussion = ({ route }) => {
             handlePress={() => navigation.goBack()}
             customStylesheet={utilsStylesheet.containerPadding}
           />
-          {recipientOnline && (
+          {/* {recipientOnline && (
             <Text>{recipient.attributes.username} est en ligne</Text>
-          )}
+          )} */}
           {/* <TextInput
             onChangeText={setMessage}
             style={{ borderWidth: 1, padding: 10, fontSize: 16 }}
             value={message}
-          />
-          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>*/}
+        />*/}
+          {/* <LargeButton handlePress={scrollToBottom}>Envoyer</LargeButton> */}
           {messages && (
             <FlatList
+              // renderScrollComponent={props => <InvertibleScrollView ref={flatListRef} />}
+              //   onContentSizeChange={(width, height) =>
+              //     scrollToBottom()
+              //   }
+              onContentSizeChange={() => flatListRef.current.scrollToEnd()}
               ref={flatListRef}
               renderItem={(data) => {
                 if (data.index !== 0) {
@@ -288,12 +305,16 @@ const OneDiscussion = ({ route }) => {
                 gap: 8,
                 padding: 16,
               }}
-              style={{ overflow: "visible", alignSelf: "stretch" }}
+              style={{ alignSelf: "stretch" }}
             />
           )}
         </View>
       </WrapperScreen>
-      <MessageInput handlePress={handleNewMessage} setMessage={setMessage} message={message} />
+      <MessageInput
+        handlePress={handleNewMessage}
+        setMessage={setMessage}
+        message={message}
+      />
     </KeyboardAvoidingView>
   );
 };

@@ -17,7 +17,6 @@ import { useEffect } from "react";
 import { selectID, selectJWT } from "../../redux/reducers/authReducer";
 // import * as Notifications from 'expo-notifications';
 import { useMatomo } from "matomo-tracker-react-native";
-import { useEffect } from "react";
 
 export const Home = () => {
   const appStore = useSelector((state) => state.appStore);
