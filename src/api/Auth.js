@@ -14,7 +14,7 @@ class Auth {
         {
           headers: {
             "content-type": "application/json",
-            "Authorization": `Bearer ${process.env.PUBLIC_USER_TOKEN}`,
+            Authorization: `Bearer ${process.env.PUBLIC_USER_TOKEN}`,
           },
         }
       );
@@ -43,7 +43,7 @@ class Auth {
         {
           headers: {
             "content-type": "application/json",
-            "Authorization": `Bearer ${process.env.PUBLIC_USER_TOKEN}`,
+            Authorization: `Bearer ${process.env.PUBLIC_USER_TOKEN}`,
           },
         }
       );

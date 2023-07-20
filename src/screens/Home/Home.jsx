@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import utilsStylesheet from "../../utils/utilsStylesheet";
 import { useEffect } from "react";
 import { selectID, selectJWT } from "../../redux/reducers/authReducer";
-import * as Notifications from 'expo-notifications';
+// import * as Notifications from 'expo-notifications';
 
 export const Home = () => {
   const appStore = useSelector((state) => state.appStore);
@@ -23,31 +23,31 @@ export const Home = () => {
   const userId = useSelector(selectID);
   const jwt = useSelector(selectJWT);
 
-  const getExpoPushToken = async () => {
-    const token = await Notifications.getExpoPushTokenAsync({
-      projectId: "2bf13b15-4d4d-4e98-b7ae-a1f3a3084189",
-    }).data;
+  // const getExpoPushToken = async () => {
+  //   const token = await Notifications.getExpoPushTokenAsync({
+  //     projectId: "2bf13b15-4d4d-4e98-b7ae-a1f3a3084189",
+  //   }).data;
 
-    // if(typeof token == 'undefined') {
-    //   return;
-    // }
+  //   // if(typeof token == 'undefined') {
+  //   //   return;
+  //   // }
 
-    console.log(token);
+  //   console.log(token);
 
-    // const response = await Users.updateById(
-    //   userId,
-    //   {
-    //     expoPushToken: token,
-    //   },
-    //   jwt
-    // );
+  //   // const response = await Users.updateById(
+  //   //   userId,
+  //   //   {
+  //   //     expoPushToken: token,
+  //   //   },
+  //   //   jwt
+  //   // );
 
-    // console.log(response);
-  };
+  //   // console.log(response);
+  // };
 
-  useEffect(() => {
-    // getExpoPushToken();
-  }, []);
+  // useEffect(() => {
+  //   // getExpoPushToken();
+  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
