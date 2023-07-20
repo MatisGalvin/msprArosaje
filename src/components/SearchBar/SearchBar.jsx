@@ -1,20 +1,16 @@
 import {
-  Text,
   TextInput,
   StyleSheet,
   Image,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { View } from "react-native";
 import colors from "../../../colors";
 
-export default function SearchBar() {
+export default function SearchBar({ textInputProps }) {
   return (
     <View style={styles.textInputView}>
-      <TextInput
-        placeholder="Pays, Ville, Rue, Code postal..."
-        style={styles.textInput}
-      />
+      <TextInput {...textInputProps} style={styles.textInput} />
       <TouchableOpacity>
         <Image
           style={styles.icon}
@@ -35,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginVertical: 16,
 
     shadowColor: colors.black,
     shadowOffset: {

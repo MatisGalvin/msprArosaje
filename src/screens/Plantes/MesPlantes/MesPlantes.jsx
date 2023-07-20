@@ -9,6 +9,8 @@ import { selectOwnPlants } from "../../../redux/reducers/appReducer";
 import { Plants } from "../../../api/Plants";
 import { selectID, selectJWT } from "../../../redux/reducers/authReducer";
 import store from "../../../redux/appStore";
+import { useIsFocused } from "@react-navigation/native";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function MesPlantes() {
   const navigation = useNavigation();
@@ -19,22 +21,30 @@ export default function MesPlantes() {
 
   const [ownPlants, setOwnPlants] = useState([]);
 
+  const isFocused = useIsFocused();
+
   const getPlants = async () => {
     const plants = await Plants.getPlantsByUserId(userID, jwt);
-    
+
     store.dispatch({ type: "INIT_OWN_PLANTS", plants: plants.data });
     setOwnPlants(plants.data);
-  }
+  };
+
+  const { trackScreenView, trackAction,  } = useMatomo();
 
   useEffect(() => {
-    if(ownPlants.length !== 0) {
-        setOwnPlants(plants);
+    trackScreenView({ name: "MesPlantes" });
+  });
+
+  useEffect(() => {
+    if (ownPlants.length !== 0) {
+      setOwnPlants(plants);
     }
 
     getPlants();
-  }, []);
+  }, [isFocused]);
 
-  return(
+  return (
     <View style={{ flex: 1, marginTop: 25 }}>
       <LargeButton
         image={require("../../../../assets/images/static/plus.png")}
@@ -43,22 +53,25 @@ export default function MesPlantes() {
         Ajouter une nouvelle plante
       </LargeButton>
       {/* {renderViews()} */}
-      {ownPlants.length > 0 && ownPlants.map((plant) => (
-        <View key={plant.id} style={{ marginTop: 15 }}>
-          <SimplePlantCard
-            style={{ marginTop: 30 }}
-            image={{uri: plant.attributes.images.data[0].attributes.base64}}
-            name={plant.attributes.name}
-            description={plant.attributes.description}
-            handlePress={() => navigation.navigate("NewReport", {
-              owner: plant.attributes.owner.data.attributes.username,
-              image: plant.attributes.images.data[0].attributes.base64,
-              plant: plant,
-              isNewReport: false
-            })}
-          />
-        </View>
-      ))}
+      {ownPlants.length > 0 &&
+        ownPlants.map((plant) => (
+          <View key={plant.id} style={{ marginTop: 15 }}>
+            <SimplePlantCard
+              style={{ marginTop: 30 }}
+              image={{ uri: plant.attributes.images.data[0].attributes.base64 }}
+              name={plant.attributes.name}
+              description={plant.attributes.description}
+              handlePress={() =>
+                navigation.navigate("NewReport", {
+                  owner: plant.attributes.owner.data.attributes.username,
+                  image: plant.attributes.images.data[0].attributes.base64,
+                  plant: plant,
+                  isNewReport: false,
+                })
+              }
+            />
+          </View>
+        ))}
     </View>
-  )
+  );
 }

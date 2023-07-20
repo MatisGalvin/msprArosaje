@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../../../colors";
 
-export const LargeButton = ({ children, image, handlePress = () => {} , dark = false, grey = false}) => {
+export const LargeButton = ({ children, image, handlePress = () => {} , dark = false, grey = false, customStyleSheet}) => {
   return (
-    <TouchableOpacity style={[s.container, dark && s.containerDark, grey && s.containerGrey]} onPress={handlePress}>
+    <TouchableOpacity style={[s.container, dark && s.containerDark, grey && s.containerGrey, customStyleSheet]} onPress={handlePress}>
       {image && <Image style={s.sizeImg} source={image} />}
       <Text style={[s.textBtn, dark && s.textBtnDark, grey && s.textBtnGrey]}>{children}</Text>
     </TouchableOpacity>

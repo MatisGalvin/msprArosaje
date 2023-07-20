@@ -7,6 +7,7 @@ import {
 } from "../../redux/reducers/authReducer";
 import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
+import OnlineDot from "../OnlineDot/OnlineDot";
 
 export const ProfileButton = () => {
   // TODO : Ouvrir le screen <PROFILE>
