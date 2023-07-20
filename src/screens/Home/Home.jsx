@@ -13,9 +13,17 @@ import {
 import TipCardsSlider from "../../components/TipCard/TipCardsSlider";
 import { useSelector } from "react-redux";
 import utilsStylesheet from "../../utils/utilsStylesheet";
+import { useMatomo } from "matomo-tracker-react-native";
+import { useEffect } from "react";
 
 export const Home = () => {
   const appStore = useSelector((state) => state.appStore);
+
+  const { trackScreenView, trackAction } = useMatomo();
+
+  useEffect(() => {
+    trackScreenView({name: 'Home'});
+  });
 
     return <View style={{flex: 1}}>
         <Header screenName="Accueil" customStylesheet={utilsStylesheet.containerPadding} />

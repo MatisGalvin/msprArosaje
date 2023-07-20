@@ -22,6 +22,7 @@ import * as FileSystem from "expo-file-system";
 import { initState } from "../../../utils/initState";
 import Image from "../../../api/Image";
 import { selectID, selectJWT } from "../../../redux/reducers/authReducer";
+import { useMatomo } from "matomo-tracker-react-native";
 
 export default function AddPlante() {
   const navigation = useNavigation();
@@ -43,6 +44,8 @@ export default function AddPlante() {
   const userID = useSelector(selectID);
   const jwt = useSelector(selectJWT);
 
+  const { trackEvent, trackAction } = useMatomo();
+
   const submitPlant = async () => {
     setWaitSubmit(true);
 
@@ -53,6 +56,7 @@ export default function AddPlante() {
         // initState(appStore.username);
         setWaitSubmit(false);
         navigation.goBack();
+        trackEvent({ category: "Plant", action: "Add", name: plantName, value: 1});
       })
       .catch((error) => {
         console.log("AddPlante:submitPlant", error);

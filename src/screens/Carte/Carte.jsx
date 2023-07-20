@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { selectAllPlants } from "../../redux/reducers/appReducer";
 import { selectJWT } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
+import { useMatomo } from "matomo-tracker-react-native";
 
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
@@ -55,6 +56,8 @@ export default function Carte() {
   const [markers, setMarkers] = useState(MarkersJson);
 
   const [region, setRegion] = useState(initialRegion);
+
+  const { trackScreenView, trackAction } = useMatomo();
 
   const allPlantsRedux = useSelector(selectAllPlants);
   const jwt = useSelector(selectJWT);
@@ -131,6 +134,10 @@ export default function Carte() {
 
     _scrollView.current.scrollTo({ x: x, y: 0, animated: true });
   };
+
+  useEffect(() => {
+    trackScreenView({name: 'Carte'});
+  });
 
   return (
     <>
