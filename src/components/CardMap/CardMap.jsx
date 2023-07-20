@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
 import colors from "../../../colors";
 import * as Haptics from "expo-haptics";

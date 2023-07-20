@@ -71,4 +71,33 @@ export class Users {
       return false;
     }
   }
+
+  static async updateById(id, newValues, jwt) {
+    try {
+      const response = await axios.put(
+        `${usersURL}/${id}`,
+        newValues,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (response.status !== 201 && response.status !== 200) {
+        return false;
+      }
+
+      if (typeof response.data[0] == "undefined") {
+        return false;
+      }
+
+      return response.data;
+    } catch (error) {
+      console.log("Users:updateById", error);
+
+      return false;
+    }
+  }
+
 }

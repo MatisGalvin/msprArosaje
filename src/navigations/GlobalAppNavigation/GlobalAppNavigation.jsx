@@ -10,21 +10,16 @@ import { Image, StyleSheet, Text } from "react-native";
 
 import {
   createStackNavigator,
-  CardStyleInterpolators,
 } from "@react-navigation/stack";
 import { Notifications } from "../../../src/screens/Notifications/Notifications";
 import PlantesNavigation from "../../../src/navigations/PlantesNavigation/PlantesNavigation";
 import Carte from "../../../src/screens/Carte/Carte";
 import Analyse from "../../../src/screens/Analyse/Analyse";
-import { initState } from "../../../src/utils/initState";
 import { useSelector } from "react-redux";
 import Login from "../../screens/Login/Login";
 import {
   selectIsLoggedIn,
-  selectUser,
-  selectUsername,
 } from "../../redux/reducers/authReducer";
-import store from "../../redux/appStore";
 import { useMatomo } from "matomo-tracker-react-native";
 import { Garde } from "../../screens/Garde/Garde";
 import { Discussion } from "../../screens/Discussion/Discussion";
@@ -36,6 +31,7 @@ import OneDiscussion from "../../screens/OneDiscussion/OneDiscussion";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

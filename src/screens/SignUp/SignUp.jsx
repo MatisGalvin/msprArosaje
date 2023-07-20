@@ -1,27 +1,21 @@
 import {
-  Animated,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   Linking,
-  SafeAreaView,
 } from "react-native";
-import { Header } from "../../components/Header/Header";
 import { BigSimpleHeader } from "../../components/BigSimpleHeader/BigSimpleHeader";
 import utilsStylesheet from "../../utils/utilsStylesheet";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import colors from "../../../colors";
 import Checkbox from "expo-checkbox";
-import { PanGestureHandler, ScrollView } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
+import { ScrollView } from "react-native-gesture-handler";
+import { useEffect, useState } from "react";
 import Auth from "../../api/Auth";
 import * as Haptics from "expo-haptics";
-import { dispatch } from "react-redux";
-import { setSignIn } from "../../redux/reducers/authReducer";
 import store from "../../redux/appStore";
 import { Users } from "../../api/Users";
 import { WrapperScreen } from "../../components/WrapperScreen/WrapperScreen";

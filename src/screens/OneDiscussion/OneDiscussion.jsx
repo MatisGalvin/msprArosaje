@@ -18,16 +18,20 @@ import socket from "../../utils/socket";
 import { useEffect, useState, useRef } from "react";
 import { LargeButton } from "../../components/LargeButton/LargeButton";
 import Message from "../../api/Message";
+import { HeaderDiscussion } from "../../components/HeaderDiscussion/HeaderDiscussion";
+import MessageBubble from "../../components/MessageBubble/MessageBubble";
+import MessageDate from "../../components/MessageDate/MessageDate";
+import { Audio } from "expo-av";
 import { MessageInput } from "../../components/MessageInput/MessageInput";
 import Reactotron from 'reactotron-react-native'
 
 const OneDiscussion = ({ route }) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(false);
   const [recipientIsTyping, setRecipientIsTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [sender, setSender] = useState();
-  const [recipient, setRecipient] = useState();
+  const [sender, setSender] = useState(false);
+  const [recipient, setRecipient] = useState(false);
   const [recipientOnline, setRecipientOnline] = useState(false);
 
   const navigation = useNavigation();
@@ -54,33 +58,29 @@ const OneDiscussion = ({ route }) => {
   }, []);
 
   const getMessages = async () => {
+
     Reactotron.log("Messages reception");
-    const allMessages = await Message.getMessagesByDiscussionID(
-      discussionID,
-      jwt
-    );
+    
+    const { data } = await Message.getMessagesByDiscussionID(discussionID, jwt);
 
-    let newAllMessages = [];
-
-    allMessages.data.forEach((value, index) => {
-      newAllMessages = [
-        ...newAllMessages,
-        {
-          discussionID: value.attributes.discussion.data.id,
-          sender: value.attributes.sender.data.id,
-          recipient: value.attributes.sender.data.id,
-          message: value.attributes.message,
-          read: value.attributes.read,
-        },
-      ];
+    const allMessages = data.map((value) => {
+      return {
+        discussionID: value.attributes.discussion.data.id,
+        sender: value.attributes.sender.data.id,
+        recipient: value.attributes.sender.data.id,
+        message: value.attributes.message,
+        read: value.attributes.read,
+        date: value.attributes.createdAt,
+      };
     });
 
     Reactotron.log("Messages recieved");
-    setMessages(newAllMessages);
+    
+    setMessages(allMessages);
   };
 
   useEffect(() => {
-    if (messages.length > 0) {
+    if (messages) {
       return;
     }
 
@@ -91,21 +91,34 @@ const OneDiscussion = ({ route }) => {
     socket.emit("join", { discussionID: discussionID });
   }, []);
 
-  socket.on("recipientJoin", () => {
-    // if(!recipientOnline) {
-    //     socket.emit("join", { discussionID: discussionID });
-    // }
-    // console.log(true);
-    setRecipientOnline(true);
-  });
+  useEffect(() => {
+    socket.on("recipientJoin", () => {
+      // if(!recipientOnline) {
+      //     socket.emit("join", { discussionID: discussionID });
+      // }
+      // console.log(true);
+      setRecipientOnline(true);
+    });
 
-  socket.on("newMessage", (data) => {
-    setMessages([...messages, data]);
-  });
+    socket.on("newMessage", (data) => {
+      let newMessages = new Array();
+      messages.map(item => newMessages.push(item));
+      newMessages.push(data);
+      console.log(newMessages);
+      setMessages(newMessages);
+    });
 
-  socket.on("recipientIsTyping", (data) => {
-    setRecipientIsTyping(data.recipientIsTyping);
-  });
+    socket.on("recipientIsTyping", async (data) => {
+      if (data.recipientIsTyping) {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../../assets/sounds/writing.wav")
+        );
+        await sound.playAsync();
+      }
+
+      setRecipientIsTyping(data.recipientIsTyping);
+    });
+  }, []);
 
   const handleNewMessage = () => {
     if (message == "") {
@@ -117,6 +130,7 @@ const OneDiscussion = ({ route }) => {
       sender: sender.id,
       recipient: recipient.id,
       message: message,
+      date: new Date().toISOString(),
     };
 
     socket.emit("sendMessage", { newMessage: newMessage, jwt: jwt });
@@ -126,18 +140,27 @@ const OneDiscussion = ({ route }) => {
     setMessage("");
   };
 
-  const handleTyping = () => {
-    clearTimeout(timeOutTyping);
-    setIsTyping(true);
+  useEffect(() => {
+    if (message == "") {
+      return;
+    }
+
     if (!isTyping) {
       socket.emit("isTyping", { isTyping: true, discussionID: discussionID });
     }
+    setIsTyping(true);
 
-    var timeOutTyping = setTimeout(() => {
+    const timeOutTyping = setTimeout(() => {
       socket.emit("isTyping", { isTyping: false, discussionID: discussionID });
       setIsTyping(false);
     }, 3000);
-  };
+
+    return () => clearTimeout(timeOutTyping);
+  }, [message]);
+
+  if (!messages || !sender || !recipient) {
+    return false;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -146,8 +169,9 @@ const OneDiscussion = ({ route }) => {
     >
       <WrapperScreen>
         <View style={{ flex: 1 }}>
-          <Header
-            screenName="Discussion"
+          <HeaderDiscussion
+            destinationUserName={recipient.attributes.username}
+            // imageUser={{uri: }}
             handlePress={() => navigation.goBack()}
             customStylesheet={utilsStylesheet.containerPadding}
           />
@@ -156,48 +180,120 @@ const OneDiscussion = ({ route }) => {
           )}
           {/* <TextInput
             onChangeText={setMessage}
-            onChange={handleTyping}
             style={{ borderWidth: 1, padding: 10, fontSize: 16 }}
             value={message}
           />
-          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton> */}
-          {recipientIsTyping && <Text>... est en train d'écrire</Text>}
+          <LargeButton handlePress={handleNewMessage}>Envoyer</LargeButton>*/}
           {messages && (
             <FlatList
               ref={flatListRef}
               renderItem={(data) => {
+                if (data.index !== 0) {
+                  var dateBefore = new Date(
+                    messages[data.index - 1].date
+                  ).getTime();
+                  var dateNow = new Date(data.item.date).getTime();
+                }
+
+                if (typeof messages[data.index + 1] !== "undefined") {
+                  var dateAfter = new Date(
+                    messages[data.index + 1].date
+                  ).getTime();
+                }
+
                 return (
-                  <View key={data.index} style={{ flexDirection: "row" }}>
-                    {data.item.sender != sender.id && (
+                  <>
+                    {(data.index == 0 ||
+                      (data.index !== 0 &&
+                        dateNow - dateBefore > 1000 * 60)) && (
+                      <MessageDate date={data.item.date} />
+                    )}
+                    <View
+                      key={data.index}
+                      style={{
+                        flexDirection: "row",
+                        alignSelf: "stretch",
+                        alignItems: "flex-end",
+                        justifyContent:
+                          data.item.sender == sender.id
+                            ? "flex-end"
+                            : "flex-start",
+                        gap: 8,
+                      }}
+                    >
+                      {data.item.sender != sender.id &&
+                        ((data.index !== 0 &&
+                          dateNow - dateBefore > 1000 * 60) ||
+                        (typeof messages[data.index + 1] !== "undefined" &&
+                          (messages[data.index + 1].sender !=
+                            data.item.sender ||
+                            dateAfter - dateNow > 1000 * 60)) ? (
+                          <Image
+                            style={{ width: 38, height: 38, borderRadius: 99 }}
+                            source={{
+                              uri: recipient.attributes.profile_picture.data
+                                .attributes.base64,
+                            }}
+                          />
+                        ) : (
+                          <View style={{ width: 38, height: 38 }}></View>
+                        ))}
+                      <MessageBubble isMine={data.item.sender == sender.id}>
+                        {data.item.message}
+                      </MessageBubble>
+                    </View>
+                  </>
+                );
+              }}
+              data={messages}
+              keyExtractor={(data) => data.date}
+              ListFooterComponent={() => {
+                return (
+                  recipientIsTyping && (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignSelf: "stretch",
+                        alignItems: "flex-end",
+                        justifyContent: "flex-start",
+                        gap: 8,
+                      }}
+                    >
                       <Image
-                        style={{ width: 60, height: 60 }}
+                        style={{ width: 38, height: 38, borderRadius: 99 }}
                         source={{
                           uri: recipient.attributes.profile_picture.data
                             .attributes.base64,
                         }}
                       />
-                    )}
-                    <Text>{data.item.message}</Text>
-                  </View>
+                      <MessageBubble>
+                        <Image
+                          style={{
+                            width: 28,
+                            height: 15,
+                          }}
+                          source={require("../../../assets/images/static/typing.gif")}
+                        />
+                      </MessageBubble>
+                    </View>
+                  )
                 );
               }}
-              data={messages}
-              //   keyExtractor={(data) => Math.random()*1000}
               ListHeaderComponentStyle={{
                 alignItems: "stretch",
                 flexDirection: "row",
               }}
               contentContainerStyle={{
                 alignItems: "stretch",
-                gap: 10,
+                gap: 8,
+                padding: 16,
               }}
-              style={{ overflow: "visible" }}
-              on
+              style={{ overflow: "visible", alignSelf: "stretch" }}
             />
           )}
         </View>
       </WrapperScreen>
-      <MessageInput handlePress={handleNewMessage} />
+      <MessageInput handlePress={handleNewMessage} setMessage={setMessage} message={message} />
     </KeyboardAvoidingView>
   );
 };

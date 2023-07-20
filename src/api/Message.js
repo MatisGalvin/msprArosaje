@@ -8,7 +8,7 @@ class Message {
 
         try {
 
-            const response = await axios.get(`${this.baseUrl}messages?populate=*&filters[discussion][data][id][$eq]=${discussionId}`, {
+            const response = await axios.get(`${this.baseUrl}messages?populate=*&filters[discussion][id][$eq]=${discussionId}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                 },

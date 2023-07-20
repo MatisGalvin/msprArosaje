@@ -8,8 +8,8 @@ import {
 import colors from "../../../colors";
 import { useState } from "react";
 
-export function MessageInput({handlePress}) {
-  const [message, setMessage] = useState("");
+export function MessageInput({handlePress, setMessage, message}) {
+    
   return (
     <View style={styles.textInputView}>
       {/* <TouchableOpacity>

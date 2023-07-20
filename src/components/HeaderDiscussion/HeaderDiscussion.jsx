@@ -1,17 +1,12 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
-import { NotificationButton } from "../NotificationButton/NotificationButton";
-import { Separator } from "../Separator/Separator";
-import { ProfileButton } from "../ProfileButton/ProfileButton";
 import colors from "../../../colors";
 import { useNavigation } from "@react-navigation/native";
-import ParametersButton from "../ParametersButton/ParametersButton";
-import { MessageButton } from "../MessageButton/MessageButton";
-import OnlineDot from "../OnlineDot/OnlineDot";
 import HeaderDiscussionLayout from "../HeaderDiscussionLayout/HeaderDiscussionLayout";
 
 export const HeaderDiscussion = ({
   destinationUserName,
+  imageUser,
   handlePress,
   customStylesheet,
   showButtons = true,
@@ -22,9 +17,7 @@ export const HeaderDiscussion = ({
   return (
     <View style={[styles.body, customStylesheet]}>
       <View style={[styles.container, { gap: 8 }]}>
-        <HeaderLogo
-          handlePress={handlePress}
-        />
+        <HeaderLogo handlePress={handlePress} />
         <HeaderDiscussionLayout destinationUserName={destinationUserName} />
       </View>
     </View>
@@ -68,6 +61,6 @@ const styles = StyleSheet.create({
   dotStyleSheet: {
     position: "absolute",
     bottom: -3,
-    right: -3
+    right: -3,
   },
 });
